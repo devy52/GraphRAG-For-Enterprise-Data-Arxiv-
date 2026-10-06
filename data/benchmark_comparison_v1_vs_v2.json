@@ -1,0 +1,46 @@
+{
+  "timestamp": "2026-10-05T15:58:53.807194+00:00",
+  "legacy_file": "D:\\PROJS\\GraphRAG-For-Enterprise-Data\\data\\test_evaluation_bundle\\benchmark_results_50q.json",
+  "v2_file": "D:\\PROJS\\GraphRAG-For-Enterprise-Data\\data\\benchmark_results_50q_v2.json",
+  "evaluation_methodology_changes": [
+    {
+      "metric_group": "Semantic Metrics",
+      "change": "faithfulness relabeled to context_groundedness; hallucination_rate relabeled to unsupported_claim_rate.",
+      "rationale": "Groundedness measures whether claims are supported by context, not absolute factual truth."
+    },
+    {
+      "metric_group": "Factual Accuracy",
+      "change": "Replaced 'matches > 0' single-keyword rule with weighted required-fact coverage across structured atomic claims.",
+      "rationale": "Prevents single irrelevant keyword matches from falsely crediting incorrect answers."
+    },
+    {
+      "metric_group": "Experimental Hardcoding",
+      "change": "Purged all synthetic question-ID overrides (e.g. is_accurate = False for 3-hop vector queries).",
+      "rationale": "Restores authentic pipeline measurement without hardcoded synthetic degradation."
+    },
+    {
+      "metric_group": "Lexical Metrics",
+      "change": "Token F1 relabeled reference_text_token_f1 and chunk utilization relabeled lexical_chunk_overlap_utilization.",
+      "rationale": "Clarifies that token overlap is a lexical proxy and does not prove semantic evidence utilization."
+    },
+    {
+      "metric_group": "Answerability",
+      "change": "Decoupled answerability into Layer D. Refusals on answerable questions are failures; abstentions on unanswerable questions are successes.",
+      "rationale": "Prevents refusals from achieving artificial 100% accuracy."
+    }
+  ],
+  "v1_metrics_summary": {
+    "plain_vector_accuracy": 0.44,
+    "hybrid_graphrag_accuracy": 0.62,
+    "accuracy_delta": 18.0,
+    "note": "Computed using legacy keyword matches > 0 and synthetic 3-hop failure overrides."
+  },
+  "v2_metrics_summary": {
+    "plain_vector_answerable_only_fact_score": 0.4958,
+    "hybrid_graphrag_answerable_only_fact_score": 0.2208,
+    "answerable_only_fact_score_delta_points": -27.5,
+    "plain_vector_success_rate": 0.46,
+    "hybrid_graphrag_success_rate": 0.28,
+    "note": "Factual score is calculated only on answerable questions; abstentions are scored separately in Layer D."
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "timestamp": "2026-10-05T15:58:53.805190+00:00",
+  "dataset_name": "RAG-Enterprise-Benchmark-v2",
+  "dataset_sha256": "f16bcb883953d7a4e95820c9dc02848d73cae902fde01b7386eedbdc26aedb1d",
+  "total_questions": 50,
+  "evaluation_standard": "Decoupled 5-Layer Integrity Standard (V2)",
+  "evaluation_status": "fresh_run",
+  "vector_baseline": {
+    "layer_a_retrieval": {
+      "precision": 0.13,
+      "recall": 0.4625,
+      "mrr": 0.3442,
+      "evaluable_questions": 40
+    },
+    "layer_a_unified_retrieval": {
+      "precision": 0.13,
+      "recall": 0.4625,
+      "mrr": 0.3442,
+      "evaluable_questions": 40
+    },
+    "layer_a_vector_retrieval": {
+      "precision": 0.13,
+      "recall": 0.4625,
+      "mrr": 0.3442,
+      "evaluable_questions": 40
+    },
+    "layer_a_graph_retrieval": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "mrr": 0.0,
+      "evaluable_questions": 40
+    },
+    "layer_b_factual_correctness": {
+      "evaluable_answerable_questions": 40,
+      "fact_score_by_hop": {
+        "1-hop": 0.55,
+        "2-hop": 0.45,
+        "3-hop": 0.5333,
+        "aggregation": 0.45,
+        "out-of-scope": null
+      },
+      "answerable_only_fact_score": 0.4958,
+      "answerable_accuracy_at_threshold_0_70": 0.325
+    },
+    "layer_c_groundedness": {
+      "mean_context_groundedness": 0.9626,
+      "mean_unsupported_claim_rate": 0.0374,
+      "methods": [
+        "deterministic_refusal_no_factual_claims",
+        "lexical_overlap_heuristic"
+      ]
+    },
+    "layer_d_answerability": {
+      "total_questions": 50,
+      "answerable_questions": 40,
+      "unanswerable_questions": 10,
+      "answerable_correct": 13,
+      "answerable_incorrect": 27,
+      "correctly_abstained": 10,
+      "incorrectly_abstained": 14,
+      "answerable_accuracy": 0.325,
+      "abstention_accuracy": 1.0,
+      "overall_success_rate": 0.46
+    },
+    "layer_e_efficiency": {
+      "p50_latency_ms": 2191.4,
+      "p95_latency_ms": 8606.1,
+      "mean_latency_ms": 2901.3
+    },
+    "lexical_proxies": {
+      "mean_reference_text_token_f1": 0.3143,
+      "mean_lexical_chunk_overlap_utilization": 0.6073,
+      "mean_invalid_citation_reference_rate": 0.0
+    }
+  },
+  "hybrid_graphrag": {
+    "layer_a_retrieval": {
+      "precision": 0.3016,
+      "recall": 0.425,
+      "mrr": 0.3821,
+      "evaluable_questions": 40
+    },
+    "layer_a_unified_retrieval": {
+      "precision": 0.3016,
+      "recall": 0.425,
+      "mrr": 0.3821,
+      "evaluable_questions": 40
+    },
+    "layer_a_vector_retrieval": {
+      "precision": 0.08,
+      "recall": 0.1125,
+      "mrr": 0.1062,
+      "evaluable_questions": 40
+    },
+    "layer_a_graph_retrieval": {
+      "precision": 0.2216,
+      "recall": 0.3125,
+      "mrr": 0.2758,
+      "evaluable_questions": 40
+    },
+    "layer_b_factual_correctness": {
+      "evaluable_answerable_questions": 40,
+      "fact_score_by_hop": {
+        "1-hop": 0.15,
+        "2-hop": 0.35,
+        "3-hop": 0.2333,
+        "aggregation": 0.15,
+        "out-of-scope": null
+      },
+      "answerable_only_fact_score": 0.2208,
+      "answerable_accuracy_at_threshold_0_70": 0.1
+    },
+    "layer_c_groundedness": {
+      "mean_context_groundedness": 0.8755,
+      "mean_unsupported_claim_rate": 0.1245,
+      "methods": [
+        "deterministic_refusal_no_factual_claims",
+        "lexical_overlap_heuristic"
+      ]
+    },
+    "layer_d_answerability": {
+      "total_questions": 50,
+      "answerable_questions": 40,
+      "unanswerable_questions": 10,
+      "answerable_correct": 4,
+      "answerable_incorrect": 36,
+      "correctly_abstained": 10,
+      "incorrectly_abstained": 24,
+      "answerable_accuracy": 0.1,
+      "abstention_accuracy": 1.0,
+      "overall_success_rate": 0.28
+    },
+    "layer_e_efficiency": {
+      "p50_latency_ms": 9339.1,
+      "p95_latency_ms": 37161.8,
+      "mean_latency_ms": 15625.3
+    },
+    "lexical_proxies": {
+      "mean_reference_text_token_f1": 0.2804,
+      "mean_lexical_chunk_overlap_utilization": 0.3182,
+      "mean_invalid_citation_reference_rate": 0.0
+    }
+  },
+  "answerable_only_fact_score_delta_points": -27.5,
+  "overall_success_rate_delta_points": -18.0
+}

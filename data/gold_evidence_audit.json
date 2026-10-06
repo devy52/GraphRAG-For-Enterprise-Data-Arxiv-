@@ -1,0 +1,256 @@
+[
+  {
+    "question_id": "q_1hop_01",
+    "question": "Who are the primary authors of the GraphRAG-R1 paper proposing process-constrained reinforcement learning?",
+    "required_facts": [
+      {
+        "required_fact_id": "q1_f1",
+        "required_fact": "Chuanyue Yu is an author",
+        "fact_present_in_current_gold_text": false,
+        "fact_present_in_other_corpus_chunk": false,
+        "fact_present_in_document_metadata": true,
+        "fact_present_in_neo4j": false
+      },
+      {
+        "required_fact_id": "q1_f2",
+        "required_fact": "Kuo Zhao is an author",
+        "fact_present_in_current_gold_text": false,
+        "fact_present_in_other_corpus_chunk": false,
+        "fact_present_in_document_metadata": true,
+        "fact_present_in_neo4j": false
+      },
+      {
+        "required_fact_id": "q1_f3",
+        "required_fact": "Heng Chang is an author",
+        "fact_present_in_current_gold_text": false,
+        "fact_present_in_other_corpus_chunk": false,
+        "fact_present_in_document_metadata": true,
+        "fact_present_in_neo4j": false
+      }
+    ],
+    "current_gold_chunk_ids": [
+      "chunk_arxiv_2507_23581v2_000"
+    ],
+    "current_gold_chunk_text": "Graph Retrieval-Augmented Generation (GraphRAG) has shown great effectiveness in enhancing the reasoning abilities of LLMs by leveraging graph structures for knowledge representation and modeling complex real-world relationships. However, existing GraphRAG methods still face significant bottlenecks when handling complex problems that require multi-hop reasoning, as their query and retrieval phases are largely based on pre-defined heuristics and do not fully utilize the reasoning potentials of LLMs. To address this problem, we propose GraphRAG-R1, an adaptive GraphRAG framework by training LLMs with process-constrained outcome-based reinforcement learning (RL) to enhance the multi-hop reasoning ability.",
+    "fact_present_in_current_gold_text": false,
+    "fact_present_in_other_corpus_chunk": false,
+    "fact_present_in_document_metadata": true,
+    "fact_present_in_neo4j": false,
+    "authoritative_source": "document_metadata:papers.json:arxiv_2507.23581v2",
+    "classification": "G2",
+    "classification_rationale": "Source mismatch: The author names Chuanyue Yu, Kuo Zhao, and Heng Chang are present in document metadata (data/corpus/papers.json), but absent from text chunk chunk_arxiv_2507_23581v2_000 which contains only the abstract body.",
+    "proposed_evidence": [
+      {
+        "type": "metadata",
+        "id": "meta_arxiv_2507_23581v2_authors",
+        "document_id": "arxiv_2507.23581v2",
+        "field": "authors"
+      }
+    ],
+    "evidence_text": "Title: GraphRAG-R1: Graph Retrieval-Augmented Generation with Process-Constrained Reinforcement Learning | Authors: Chuanyue Yu, Kuo Zhao, Yuhan Li, Heng Chang, Mingjian Feng, Xiangzhe Jiang, Yufei Sun, Jia Li, Yuzhi Zhang, Jianxin Li, Ziwei Zhang",
+    "verification_method": "Keyed document metadata lookup in data/corpus/papers.json against paper_id arxiv_2507.23581v2."
+  },
+  {
+    "question_id": "q_1hop_04",
+    "question": "Who authored the component ablation study 'Dissecting Agentic RAG' for multi-hop QA?",
+    "required_facts": [
+      {
+        "required_fact_id": "q4_f1",
+        "required_fact": "Sheroz Shaikh is the author",
+        "fact_present_in_current_gold_text": false,
+        "fact_present_in_other_corpus_chunk": false,
+        "fact_present_in_document_metadata": true,
+        "fact_present_in_neo4j": false
+      },
+      {
+        "required_fact_id": "q4_f2",
+        "required_fact": "Evaluates a local 7B model",
+        "fact_present_in_current_gold_text": true,
+        "fact_present_in_other_corpus_chunk": true,
+        "fact_present_in_document_metadata": false,
+        "fact_present_in_neo4j": false
+      }
+    ],
+    "current_gold_chunk_ids": [
+      "chunk_arxiv_2606_21553v1_000"
+    ],
+    "current_gold_chunk_text": "Agentic retrieval-augmented generation (RAG) systems combine iterative reasoning loops, query decomposition, and adaptive retrieval to tackle multi-hop question answering. However, the contribution of each component remains poorly understood, particularly under resource-constrained settings using only local language models. Many agentic designs add adaptive retrieval routing and deeper retrieval loops on the assumption that the added complexity helps. To test whether it does, we run a controlled ablation study of a full agentic RAG pipeline evaluated on 5,000 questions from the HotpotQA distractor development set using a local 7B parameter model (Qwen2.5-7B-Instruct).",
+    "fact_present_in_current_gold_text": false,
+    "fact_present_in_other_corpus_chunk": false,
+    "fact_present_in_document_metadata": true,
+    "fact_present_in_neo4j": false,
+    "authoritative_source": "composite:document_metadata:papers.json:arxiv_2606.21553v1 + chunk:chunk_arxiv_2606_21553v1_000",
+    "classification": "G2",
+    "classification_rationale": "Source mismatch: The author Sheroz Shaikh is present in document metadata (data/corpus/papers.json), while the 7B model evaluation fact is in chunk 000. Current gold points only to chunk 000 which omits the author.",
+    "proposed_evidence": [
+      {
+        "type": "metadata",
+        "id": "meta_arxiv_2606_21553v1_authors",
+        "document_id": "arxiv_2606.21553v1",
+        "field": "authors"
+      },
+      {
+        "type": "chunk",
+        "id": "chunk_arxiv_2606_21553v1_000",
+        "document_id": "arxiv_2606.21553v1",
+        "section_path": "Abstract"
+      }
+    ],
+    "evidence_text": "Metadata: Title: Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model | Author: Sheroz Shaikh. Chunk: 'evaluated on 5,000 questions from the HotpotQA distractor development set using a local 7B parameter model (Qwen2.5-7B-Instruct)'.",
+    "verification_method": "Document metadata extraction in papers.json plus substring containment in chunk_arxiv_2606_21553v1_000."
+  },
+  {
+    "question_id": "q_2hop_02",
+    "question": "What four task categories are covered by the GraphRAG-Bench evaluation suite introduced by Zhishang Xiang et al.?",
+    "required_facts": [
+      {
+        "required_fact_id": "q2hop2_f1",
+        "required_fact": "Fact retrieval and complex reasoning",
+        "fact_present_in_current_gold_text": false,
+        "fact_present_in_other_corpus_chunk": true,
+        "fact_present_in_document_metadata": false,
+        "fact_present_in_neo4j": false
+      },
+      {
+        "required_fact_id": "q2hop2_f2",
+        "required_fact": "Contextual summarization and creative generation",
+        "fact_present_in_current_gold_text": false,
+        "fact_present_in_other_corpus_chunk": true,
+        "fact_present_in_document_metadata": false,
+        "fact_present_in_neo4j": false
+      }
+    ],
+    "current_gold_chunk_ids": [
+      "chunk_arxiv_2506_05690v3_000"
+    ],
+    "current_gold_chunk_text": "Graph retrieval-augmented generation (GraphRAG) has emerged as a powerful paradigm for enhancing large language models (LLMs) with external knowledge. It leverages graphs to model the hierarchical structure between specific concepts, enabling more coherent and effective knowledge retrieval for accurate reasoning.Despite its conceptual promise, recent studies report that GraphRAG frequently underperforms vanilla RAG on many real-world tasks. This raises a critical question: Is GraphRAG really effective, and in which scenarios do graph structures provide measurable benefits for RAG systems? To address this, we propose GraphRAG-Bench, a comprehensive benchmark designed to evaluate GraphRAG models onboth hierarchical knowledge retrieval and deep contextual reasoning.",
+    "fact_present_in_current_gold_text": false,
+    "fact_present_in_other_corpus_chunk": true,
+    "fact_present_in_document_metadata": false,
+    "fact_present_in_neo4j": false,
+    "authoritative_source": "corpus_chunk:chunk_arxiv_2506_05690v3_001",
+    "classification": "G2",
+    "classification_rationale": "Source mismatch (missing chunk continuation): The 4 task categories are explicitly stated in chunk_arxiv_2506_05690v3_001 ('covering fact retrieval, complex reasoning, contextual summarization, and creative generation'). Current gold annotation stopped prematurely at chunk 000.",
+    "proposed_evidence": [
+      {
+        "type": "chunk",
+        "id": "chunk_arxiv_2506_05690v3_000",
+        "document_id": "arxiv_2506.05690v3",
+        "section_path": "Abstract"
+      },
+      {
+        "type": "chunk",
+        "id": "chunk_arxiv_2506_05690v3_001",
+        "document_id": "arxiv_2506.05690v3",
+        "section_path": "Abstract"
+      }
+    ],
+    "evidence_text": "chunk_arxiv_2506_05690v3_001: 'GraphRAG-Bench features a comprehensive dataset with tasks of increasing difficulty, covering fact retrieval, complex reasoning, contextual summarization, and creative generation, and a systematic evaluation across the entire pipeline...'",
+    "verification_method": "Verbatim substring match in data/corpus/chunks.json under chunk_id chunk_arxiv_2506_05690v3_001."
+  },
+  {
+    "question_id": "q_2hop_05",
+    "question": "What retrieval corpus granularity does the IslamicFaithQA framework develop for agentic Quran-grounding?",
+    "required_facts": [
+      {
+        "required_fact_id": "q2hop5_f1",
+        "required_fact": "Verse-level retrieval corpus",
+        "fact_present_in_current_gold_text": false,
+        "fact_present_in_other_corpus_chunk": true,
+        "fact_present_in_document_metadata": false,
+        "fact_present_in_neo4j": false
+      },
+      {
+        "required_fact_id": "q2hop5_f2",
+        "required_fact": "Approximately 6,000 verses",
+        "fact_present_in_current_gold_text": false,
+        "fact_present_in_other_corpus_chunk": true,
+        "fact_present_in_document_metadata": false,
+        "fact_present_in_neo4j": false
+      }
+    ],
+    "current_gold_chunk_ids": [
+      "chunk_arxiv_2601_07528v2_000"
+    ],
+    "current_gold_chunk_text": "Large Language Models (LLMs) are increasingly used for Islamic question answering, where ungrounded responses may carry serious religious consequences. Yet standard MCQ/MRC-style evaluations (MCQ: Multiple choice questions, MRC: Machine Reading Comprehension) do not capture key real-world failure modes like subtle doctrinal hallucinations or unjustified abstentions. To bridge this gap, we introduce IslamicFaithQA, a 3,810-item bilingual (Arabic/English) generative benchmark assessing both correctness and abstention across diverse Islamic knowledge topics. We provide: (i) 15K Arabic text-grounded SFT reasoning pairs,",
+    "fact_present_in_current_gold_text": false,
+    "fact_present_in_other_corpus_chunk": true,
+    "fact_present_in_document_metadata": false,
+    "fact_present_in_neo4j": false,
+    "authoritative_source": "corpus_chunk:chunk_arxiv_2601_07528v2_001",
+    "classification": "G2",
+    "classification_rationale": "Source mismatch (missing chunk continuation): The granularity ('verse-level') and quantity ('~6k atomic verses (ayat)') are explicitly defined in chunk_arxiv_2601_07528v2_001. Current gold points only to chunk 000 which cuts off after item (i).",
+    "proposed_evidence": [
+      {
+        "type": "chunk",
+        "id": "chunk_arxiv_2601_07528v2_000",
+        "document_id": "arxiv_2601.07528v2",
+        "section_path": "Abstract"
+      },
+      {
+        "type": "chunk",
+        "id": "chunk_arxiv_2601_07528v2_001",
+        "document_id": "arxiv_2601.07528v2",
+        "section_path": "Abstract"
+      }
+    ],
+    "evidence_text": "chunk_arxiv_2601_07528v2_001: 'and (iii) a verse-level Qur\\'an retrieval corpus of ~6k atomic verses (ayat). Building on these resources, we develop an agentic Quran-grounding framework (agentic RAG) that uses structured tool calls for iterative evidence seeking and answer revision.'",
+    "verification_method": "Verbatim substring match in data/corpus/chunks.json under chunk_id chunk_arxiv_2601_07528v2_001."
+  },
+  {
+    "question_id": "q_agg_04",
+    "question": "Compare the efficiency strategies of HeRo and Kotoge et al. for running Agentic RAG on resource-constrained hardware.",
+    "required_facts": [
+      {
+        "required_fact_id": "qagg4_f1",
+        "required_fact": "HeRo optimizes adaptive orchestration on mobile SoCs",
+        "fact_present_in_current_gold_text": true,
+        "fact_present_in_other_corpus_chunk": true,
+        "fact_present_in_document_metadata": false,
+        "fact_present_in_neo4j": false
+      },
+      {
+        "required_fact_id": "qagg4_f2",
+        "required_fact": "Kotoge et al. distill agentic search into compact 0.5-1B models",
+        "fact_present_in_current_gold_text": false,
+        "fact_present_in_other_corpus_chunk": false,
+        "fact_present_in_document_metadata": true,
+        "fact_present_in_neo4j": false
+      }
+    ],
+    "current_gold_chunk_ids": [
+      "chunk_arxiv_2603_01661v2_000",
+      "chunk_arxiv_2508_20324v4_000"
+    ],
+    "current_gold_chunk_text": "--- chunk_arxiv_2603_01661v2_000 ---\nWith the increasing computational capability of mobile devices, deploying agentic retrieval-augmented generation (RAG) locally on heterogeneous System-on-Chips (SoCs) has become a promising way to enhance LLM-based applications. However, agentic RAG induces multi-stage workflows with heterogeneous memory and compute characteristics, leading to severe resource underutilization and high execution latency on mobile SoCs. To address this, we propose HeRo, an adaptive orchestration framework for agentic RAG on heterogeneous mobile SoCs.\n\n--- chunk_arxiv_2508_20324v4_000 ---\nReinforcement Learning has emerged as a dominant post-training approach to elicit agentic RAG behaviors such as search and planning from language models. Despite its success with larger models, applying RL to compact models (e.g., 0.5--1B parameters) presents unique challenges. The compact models exhibit poor initial performance, resulting in sparse rewards and unstable training. To overcome these difficulties, we propose Distillation-Guided Policy Optimization (DGPO), which employs cold-start initialization from teacher demonstrations and continuous teacher guidance during policy optimization.",
+    "fact_present_in_current_gold_text": false,
+    "fact_present_in_other_corpus_chunk": false,
+    "fact_present_in_document_metadata": true,
+    "fact_present_in_neo4j": false,
+    "authoritative_source": "composite:chunk:chunk_arxiv_2603_01661v2_000 + chunk:chunk_arxiv_2508_20324v4_000 + document_metadata:papers.json:arxiv_2508.20324v4",
+    "classification": "G2",
+    "classification_rationale": "Source mismatch: The compact 0.5-1B parameter RL strategy (DGPO) is present in chunk_arxiv_2508_20324v4_000, and HeRo's mobile SoC strategy is in chunk_arxiv_2603_01661v2_000. However, the author link connecting 'Kotoge et al.' to the DGPO paper is located in document metadata (data/corpus/papers.json), causing the Oracle generator to observe 'Kotoge et al. is not mentioned' and refuse.",
+    "proposed_evidence": [
+      {
+        "type": "chunk",
+        "id": "chunk_arxiv_2603_01661v2_000",
+        "document_id": "arxiv_2603.01661v2",
+        "section_path": "Abstract"
+      },
+      {
+        "type": "chunk",
+        "id": "chunk_arxiv_2508_20324v4_000",
+        "document_id": "arxiv_2508.20324v4",
+        "section_path": "Abstract"
+      },
+      {
+        "type": "metadata",
+        "id": "meta_arxiv_2508_20324v4_authors",
+        "document_id": "arxiv_2508.20324v4",
+        "field": "authors"
+      }
+    ],
+    "evidence_text": "HeRo chunk: 'deploying agentic retrieval-augmented generation (RAG) locally on heterogeneous System-on-Chips (SoCs) ... propose HeRo'. DGPO chunk: 'applying RL to compact models (e.g., 0.5--1B parameters) ... propose Distillation-Guided Policy Optimization (DGPO)'. Metadata: Title: 'Can Compact Language Models Search Like Agents? ...' | Authors: Rikuto Kotoge, Mai Nishimura, Jiaxin Ma.",
+    "verification_method": "Chunk containment for both algorithmic strategies combined with papers.json author resolution for Kotoge et al."
+  }
+]

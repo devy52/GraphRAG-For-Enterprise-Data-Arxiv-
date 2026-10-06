@@ -1,0 +1,121 @@
+{
+  "benchmark_run": "Step 32C Evidence-Gap Adaptive Passage Hydration",
+  "timestamp": "2026-10-06T15:35:23.461286+00:00",
+  "dataset_sha256": "88fc85fc1af4200abcfe9530bd8228156b407b8cb04c4c1745472cc080fdcae4",
+  "controls": {
+    "model": "Qwen2.5-7B-Instruct",
+    "temperature": 0.0,
+    "enable_graph_passage_hydration": true,
+    "enable_adaptive_hydration": true,
+    "max_graph_hydrated_passages": 3,
+    "route": "BOTH"
+  },
+  "pre_registered_engineering_gates": [
+    {
+      "gate": "Mean Context Tokens",
+      "benchmark_target": "<= 450.0",
+      "run3b": 392.2,
+      "step32b": 598.0,
+      "step32c": 541.7,
+      "status": "FAIL"
+    },
+    {
+      "gate": "Overall Fact Score",
+      "benchmark_target": ">= 0.8208",
+      "run3b": 0.7583,
+      "step32b": 0.8208,
+      "step32c": 0.7958,
+      "status": "FAIL"
+    },
+    {
+      "gate": "Strict Success (Count)",
+      "benchmark_target": ">= 28/40 (>= 70.0%)",
+      "run3b": "24/40",
+      "step32b": "28/40",
+      "step32c": "27/40",
+      "status": "FAIL"
+    },
+    {
+      "gate": "Substantive Chunk Recall",
+      "benchmark_target": ">= 0.6538",
+      "run3b": 0.2821,
+      "step32b": 0.6538,
+      "step32c": 0.5513,
+      "status": "FAIL"
+    },
+    {
+      "gate": "Unified Evidence Recall",
+      "benchmark_target": ">= 0.6708",
+      "run3b": 0.3083,
+      "step32b": 0.6708,
+      "step32c": 0.5708,
+      "status": "FAIL"
+    },
+    {
+      "gate": "P50 Latency",
+      "benchmark_target": "<= 4500.0 ms",
+      "run3b": "4115.6 ms",
+      "step32b": "4112.7 ms",
+      "step32c": "4660.2 ms",
+      "status": "FAIL"
+    },
+    {
+      "gate": "Invalid Citation Rate",
+      "benchmark_target": "0.0%",
+      "run3b": "0.0%",
+      "step32b": "0.0%",
+      "step32c": "0.0%",
+      "status": "PASS"
+    },
+    {
+      "gate": "1-Hop Fact Score Recovery",
+      "benchmark_target": ">= 0.8000",
+      "run3b": 0.8,
+      "step32b": 0.7,
+      "step32c": 0.7,
+      "status": "FAIL"
+    }
+  ],
+  "layer_a_retrieval": {
+    "substantive_chunk_recall": 0.5513,
+    "unified_evidence_recall": 0.5708,
+    "metadata_recall": 1.0
+  },
+  "layer_b_factual_correctness": {
+    "fact_score_mean": 0.7958,
+    "fact_score_by_hop": {
+      "1-hop": 0.7,
+      "2-hop": 0.7,
+      "3-hop": 0.9333,
+      "aggregation": 0.85,
+      "out-of-scope": null
+    }
+  },
+  "layer_d_answerability": {
+    "strict_success_count": 27,
+    "strict_success_rate": 0.675,
+    "abstention_accuracy": 1.0,
+    "overall_success_rate": 0.74
+  },
+  "layer_e_efficiency": {
+    "mean_context_tokens": 541.7,
+    "p50_latency_ms": 4660.2,
+    "p95_latency_ms": 20051.9,
+    "invalid_citation_rate": 0.0
+  },
+  "adaptive_hydration_telemetry": {
+    "total_candidate_cids": 177,
+    "total_selected_cids": 55,
+    "total_hydrated_cids": 55,
+    "total_dropped_cids": 84,
+    "reason_counts": {
+      "direct_vector_sufficient": 3,
+      "multi_hop_gap": 17,
+      "no_unseen_graph_chunks": 6,
+      "minor_gap": 14,
+      "no_graph_candidates": 10
+    },
+    "p50_hydration_latency_ms": 5.92,
+    "p95_hydration_latency_ms": 7.03
+  }
+}

@@ -1,0 +1,451 @@
+[
+  {
+    "input": "Who are the primary authors of the GraphRAG-R1 paper proposing process-constrained reinforcement learning?",
+    "output": "There is insufficient evidence in the provided context to determine the primary authors of the GraphRAG-R1 paper proposing process-constrained reinforcement learning.",
+    "reference": "The primary authors of GraphRAG-R1 are Chuanyue Yu, Kuo Zhao, Yuhan Li, and Heng Chang.",
+    "context": [
+      "[graph] Entity 'Process-Constrained Reinforcement Learning' -[:USES_METHOD]- 'GraphRAG-R1' (Paper) [chunk: chunk_arxiv_2507_23581v2_002].",
+      "[graph] Entity 'Process-Constrained Reinforcement Learning' -[:USES_METHOD]- 'GraphRAG-R1' (Paper) [chunk: chunk_arxiv_2507_23581v2_000].",
+      "[graph] Entity 'GraphRAG-R1' -[:USES_DATASET]- 'out-of-domain datasets' (Dataset) [chunk: chunk_arxiv_2507_23581v2_002].",
+      "[graph] Entity 'GraphRAG-R1' -[:USES_DATASET]- 'in-domain datasets' (Dataset) [chunk: chunk_arxiv_2507_23581v2_002].",
+      "[graph] Entity 'GraphRAG-R1' -[:EXTENDS]- 'GraphRAG' (Method) [chunk: chunk_arxiv_2507_23581v2_002].",
+      "[graph] Entity 'GraphRAG-R1' -[:PUBLISHED_IN]- 'arXiv' (Venue) [chunk: chunk_arxiv_2507_23581v2_002].",
+      "[graph] Entity 'GraphRAG-R1' -[:HAS_TOPIC]- 'Graph Retrieval-Augmented Generation' (Topic) [chunk: chunk_arxiv_2507_23581v2_002].",
+      "[graph] Entity 'GraphRAG-R1' -[:USES_METHOD]- 'Graph-textual retrieval' (Method) [chunk: chunk_arxiv_2507_23581v2_002]."
+    ],
+    "scores": {
+      "latency_ms": 4317.02,
+      "cost": 0.0,
+      "rag.faithfulness": 1.0,
+      "rag.context_precision": 0.2,
+      "rag.context_recall": 0.0,
+      "rag.answer_relevancy": 0.2,
+      "rag.answer_correctness": 0.0,
+      "retrieval.precision_at_k": 0.5,
+      "retrieval.recall_at_k": 1.0,
+      "retrieval.mrr": 0.5,
+      "retrieval.ndcg_at_k": 0.6309297535714575,
+      "retrieval.chunk_utilization": 0.25,
+      "graph.graph_utilization_rate": 0.0,
+      "graph.global_diversity": 0.9565,
+      "text_similarity.exact_match": 0.0,
+      "text_similarity.f1": 0.30769230769230765,
+      "text_similarity.bleu": 0.07305267243289862,
+      "text_similarity.rouge_l": 0.30769230769230765
+    },
+    "metadata": {
+      "id": "q_1hop_01",
+      "required_facts": [
+        {
+          "id": "q1_f1",
+          "fact": "Chuanyue Yu is an author",
+          "weight": 1.0,
+          "aliases": [
+            "chuanyue yu",
+            "yu"
+          ]
+        },
+        {
+          "id": "q1_f2",
+          "fact": "Kuo Zhao is an author",
+          "weight": 1.0,
+          "aliases": [
+            "kuo zhao",
+            "zhao"
+          ]
+        },
+        {
+          "id": "q1_f3",
+          "fact": "Heng Chang is an author",
+          "weight": 1.0,
+          "aliases": [
+            "heng chang",
+            "chang"
+          ]
+        }
+      ],
+      "optional_facts": [
+        {
+          "id": "q1_o1",
+          "fact": "Yuhan Li is an author",
+          "weight": 0.5,
+          "aliases": [
+            "yuhan li",
+            "li"
+          ]
+        }
+      ],
+      "answerable": true,
+      "hop_type": "1-hop",
+      "target_entities": [
+        "GraphRAG-R1",
+        "Chuanyue Yu"
+      ],
+      "gold_chunk_ids": [
+        "chunk_arxiv_2507_23581v2_000"
+      ],
+      "route_taken": "graph",
+      "citations": [],
+      "is_grounded": true,
+      "from_cache": false,
+      "original_question_id": "q_1hop_01",
+      "graph_facts_retrieved": [
+        "Entity 'Process-Constrained Reinforcement Learning' -[:USES_METHOD]- 'GraphRAG-R1' (Paper) [chunk: chunk_arxiv_2507_23581v2_002].",
+        "Entity 'Process-Constrained Reinforcement Learning' -[:USES_METHOD]- 'GraphRAG-R1' (Paper) [chunk: chunk_arxiv_2507_23581v2_000].",
+        "Entity 'GraphRAG-R1' -[:USES_DATASET]- 'out-of-domain datasets' (Dataset) [chunk: chunk_arxiv_2507_23581v2_002].",
+        "Entity 'GraphRAG-R1' -[:USES_DATASET]- 'in-domain datasets' (Dataset) [chunk: chunk_arxiv_2507_23581v2_002].",
+        "Entity 'GraphRAG-R1' -[:EXTENDS]- 'GraphRAG' (Method) [chunk: chunk_arxiv_2507_23581v2_002].",
+        "Entity 'GraphRAG-R1' -[:PUBLISHED_IN]- 'arXiv' (Venue) [chunk: chunk_arxiv_2507_23581v2_002].",
+        "Entity 'GraphRAG-R1' -[:HAS_TOPIC]- 'Graph Retrieval-Augmented Generation' (Topic) [chunk: chunk_arxiv_2507_23581v2_002].",
+        "Entity 'GraphRAG-R1' -[:USES_METHOD]- 'Graph-textual retrieval' (Method) [chunk: chunk_arxiv_2507_23581v2_002]."
+      ],
+      "expected_themes": null,
+      "community_summary": null,
+      "community_chunks": null
+    }
+  },
+  {
+    "input": "Which reinforcement learning method does Chuanyue Yu and colleagues use to enhance reasoning in GraphRAG?",
+    "output": "There is insufficient evidence in the provided context to determine which reinforcement learning method Chuanyue Yu and colleagues use to enhance reasoning in GraphRAG.",
+    "reference": "Chuanyue Yu and colleagues propose GraphRAG-R1, which utilizes process-constrained reinforcement learning (RL) to guide graph traversal and reasoning.",
+    "context": [
+      "[graph] Paper 'GraphRAG-Bench' uses method 'GraphRAG methods' [chunk: chunk_arxiv_2506_02404v3_002].",
+      "[graph] Paper 'GraphRAG-Bench' uses method 'GraphRAG' [chunk: chunk_arxiv_2506_02404v3_001].",
+      "[graph] Paper 'GraphRAG-Bench' uses method 'GraphRAG' [chunk: chunk_arxiv_2506_02404v3_000].",
+      "[graph] Paper 'GraphRAG-R1' uses method 'Graph-textual retrieval' [chunk: chunk_arxiv_2507_23581v2_002].",
+      "[graph] Paper 'GraphRAG-R1' uses method 'Process-Constrained Reinforcement Learning' [chunk: chunk_arxiv_2507_23581v2_002].",
+      "[graph] Paper 'GraphRAG-R1' uses method 'Process-Constrained Reinforcement Learning' [chunk: chunk_arxiv_2507_23581v2_000].",
+      "[graph] Paper 'GraphRAG-R1' uses method 'GraphRAG' [chunk: chunk_arxiv_2507_23581v2_000].",
+      "[graph] Paper 'HVM-GraphRAG' uses method 'Multimodal GraphRAG' [chunk: chunk_arxiv_2607_24861v1_000].",
+      "[graph] Paper 'HVM-GraphRAG' uses method 'GraphRAG' [chunk: chunk_arxiv_2607_24861v1_000].",
+      "[graph] Paper 'RAG vs. GraphRAG: A Systematic Evaluation and Key Insights' uses method 'GraphRAG' [chunk: chunk_arxiv_2502_11371v3_001].",
+      "[graph] Paper 'RAG vs. GraphRAG: A Systematic Evaluation and Key Insights' uses method 'RAG' [chunk: chunk_arxiv_2502_11371v3_001].",
+      "[graph] Paper 'ACE-GraphRAG' uses method 'RAG' [chunk: chunk_arxiv_2608_01269v2_001].",
+      "[graph] Paper 'ACE-GraphRAG' uses method 'GraphRAG' [chunk: chunk_arxiv_2608_01269v2_001].",
+      "[graph] Paper 'ACE-GraphRAG' uses method 'Parallel Differential Retrieval' [chunk: chunk_arxiv_2608_01269v2_000].",
+      "[graph] Paper 'ACE-GraphRAG' uses method 'GraphRAG' [chunk: chunk_arxiv_2608_01269v2_000].",
+      "[graph] Paper 'Plasma GraphRAG' uses method 'vanilla RAG' [chunk: chunk_arxiv_2604_06279v1_001].",
+      "[graph] Paper 'Plasma GraphRAG' uses method 'Large Language Models (LLMs)' [chunk: chunk_arxiv_2604_06279v1_000].",
+      "[graph] Paper 'Plasma GraphRAG' uses method 'GraphRAG' [chunk: chunk_arxiv_2604_06279v1_000].",
+      "[graph] Paper 'Do We Still Need GraphRAG? Benchmarking RAG and GraphRAG for Agentic Search Systems' uses method 'GraphRAG' [chunk: chunk_arxiv_2604_09666v1_001].",
+      "[graph] Paper 'Do We Still Need GraphRAG? Benchmarking RAG and GraphRAG for Agentic Search Systems' uses method 'RAG' [chunk: chunk_arxiv_2604_09666v1_001].",
+      "[graph] Paper 'Toward Robust GraphRAG: Mitigating Retrieval Drift and Hallucination from Imperfect Knowledge Graphs' uses method 'CS-RAG' [chunk: chunk_arxiv_2603_14828v2_001].",
+      "[graph] Paper 'Toward Robust GraphRAG: Mitigating Retrieval Drift and Hallucination from Imperfect Knowledge Graphs' uses method 'GraphRAG' [chunk: chunk_arxiv_2603_14828v2_001].",
+      "[graph] Paper 'GraphRAG' uses method 'RAG' [chunk: chunk_arxiv_2501_14050v4_000]."
+    ],
+    "scores": {
+      "latency_ms": 2331.4,
+      "cost": 0.0,
+      "rag.faithfulness": 1.0,
+      "rag.context_precision": 0.13,
+      "rag.context_recall": 0.7,
+      "rag.answer_relevancy": 0.3,
+      "rag.answer_correctness": 0.0,
+      "retrieval.precision_at_k": 0.07142857142857142,
+      "retrieval.recall_at_k": 0.5,
+      "retrieval.mrr": 0.2,
+      "retrieval.ndcg_at_k": 0.23719771276929622,
+      "retrieval.chunk_utilization": 0.0,
+      "graph.graph_utilization_rate": 0.0,
+      "graph.global_diversity": 0.9583,
+      "text_similarity.exact_match": 0.0,
+      "text_similarity.f1": 0.45454545454545453,
+      "text_similarity.bleu": 0.127408104603236,
+      "text_similarity.rouge_l": 0.2727272727272727
+    },
+    "metadata": {
+      "id": "q_2hop_01",
+      "required_facts": [
+        {
+          "id": "q2hop1_f1",
+          "fact": "Proposes GraphRAG-R1",
+          "weight": 1.0,
+          "aliases": [
+            "graphrag-r1",
+            "graphrag r1"
+          ]
+        },
+        {
+          "id": "q2hop1_f2",
+          "fact": "Process-constrained reinforcement learning",
+          "weight": 1.0,
+          "aliases": [
+            "process-constrained reinforcement learning",
+            "process-constrained rl",
+            "reinforcement learning"
+          ]
+        }
+      ],
+      "optional_facts": [],
+      "answerable": true,
+      "hop_type": "2-hop",
+      "target_entities": [
+        "GraphRAG-R1",
+        "Chuanyue Yu"
+      ],
+      "gold_chunk_ids": [
+        "chunk_arxiv_2507_23581v2_000",
+        "chunk_arxiv_2507_23581v2_001"
+      ],
+      "route_taken": "graph",
+      "citations": [],
+      "is_grounded": true,
+      "from_cache": false,
+      "original_question_id": "q_2hop_01",
+      "graph_facts_retrieved": [
+        "Paper 'GraphRAG-Bench' uses method 'GraphRAG methods' [chunk: chunk_arxiv_2506_02404v3_002].",
+        "Paper 'GraphRAG-Bench' uses method 'GraphRAG' [chunk: chunk_arxiv_2506_02404v3_001].",
+        "Paper 'GraphRAG-Bench' uses method 'GraphRAG' [chunk: chunk_arxiv_2506_02404v3_000].",
+        "Paper 'GraphRAG-R1' uses method 'Graph-textual retrieval' [chunk: chunk_arxiv_2507_23581v2_002].",
+        "Paper 'GraphRAG-R1' uses method 'Process-Constrained Reinforcement Learning' [chunk: chunk_arxiv_2507_23581v2_002].",
+        "Paper 'GraphRAG-R1' uses method 'Process-Constrained Reinforcement Learning' [chunk: chunk_arxiv_2507_23581v2_000].",
+        "Paper 'GraphRAG-R1' uses method 'GraphRAG' [chunk: chunk_arxiv_2507_23581v2_000].",
+        "Paper 'HVM-GraphRAG' uses method 'Multimodal GraphRAG' [chunk: chunk_arxiv_2607_24861v1_000].",
+        "Paper 'HVM-GraphRAG' uses method 'GraphRAG' [chunk: chunk_arxiv_2607_24861v1_000].",
+        "Paper 'RAG vs. GraphRAG: A Systematic Evaluation and Key Insights' uses method 'GraphRAG' [chunk: chunk_arxiv_2502_11371v3_001].",
+        "Paper 'RAG vs. GraphRAG: A Systematic Evaluation and Key Insights' uses method 'RAG' [chunk: chunk_arxiv_2502_11371v3_001].",
+        "Paper 'ACE-GraphRAG' uses method 'RAG' [chunk: chunk_arxiv_2608_01269v2_001].",
+        "Paper 'ACE-GraphRAG' uses method 'GraphRAG' [chunk: chunk_arxiv_2608_01269v2_001].",
+        "Paper 'ACE-GraphRAG' uses method 'Parallel Differential Retrieval' [chunk: chunk_arxiv_2608_01269v2_000].",
+        "Paper 'ACE-GraphRAG' uses method 'GraphRAG' [chunk: chunk_arxiv_2608_01269v2_000].",
+        "Paper 'Plasma GraphRAG' uses method 'vanilla RAG' [chunk: chunk_arxiv_2604_06279v1_001].",
+        "Paper 'Plasma GraphRAG' uses method 'Large Language Models (LLMs)' [chunk: chunk_arxiv_2604_06279v1_000].",
+        "Paper 'Plasma GraphRAG' uses method 'GraphRAG' [chunk: chunk_arxiv_2604_06279v1_000].",
+        "Paper 'Do We Still Need GraphRAG? Benchmarking RAG and GraphRAG for Agentic Search Systems' uses method 'GraphRAG' [chunk: chunk_arxiv_2604_09666v1_001].",
+        "Paper 'Do We Still Need GraphRAG? Benchmarking RAG and GraphRAG for Agentic Search Systems' uses method 'RAG' [chunk: chunk_arxiv_2604_09666v1_001].",
+        "Paper 'Toward Robust GraphRAG: Mitigating Retrieval Drift and Hallucination from Imperfect Knowledge Graphs' uses method 'CS-RAG' [chunk: chunk_arxiv_2603_14828v2_001].",
+        "Paper 'Toward Robust GraphRAG: Mitigating Retrieval Drift and Hallucination from Imperfect Knowledge Graphs' uses method 'GraphRAG' [chunk: chunk_arxiv_2603_14828v2_001].",
+        "Paper 'GraphRAG' uses method 'RAG' [chunk: chunk_arxiv_2501_14050v4_000]."
+      ],
+      "expected_themes": null,
+      "community_summary": null,
+      "community_chunks": null
+    }
+  },
+  {
+    "input": "How does GraphRAG-R1's reinforcement learning framework enforce constraints on graph traversal during generation?",
+    "output": "There is insufficient evidence in the provided context to answer how GraphRAG-R1's reinforcement learning framework enforces constraints on graph traversal during generation.",
+    "reference": "GraphRAG-R1 integrates process-constrained reinforcement learning that constrains the reasoning process along valid graph structures, preventing hallucinated paths and improving factual consistency.",
+    "context": [
+      "[graph] Entity 'Process-Constrained Reinforcement Learning' -[:USES_METHOD]- 'GraphRAG-R1' (Paper) [chunk: chunk_arxiv_2507_23581v2_002].",
+      "[graph] Entity 'Process-Constrained Reinforcement Learning' -[:USES_METHOD]- 'GraphRAG-R1' (Paper) [chunk: chunk_arxiv_2507_23581v2_000].",
+      "[graph] Entity 'Reinforcement Learning' -[:EXTENDS]- 'Distillation-Guided Policy Optimization' (Method) [chunk: chunk_arxiv_2508_20324v4_000].",
+      "[graph] Entity 'GraphRAG-R1' -[:USES_DATASET]- 'out-of-domain datasets' (Dataset) [chunk: chunk_arxiv_2507_23581v2_002].",
+      "[graph] Entity 'GraphRAG-R1' -[:USES_DATASET]- 'in-domain datasets' (Dataset) [chunk: chunk_arxiv_2507_23581v2_002].",
+      "[graph] Entity 'GraphRAG-R1' -[:EXTENDS]- 'GraphRAG' (Method) [chunk: chunk_arxiv_2507_23581v2_002].",
+      "[graph] Entity 'GraphRAG-R1' -[:PUBLISHED_IN]- 'arXiv' (Venue) [chunk: chunk_arxiv_2507_23581v2_002].",
+      "[graph] Entity 'GraphRAG-R1' -[:HAS_TOPIC]- 'Graph Retrieval-Augmented Generation' (Topic) [chunk: chunk_arxiv_2507_23581v2_002]."
+    ],
+    "scores": {
+      "latency_ms": 3915.44,
+      "cost": 0.0,
+      "rag.faithfulness": 1.0,
+      "rag.context_precision": 0.3,
+      "rag.context_recall": 0.2,
+      "rag.answer_relevancy": 0.0,
+      "rag.answer_correctness": 0.0,
+      "retrieval.precision_at_k": 0.3333333333333333,
+      "retrieval.recall_at_k": 0.5,
+      "retrieval.mrr": 0.5,
+      "retrieval.ndcg_at_k": 0.38685280723454163,
+      "retrieval.chunk_utilization": 0.25,
+      "graph.graph_utilization_rate": 0.0,
+      "graph.global_diversity": 1.0,
+      "text_similarity.exact_match": 0.0,
+      "text_similarity.f1": 0.2553191489361702,
+      "text_similarity.bleu": 0.04141141330484801,
+      "text_similarity.rouge_l": 0.2127659574468085
+    },
+    "metadata": {
+      "id": "q_3hop_01",
+      "required_facts": [
+        {
+          "id": "q3hop1_f1",
+          "fact": "Process-constrained reinforcement learning framework",
+          "weight": 1.0,
+          "aliases": [
+            "process-constrained reinforcement learning",
+            "process-constrained",
+            "rl"
+          ]
+        },
+        {
+          "id": "q3hop1_f2",
+          "fact": "Constrains reasoning along graph structures",
+          "weight": 1.0,
+          "aliases": [
+            "graph structures",
+            "valid paths",
+            "graph traversal"
+          ]
+        },
+        {
+          "id": "q3hop1_f3",
+          "fact": "Mitigates hallucinated connections and improves consistency",
+          "weight": 1.0,
+          "aliases": [
+            "hallucination",
+            "factual consistency",
+            "reasoning abilities"
+          ]
+        }
+      ],
+      "optional_facts": [],
+      "answerable": true,
+      "hop_type": "3-hop",
+      "target_entities": [
+        "GraphRAG-R1"
+      ],
+      "gold_chunk_ids": [
+        "chunk_arxiv_2507_23581v2_000",
+        "chunk_arxiv_2507_23581v2_001"
+      ],
+      "route_taken": "graph",
+      "citations": [],
+      "is_grounded": true,
+      "from_cache": false,
+      "original_question_id": "q_3hop_01",
+      "graph_facts_retrieved": [
+        "Entity 'Process-Constrained Reinforcement Learning' -[:USES_METHOD]- 'GraphRAG-R1' (Paper) [chunk: chunk_arxiv_2507_23581v2_002].",
+        "Entity 'Process-Constrained Reinforcement Learning' -[:USES_METHOD]- 'GraphRAG-R1' (Paper) [chunk: chunk_arxiv_2507_23581v2_000].",
+        "Entity 'Reinforcement Learning' -[:EXTENDS]- 'Distillation-Guided Policy Optimization' (Method) [chunk: chunk_arxiv_2508_20324v4_000].",
+        "Entity 'GraphRAG-R1' -[:USES_DATASET]- 'out-of-domain datasets' (Dataset) [chunk: chunk_arxiv_2507_23581v2_002].",
+        "Entity 'GraphRAG-R1' -[:USES_DATASET]- 'in-domain datasets' (Dataset) [chunk: chunk_arxiv_2507_23581v2_002].",
+        "Entity 'GraphRAG-R1' -[:EXTENDS]- 'GraphRAG' (Method) [chunk: chunk_arxiv_2507_23581v2_002].",
+        "Entity 'GraphRAG-R1' -[:PUBLISHED_IN]- 'arXiv' (Venue) [chunk: chunk_arxiv_2507_23581v2_002].",
+        "Entity 'GraphRAG-R1' -[:HAS_TOPIC]- 'Graph Retrieval-Augmented Generation' (Topic) [chunk: chunk_arxiv_2507_23581v2_002]."
+      ],
+      "expected_themes": null,
+      "community_summary": null,
+      "community_chunks": null
+    }
+  },
+  {
+    "input": "Compare the primary evaluation objectives of GraphRAG-Bench and IslamicFaithQA.",
+    "output": "There is insufficient evidence to compare the primary evaluation objectives of GraphRAG-Bench and IslamicFaithQA, as neither of these benchmarks is mentioned in the provided context.",
+    "reference": "GraphRAG-Bench focuses on evaluating hierarchical knowledge retrieval and complex reasoning across four task difficulties, while IslamicFaithQA specifically evaluates hallucination, evidence grounding, and justified abstention on atomic single-gold questions.",
+    "context": [
+      "[retrieved] estion design. Featuring college-level, domain-specific questions that demand multi-hop reasoning, the benchmark ensures that simple content retrieval is insufficient for problem-solving. For example, some questions require mathematical reasoning or programming. \\((ii)\\) Diverse task coverage. The dataset includes a broad spectrum of reasoning tasks, multiple-choice, true/false, multi-select, open-ended, and fill-in-the-blank. It spans 16 disciplines in twenty core textbooks. \\((iii)\\) Holistic evaluation framework. GraphRAG-Bench provides comprehensive assessment across the entire GraphRAG pipeline, including graph construction, knowledge retrieval, and answer generation. Beyond final-answer correctness, it evaluates the logical coherence of the reasoning process.",
+      "[retrieved] ls onboth hierarchical knowledge retrieval and deep contextual reasoning. GraphRAG-Bench features a comprehensive dataset with tasks of increasing difficulty, coveringfact retrieval, complex reasoning, contextual summarization, and creative generation, and a systematic evaluation across the entire pipeline, from graph constructionand knowledge retrieval to final generation. Leveraging this novel benchmark, we systematically investigate the conditions when GraphRAG surpasses traditional RAG and the underlying reasons for its success, offering guidelines for its practical application. All related resources and analyses are collected for the community at https://github.com/GraphRAG-Bench/GraphRAG-Benchmark.",
+      "[retrieved] nd agent-graph integration. Besides, we present a novel context engineering method for GraphRAG and Agentic RAG, addressing the context/memory overflow issues, efficiently managing text and graph retrievals with new representations and agentic loop design, leading to 19%-53% reduction on token usage. Moreover, further analysis identifies a retrieval-generation gap where expanded retrieval does not proportionally improve generation quality, suggesting retrieval-oriented metrics overstate advanced retrieval benefits. This work provides data-driven insights on when and how to use them for building production-ready intelligent RAG systems."
+    ],
+    "scores": {
+      "latency_ms": 3218.91,
+      "cost": 0.0,
+      "rag.faithfulness": 0.0,
+      "rag.context_precision": 0.4,
+      "rag.context_recall": 0.5,
+      "rag.answer_relevancy": 0.2,
+      "rag.answer_correctness": 0.0,
+      "retrieval.precision_at_k": 0.0,
+      "retrieval.recall_at_k": 0.0,
+      "retrieval.mrr": 0.0,
+      "retrieval.ndcg_at_k": 0.0,
+      "retrieval.chunk_utilization": 0.0,
+      "graph.global_diversity": 0.9423,
+      "text_similarity.exact_match": 0.0,
+      "text_similarity.f1": 0.17857142857142855,
+      "text_similarity.bleu": 0.018048695766299853,
+      "text_similarity.rouge_l": 0.14285714285714288
+    },
+    "metadata": {
+      "id": "q_agg_01",
+      "required_facts": [
+        {
+          "id": "qagg1_f1",
+          "fact": "GraphRAG-Bench evaluates hierarchical retrieval and multi-task reasoning",
+          "weight": 1.0,
+          "aliases": [
+            "graphrag-bench",
+            "hierarchical knowledge retrieval",
+            "complex reasoning"
+          ]
+        },
+        {
+          "id": "qagg1_f2",
+          "fact": "IslamicFaithQA measures hallucination and abstention",
+          "weight": 1.0,
+          "aliases": [
+            "islamicfaithqa",
+            "hallucination",
+            "abstention",
+            "grounding"
+          ]
+        }
+      ],
+      "optional_facts": [],
+      "answerable": true,
+      "hop_type": "aggregation",
+      "target_entities": [
+        "GraphRAG-Bench",
+        "IslamicFaithQA"
+      ],
+      "gold_chunk_ids": [
+        "chunk_arxiv_2506_05690v3_000",
+        "chunk_arxiv_2601_07528v2_000"
+      ],
+      "route_taken": "vector",
+      "citations": [],
+      "is_grounded": true,
+      "from_cache": false,
+      "original_question_id": "q_agg_01",
+      "graph_facts_retrieved": [],
+      "expected_themes": null,
+      "community_summary": null,
+      "community_chunks": null
+    }
+  },
+  {
+    "input": "What is the biochemical mechanism of light-independent reactions in C4 carbon fixation?",
+    "output": "There is insufficient evidence in the provided context to answer the question about the biochemical mechanism of light-independent reactions in C4 carbon fixation. The context only discusses Agentic Retrieval-Augmented Generation (RAG) and its applications, and does not mention C4 carbon fixation or biochemical mechanisms.",
+    "reference": "I cannot answer this question because the provided enterprise research corpus contains no evidence on plant biology, photosynthesis, or C4 carbon fixation.",
+    "context": [
+      "[retrieved] ranscends these limitations by embedding autonomous AI agents into the RAG pipeline. These agents leverage agentic design patterns reflection, planning, tool use, and multi-agent collaboration to dynamically manage retrieval strategies, iteratively refine contextual understanding, and adapt workflows through operational structures ranging from sequential steps to adaptive collaboration. This integration enables Agentic RAG systems to deliver flexibility, scalability, and context-awareness across diverse applications. This paper presents an analytical survey of Agentic RAG systems."
+    ],
+    "scores": {
+      "latency_ms": 3504.76,
+      "cost": 0.0,
+      "rag.faithfulness": 1.0,
+      "rag.context_precision": 0.0,
+      "rag.context_recall": 1.0,
+      "rag.answer_relevancy": 0.0,
+      "rag.answer_correctness": 1.0,
+      "retrieval.chunk_utilization": 0.0,
+      "graph.global_diversity": 0.8691,
+      "text_similarity.exact_match": 0.0,
+      "text_similarity.f1": 0.2647058823529412,
+      "text_similarity.bleu": 0.06449817351457393,
+      "text_similarity.rouge_l": 0.1764705882352941
+    },
+    "metadata": {
+      "id": "q_oos_01",
+      "required_facts": [
+        {
+          "id": "qoos1_f1",
+          "fact": "States lack of evidence in corpus / abstains",
+          "weight": 1.0,
+          "aliases": [
+            "insufficient evidence",
+            "cannot answer",
+            "lacks sufficient evidence",
+            "no evidence"
+          ]
+        }
+      ],
+      "optional_facts": [],
+      "answerable": false,
+      "hop_type": "out-of-scope",
+      "target_entities": [],
+      "gold_chunk_ids": [],
+      "route_taken": "vector",
+      "citations": [],
+      "is_grounded": true,
+      "from_cache": false,
+      "original_question_id": "q_oos_01",
+      "graph_facts_retrieved": [],
+      "expected_themes": null,
+      "community_summary": null,
+      "community_chunks": null
+    }
+  }
+]

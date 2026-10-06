@@ -1,0 +1,652 @@
+{
+  "timestamp": "2026-10-06T16:27:27.979941+00:00",
+  "runs": {
+    "run1_peak": {
+      "fact_score": 0.8208,
+      "strict_count": 28,
+      "strict_rate": 0.7,
+      "substantive_recall": 0.6538,
+      "unified_recall": 0.6708,
+      "abstention_count": 10,
+      "mean_context_tokens": 598.0,
+      "invalid_citation_rate": 0.0,
+      "total_latency": {
+        "median": 4112.7,
+        "min": 1720.4,
+        "max": 104873.8,
+        "p95": 31283.2
+      },
+      "db_latency": null,
+      "hydration_latency": {
+        "median": 6.1,
+        "min": 0.0,
+        "max": 13.9,
+        "p95": 12.1
+      },
+      "nim_latency": null
+    },
+    "run2_rerun": {
+      "fact_score": 0.8,
+      "strict_count": 26,
+      "strict_rate": 0.65,
+      "substantive_recall": 0.6538,
+      "unified_recall": 0.6708,
+      "abstention_count": 10,
+      "mean_context_tokens": 598.0,
+      "invalid_citation_rate": 0.0,
+      "total_latency": {
+        "median": 5043.9,
+        "min": 1865.1,
+        "max": 94968.8,
+        "p95": 21683.3
+      },
+      "db_latency": null,
+      "hydration_latency": {
+        "median": 6.2,
+        "min": 0.0,
+        "max": 16.9,
+        "p95": 10.7
+      },
+      "nim_latency": null
+    },
+    "run3_fresh": {
+      "fact_score": 0.7917,
+      "strict_count": 25,
+      "strict_rate": 0.625,
+      "substantive_recall": 0.6538,
+      "unified_recall": 0.6708,
+      "abstention_count": 10,
+      "mean_context_tokens": 598.0,
+      "invalid_citation_rate": 0.0,
+      "total_latency": {
+        "median": 3777.7,
+        "min": 2024.2,
+        "max": 94593.1,
+        "p95": 18692.9
+      },
+      "db_latency": {
+        "median": 411.9,
+        "min": 269.0,
+        "max": 2890.9,
+        "p95": 539.6
+      },
+      "hydration_latency": {
+        "median": 8.2,
+        "min": 0.0,
+        "max": 16.8,
+        "p95": 12.8
+      },
+      "nim_latency": {
+        "median": 1979.1,
+        "min": 910.8,
+        "max": 25383.6,
+        "p95": 9673.1
+      }
+    }
+  },
+  "aggregate_metrics": {
+    "mean_fact_score": 0.8042,
+    "std_fact_score": 0.015,
+    "range_fact_score": [
+      0.7917,
+      0.8208
+    ],
+    "mean_strict_count": 26.33,
+    "std_strict_count": 1.53,
+    "range_strict_count": [
+      25,
+      28
+    ],
+    "mean_substantive_recall": 0.6538,
+    "mean_unified_recall": 0.6708
+  },
+  "stability_metrics": {
+    "retrieval_deterministic_50q": true,
+    "chunks_identical_count": 50,
+    "graph_facts_identical_count": 50,
+    "stable_questions_count": 44,
+    "unstable_questions_count": 6,
+    "unstable_questions": [
+      {
+        "question_id": "q_1hop_09",
+        "hop_type": "1-hop",
+        "scores": [
+          1.0,
+          0.5,
+          1.0
+        ],
+        "reason": "Scores varied: R1=1.0, R2=0.5, R3=1.0"
+      },
+      {
+        "question_id": "q_1hop_10",
+        "hop_type": "1-hop",
+        "scores": [
+          1.0,
+          1.0,
+          0.5
+        ],
+        "reason": "Scores varied: R1=1.0, R2=1.0, R3=0.5"
+      },
+      {
+        "question_id": "q_3hop_01",
+        "hop_type": "3-hop",
+        "scores": [
+          1.0,
+          0.6667,
+          0.6667
+        ],
+        "reason": "Scores varied: R1=1.0, R2=0.6667, R3=0.6667"
+      },
+      {
+        "question_id": "q_3hop_03",
+        "hop_type": "3-hop",
+        "scores": [
+          1.0,
+          1.0,
+          0.6667
+        ],
+        "reason": "Scores varied: R1=1.0, R2=1.0, R3=0.6667"
+      },
+      {
+        "question_id": "q_agg_01",
+        "hop_type": "aggregation",
+        "scores": [
+          1.0,
+          0.5,
+          0.5
+        ],
+        "reason": "Scores varied: R1=1.0, R2=0.5, R3=0.5"
+      },
+      {
+        "question_id": "q_agg_09",
+        "hop_type": "aggregation",
+        "scores": [
+          0.5,
+          1.0,
+          1.0
+        ],
+        "reason": "Scores varied: R1=0.5, R2=1.0, R3=1.0"
+      }
+    ]
+  },
+  "aggregate_criteria": [
+    {
+      "criterion": "Mean Fact Score",
+      "threshold": ">= 0.8208",
+      "measured": 0.8042,
+      "status": "FAIL"
+    },
+    {
+      "criterion": "Mean Strict Success (Count)",
+      "threshold": ">= 28/40",
+      "measured": "26.33/40 (65.8%)",
+      "status": "FAIL"
+    },
+    {
+      "criterion": "Mean Substantive Chunk Recall",
+      "threshold": ">= 0.6538",
+      "measured": 0.6538,
+      "status": "PASS"
+    },
+    {
+      "criterion": "Mean Unified Evidence Recall",
+      "threshold": ">= 0.6708",
+      "measured": 0.6708,
+      "status": "PASS"
+    }
+  ],
+  "is_release_qualified": false,
+  "final_classification": "Research Champion / Release Candidate (Quantified Generator Variance)",
+  "question_stability_matrix": [
+    {
+      "question_id": "q_1hop_01",
+      "hop_type": "1-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_1hop_02",
+      "hop_type": "1-hop",
+      "answerable": true,
+      "run1": 0.0,
+      "run2": 0.0,
+      "run3": 0.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_1hop_03",
+      "hop_type": "1-hop",
+      "answerable": true,
+      "run1": 0.0,
+      "run2": 0.0,
+      "run3": 0.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_1hop_04",
+      "hop_type": "1-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_1hop_05",
+      "hop_type": "1-hop",
+      "answerable": true,
+      "run1": 0.5,
+      "run2": 0.5,
+      "run3": 0.5,
+      "stable": true
+    },
+    {
+      "question_id": "q_1hop_06",
+      "hop_type": "1-hop",
+      "answerable": true,
+      "run1": 0.5,
+      "run2": 0.5,
+      "run3": 0.5,
+      "stable": true
+    },
+    {
+      "question_id": "q_1hop_07",
+      "hop_type": "1-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_1hop_08",
+      "hop_type": "1-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_1hop_09",
+      "hop_type": "1-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 0.5,
+      "run3": 1.0,
+      "stable": false
+    },
+    {
+      "question_id": "q_1hop_10",
+      "hop_type": "1-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 0.5,
+      "stable": false
+    },
+    {
+      "question_id": "q_2hop_01",
+      "hop_type": "2-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_2hop_02",
+      "hop_type": "2-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_2hop_03",
+      "hop_type": "2-hop",
+      "answerable": true,
+      "run1": 0.0,
+      "run2": 0.0,
+      "run3": 0.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_2hop_04",
+      "hop_type": "2-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_2hop_05",
+      "hop_type": "2-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_2hop_06",
+      "hop_type": "2-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_2hop_07",
+      "hop_type": "2-hop",
+      "answerable": true,
+      "run1": 0.5,
+      "run2": 0.5,
+      "run3": 0.5,
+      "stable": true
+    },
+    {
+      "question_id": "q_2hop_08",
+      "hop_type": "2-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_2hop_09",
+      "hop_type": "2-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_2hop_10",
+      "hop_type": "2-hop",
+      "answerable": true,
+      "run1": 0.5,
+      "run2": 0.5,
+      "run3": 0.5,
+      "stable": true
+    },
+    {
+      "question_id": "q_3hop_01",
+      "hop_type": "3-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 0.6667,
+      "run3": 0.6667,
+      "stable": false
+    },
+    {
+      "question_id": "q_3hop_02",
+      "hop_type": "3-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_3hop_03",
+      "hop_type": "3-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 0.6667,
+      "stable": false
+    },
+    {
+      "question_id": "q_3hop_04",
+      "hop_type": "3-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_3hop_05",
+      "hop_type": "3-hop",
+      "answerable": true,
+      "run1": 0.6667,
+      "run2": 0.6667,
+      "run3": 0.6667,
+      "stable": true
+    },
+    {
+      "question_id": "q_3hop_06",
+      "hop_type": "3-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_3hop_07",
+      "hop_type": "3-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_3hop_08",
+      "hop_type": "3-hop",
+      "answerable": true,
+      "run1": 0.6667,
+      "run2": 0.6667,
+      "run3": 0.6667,
+      "stable": true
+    },
+    {
+      "question_id": "q_3hop_09",
+      "hop_type": "3-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_3hop_10",
+      "hop_type": "3-hop",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_agg_01",
+      "hop_type": "aggregation",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 0.5,
+      "run3": 0.5,
+      "stable": false
+    },
+    {
+      "question_id": "q_agg_02",
+      "hop_type": "aggregation",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_agg_03",
+      "hop_type": "aggregation",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_agg_04",
+      "hop_type": "aggregation",
+      "answerable": true,
+      "run1": 0.5,
+      "run2": 0.5,
+      "run3": 0.5,
+      "stable": true
+    },
+    {
+      "question_id": "q_agg_05",
+      "hop_type": "aggregation",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_agg_06",
+      "hop_type": "aggregation",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_agg_07",
+      "hop_type": "aggregation",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_agg_08",
+      "hop_type": "aggregation",
+      "answerable": true,
+      "run1": 1.0,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": true
+    },
+    {
+      "question_id": "q_agg_09",
+      "hop_type": "aggregation",
+      "answerable": true,
+      "run1": 0.5,
+      "run2": 1.0,
+      "run3": 1.0,
+      "stable": false
+    },
+    {
+      "question_id": "q_agg_10",
+      "hop_type": "aggregation",
+      "answerable": true,
+      "run1": 0.5,
+      "run2": 0.5,
+      "run3": 0.5,
+      "stable": true
+    },
+    {
+      "question_id": "q_oos_01",
+      "hop_type": "out-of-scope",
+      "answerable": false,
+      "run1": "Refusal",
+      "run2": "Refusal",
+      "run3": "Refusal",
+      "stable": true
+    },
+    {
+      "question_id": "q_oos_02",
+      "hop_type": "out-of-scope",
+      "answerable": false,
+      "run1": "Refusal",
+      "run2": "Refusal",
+      "run3": "Refusal",
+      "stable": true
+    },
+    {
+      "question_id": "q_oos_03",
+      "hop_type": "out-of-scope",
+      "answerable": false,
+      "run1": "Refusal",
+      "run2": "Refusal",
+      "run3": "Refusal",
+      "stable": true
+    },
+    {
+      "question_id": "q_oos_04",
+      "hop_type": "out-of-scope",
+      "answerable": false,
+      "run1": "Refusal",
+      "run2": "Refusal",
+      "run3": "Refusal",
+      "stable": true
+    },
+    {
+      "question_id": "q_oos_05",
+      "hop_type": "out-of-scope",
+      "answerable": false,
+      "run1": "Refusal",
+      "run2": "Refusal",
+      "run3": "Refusal",
+      "stable": true
+    },
+    {
+      "question_id": "q_oos_06",
+      "hop_type": "out-of-scope",
+      "answerable": false,
+      "run1": "Refusal",
+      "run2": "Refusal",
+      "run3": "Refusal",
+      "stable": true
+    },
+    {
+      "question_id": "q_oos_07",
+      "hop_type": "out-of-scope",
+      "answerable": false,
+      "run1": "Refusal",
+      "run2": "Refusal",
+      "run3": "Refusal",
+      "stable": true
+    },
+    {
+      "question_id": "q_oos_08",
+      "hop_type": "out-of-scope",
+      "answerable": false,
+      "run1": "Refusal",
+      "run2": "Refusal",
+      "run3": "Refusal",
+      "stable": true
+    },
+    {
+      "question_id": "q_oos_09",
+      "hop_type": "out-of-scope",
+      "answerable": false,
+      "run1": "Refusal",
+      "run2": "Refusal",
+      "run3": "Refusal",
+      "stable": true
+    },
+    {
+      "question_id": "q_oos_10",
+      "hop_type": "out-of-scope",
+      "answerable": false,
+      "run1": "Refusal",
+      "run2": "Refusal",
+      "run3": "Refusal",
+      "stable": true
+    }
+  ]
+}

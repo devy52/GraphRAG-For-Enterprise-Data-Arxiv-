@@ -1,0 +1,54 @@
+# Benchmark V2 Per-Question Audit Table
+
+| Question ID | Hop Type | Answerable | Retrieval Recall | Fact Score | Correct | Missing | Incorrect | Groundedness | Unsupported | Token F1 | Abstention |
+|---|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| `q_1hop_01` | 1-hop | Yes | 1.00 | 0.00 | 0 | 3 | 0 | 1.00 | 0.00 | 0.28 | Incorrect |
+| `q_1hop_02` | 1-hop | Yes | 0.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.27 | Incorrect |
+| `q_1hop_03` | 1-hop | Yes | 0.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.14 | Incorrect |
+| `q_1hop_04` | 1-hop | Yes | 1.00 | 0.00 | 0 | 2 | 0 | 0.92 | 0.08 | 0.46 | Answered |
+| `q_1hop_05` | 1-hop | Yes | 0.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.28 | Incorrect |
+| `q_1hop_06` | 1-hop | Yes | 0.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.12 | Incorrect |
+| `q_1hop_07` | 1-hop | Yes | 1.00 | 0.00 | 0 | 1 | 1 | 0.29 | 0.71 | 0.20 | Answered |
+| `q_1hop_08` | 1-hop | Yes | 1.00 | 0.50 | 1 | 1 | 0 | 1.00 | 0.00 | 0.17 | Answered |
+| `q_1hop_09` | 1-hop | Yes | 1.00 | 1.00 | 2 | 0 | 0 | 1.00 | 0.00 | 0.89 | Answered |
+| `q_1hop_10` | 1-hop | Yes | 0.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.15 | Incorrect |
+| `q_2hop_01` | 2-hop | Yes | 0.50 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.43 | Incorrect |
+| `q_2hop_02` | 2-hop | Yes | 0.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.10 | Incorrect |
+| `q_2hop_03` | 2-hop | Yes | 1.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.24 | Incorrect |
+| `q_2hop_04` | 2-hop | Yes | 0.00 | 1.00 | 2 | 0 | 0 | 0.58 | 0.42 | 0.38 | Answered |
+| `q_2hop_05` | 2-hop | Yes | 0.00 | 1.00 | 2 | 0 | 0 | 1.00 | 0.00 | 0.67 | Answered |
+| `q_2hop_06` | 2-hop | Yes | 1.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.31 | Incorrect |
+| `q_2hop_07` | 2-hop | Yes | 0.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.41 | Incorrect |
+| `q_2hop_08` | 2-hop | Yes | 1.00 | 0.50 | 1 | 1 | 0 | 1.00 | 0.00 | 0.40 | Answered |
+| `q_2hop_09` | 2-hop | Yes | 1.00 | 0.50 | 1 | 1 | 0 | 0.06 | 0.94 | 0.24 | Answered |
+| `q_2hop_10` | 2-hop | Yes | 1.00 | 0.50 | 1 | 1 | 0 | 0.97 | 0.03 | 0.64 | Answered |
+| `q_3hop_01` | 3-hop | Yes | 0.50 | 0.33 | 1 | 2 | 0 | 0.27 | 0.73 | 0.16 | Answered |
+| `q_3hop_02` | 3-hop | Yes | 1.00 | 0.67 | 2 | 1 | 0 | 0.91 | 0.09 | 0.19 | Answered |
+| `q_3hop_03` | 3-hop | Yes | 0.50 | 0.33 | 1 | 2 | 0 | 0.14 | 0.86 | 0.24 | Answered |
+| `q_3hop_04` | 3-hop | Yes | 0.00 | 0.00 | 0 | 3 | 0 | 1.00 | 0.00 | 0.22 | Incorrect |
+| `q_3hop_05` | 3-hop | Yes | 0.50 | 0.33 | 1 | 2 | 0 | 0.26 | 0.74 | 0.18 | Answered |
+| `q_3hop_06` | 3-hop | Yes | 1.00 | 0.00 | 0 | 3 | 0 | 1.00 | 0.00 | 0.37 | Incorrect |
+| `q_3hop_07` | 3-hop | Yes | 0.50 | 0.67 | 2 | 1 | 0 | 0.19 | 0.81 | 0.26 | Answered |
+| `q_3hop_08` | 3-hop | Yes | 0.00 | 0.00 | 0 | 3 | 0 | 1.00 | 0.00 | 0.16 | Incorrect |
+| `q_3hop_09` | 3-hop | Yes | 1.00 | 0.00 | 0 | 3 | 0 | 1.00 | 0.00 | 0.22 | Incorrect |
+| `q_3hop_10` | 3-hop | Yes | 0.00 | 0.00 | 0 | 3 | 0 | 1.00 | 0.00 | 0.23 | Incorrect |
+| `q_agg_01` | aggregation | Yes | 0.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.19 | Incorrect |
+| `q_agg_02` | aggregation | Yes | 0.50 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.22 | Incorrect |
+| `q_agg_03` | aggregation | Yes | 0.50 | 0.50 | 1 | 1 | 0 | 1.00 | 0.00 | 0.21 | Answered |
+| `q_agg_04` | aggregation | Yes | 0.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.24 | Incorrect |
+| `q_agg_05` | aggregation | Yes | 0.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.25 | Incorrect |
+| `q_agg_06` | aggregation | Yes | 0.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.27 | Incorrect |
+| `q_agg_07` | aggregation | Yes | 0.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.21 | Incorrect |
+| `q_agg_08` | aggregation | Yes | 0.50 | 1.00 | 2 | 0 | 0 | 0.20 | 0.80 | 0.16 | Answered |
+| `q_agg_09` | aggregation | Yes | 0.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.35 | Incorrect |
+| `q_agg_10` | aggregation | Yes | 0.00 | 0.00 | 0 | 2 | 0 | 1.00 | 0.00 | 0.20 | Incorrect |
+| `q_oos_01` | out-of-scope | No | N/A | N/A | 0 | 0 | 0 | 1.00 | 0.00 | 0.28 | Correct |
+| `q_oos_02` | out-of-scope | No | N/A | N/A | 0 | 0 | 0 | 1.00 | 0.00 | 0.33 | Correct |
+| `q_oos_03` | out-of-scope | No | N/A | N/A | 0 | 0 | 0 | 1.00 | 0.00 | 0.24 | Correct |
+| `q_oos_04` | out-of-scope | No | N/A | N/A | 0 | 0 | 0 | 1.00 | 0.00 | 0.36 | Correct |
+| `q_oos_05` | out-of-scope | No | N/A | N/A | 0 | 0 | 0 | 1.00 | 0.00 | 0.18 | Correct |
+| `q_oos_06` | out-of-scope | No | N/A | N/A | 0 | 0 | 0 | 1.00 | 0.00 | 0.36 | Correct |
+| `q_oos_07` | out-of-scope | No | N/A | N/A | 0 | 0 | 0 | 1.00 | 0.00 | 0.22 | Correct |
+| `q_oos_08` | out-of-scope | No | N/A | N/A | 0 | 0 | 0 | 1.00 | 0.00 | 0.29 | Correct |
+| `q_oos_09` | out-of-scope | No | N/A | N/A | 0 | 0 | 0 | 1.00 | 0.00 | 0.23 | Correct |
+| `q_oos_10` | out-of-scope | No | N/A | N/A | 0 | 0 | 0 | 1.00 | 0.00 | 0.25 | Correct |

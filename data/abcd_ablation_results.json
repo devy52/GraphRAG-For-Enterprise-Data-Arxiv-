@@ -1,0 +1,390 @@
+{
+  "schema_version": "abcd-ablation-v1",
+  "generated_at": "2026-10-06T07:00:15.526101+00:00",
+  "dataset_sha256": "88fc85fc1af4200abcfe9530bd8228156b407b8cb04c4c1745472cc080fdcae4",
+  "question_count": 50,
+  "summary": {
+    "mode_a_vector": {
+      "question_count": 50,
+      "answerable_count": 40,
+      "unanswerable_count": 10,
+      "fact_score_mean": 0.6292,
+      "answerable_success_rate": 0.425,
+      "abstention_accuracy": 1.0,
+      "chunk_recall_mean": 0.2692,
+      "graph_recall_mean": 0.0,
+      "metadata_recall_mean": 0.0,
+      "unified_recall_mean": 0.2625,
+      "retrieval_precision_mean": 0.2175,
+      "retrieval_recall_mean": 0.2625,
+      "retrieval_mrr_mean": 0.3312,
+      "context_tokens_mean": 247,
+      "context_chunks_mean": 2.04,
+      "latency_p50_ms": 3594.3,
+      "latency_p95_ms": 28875.06,
+      "by_tier": {
+        "1-hop": {
+          "count": 10,
+          "fact_score_mean": 0.4,
+          "retrieval_recall_mean": 0.2,
+          "retrieval_precision_mean": 0.1
+        },
+        "2-hop": {
+          "count": 10,
+          "fact_score_mean": 0.7,
+          "retrieval_recall_mean": 0.4,
+          "retrieval_precision_mean": 0.3
+        },
+        "3-hop": {
+          "count": 10,
+          "fact_score_mean": 0.6667,
+          "retrieval_recall_mean": 0.3,
+          "retrieval_precision_mean": 0.35
+        },
+        "aggregation": {
+          "count": 10,
+          "fact_score_mean": 0.75,
+          "retrieval_recall_mean": 0.15,
+          "retrieval_precision_mean": 0.12
+        },
+        "out-of-scope": {
+          "count": 10,
+          "fact_score_mean": null,
+          "abstention_accuracy": 1.0
+        }
+      }
+    },
+    "mode_b_graph": {
+      "question_count": 50,
+      "answerable_count": 40,
+      "unanswerable_count": 10,
+      "fact_score_mean": 0.4625,
+      "answerable_success_rate": 0.2,
+      "abstention_accuracy": 1.0,
+      "chunk_recall_mean": 0.0,
+      "graph_recall_mean": 0.5,
+      "metadata_recall_mean": 0.0,
+      "unified_recall_mean": 0.475,
+      "retrieval_precision_mean": 0.3349,
+      "retrieval_recall_mean": 0.475,
+      "retrieval_mrr_mean": 0.4058,
+      "context_tokens_mean": 205.06,
+      "context_chunks_mean": 11.06,
+      "latency_p50_ms": 3733.3,
+      "latency_p95_ms": 34029.12,
+      "by_tier": {
+        "1-hop": {
+          "count": 10,
+          "fact_score_mean": 0.3,
+          "retrieval_recall_mean": 0.45,
+          "retrieval_precision_mean": 0.35
+        },
+        "2-hop": {
+          "count": 10,
+          "fact_score_mean": 0.25,
+          "retrieval_recall_mean": 0.65,
+          "retrieval_precision_mean": 0.323
+        },
+        "3-hop": {
+          "count": 10,
+          "fact_score_mean": 0.6,
+          "retrieval_recall_mean": 0.55,
+          "retrieval_precision_mean": 0.4083
+        },
+        "aggregation": {
+          "count": 10,
+          "fact_score_mean": 0.7,
+          "retrieval_recall_mean": 0.25,
+          "retrieval_precision_mean": 0.2583
+        },
+        "out-of-scope": {
+          "count": 10,
+          "fact_score_mean": null,
+          "abstention_accuracy": 1.0
+        }
+      }
+    },
+    "mode_c_hybrid": {
+      "question_count": 50,
+      "answerable_count": 40,
+      "unanswerable_count": 10,
+      "fact_score_mean": 0.675,
+      "answerable_success_rate": 0.425,
+      "abstention_accuracy": 1.0,
+      "chunk_recall_mean": 0.2821,
+      "graph_recall_mean": 0.5,
+      "metadata_recall_mean": 0.0,
+      "unified_recall_mean": 0.55,
+      "retrieval_precision_mean": 0.2438,
+      "retrieval_recall_mean": 0.55,
+      "retrieval_mrr_mean": 0.419,
+      "context_tokens_mean": 448.58,
+      "context_chunks_mean": 13.08,
+      "latency_p50_ms": 4187.99,
+      "latency_p95_ms": 15396.46,
+      "by_tier": {
+        "1-hop": {
+          "count": 10,
+          "fact_score_mean": 0.55,
+          "retrieval_recall_mean": 0.45,
+          "retrieval_precision_mean": 0.2333
+        },
+        "2-hop": {
+          "count": 10,
+          "fact_score_mean": 0.7,
+          "retrieval_recall_mean": 0.65,
+          "retrieval_precision_mean": 0.2121
+        },
+        "3-hop": {
+          "count": 10,
+          "fact_score_mean": 0.7,
+          "retrieval_recall_mean": 0.7,
+          "retrieval_precision_mean": 0.3715
+        },
+        "aggregation": {
+          "count": 10,
+          "fact_score_mean": 0.75,
+          "retrieval_recall_mean": 0.4,
+          "retrieval_precision_mean": 0.1581
+        },
+        "out-of-scope": {
+          "count": 10,
+          "fact_score_mean": null,
+          "abstention_accuracy": 1.0
+        }
+      }
+    },
+    "mode_d_oracle": {
+      "question_count": 50,
+      "answerable_count": 40,
+      "unanswerable_count": 10,
+      "fact_score_mean": 0.9458,
+      "answerable_success_rate": 0.9,
+      "abstention_accuracy": 1.0,
+      "chunk_recall_mean": 1.0,
+      "graph_recall_mean": 0.0,
+      "metadata_recall_mean": 1.0,
+      "unified_recall_mean": 1.0,
+      "retrieval_precision_mean": 1.0,
+      "retrieval_recall_mean": 1.0,
+      "retrieval_mrr_mean": 1.0,
+      "context_tokens_mean": 180.14,
+      "context_chunks_mean": 1.26,
+      "latency_p50_ms": 1922.91,
+      "latency_p95_ms": 19655.04,
+      "by_tier": {
+        "1-hop": {
+          "count": 10,
+          "fact_score_mean": 1.0,
+          "retrieval_recall_mean": 1.0,
+          "retrieval_precision_mean": 1.0
+        },
+        "2-hop": {
+          "count": 10,
+          "fact_score_mean": 0.85,
+          "retrieval_recall_mean": 1.0,
+          "retrieval_precision_mean": 1.0
+        },
+        "3-hop": {
+          "count": 10,
+          "fact_score_mean": 0.9333,
+          "retrieval_recall_mean": 1.0,
+          "retrieval_precision_mean": 1.0
+        },
+        "aggregation": {
+          "count": 10,
+          "fact_score_mean": 1.0,
+          "retrieval_recall_mean": 1.0,
+          "retrieval_precision_mean": 1.0
+        },
+        "out-of-scope": {
+          "count": 10,
+          "fact_score_mean": null,
+          "abstention_accuracy": 1.0
+        }
+      }
+    }
+  },
+  "worst_10_hybrid_triage": [
+    {
+      "question_id": "q_1hop_01",
+      "hop_type": "1-hop",
+      "question": "Who are the primary authors of the GraphRAG-R1 paper proposing process-constrained reinforcement learning?",
+      "retrieval_stage": "✅",
+      "evidence_stage": "❌",
+      "context_stage": "✅",
+      "generation_stage": "❌",
+      "vector_fact": 0.0,
+      "hybrid_fact": 0.0,
+      "oracle_fact": 1.0,
+      "hybrid_recall": 0.0,
+      "hybrid_tokens": 372,
+      "failure_type": "B",
+      "diagnostic_reasoning": "Graph traversal found relationships, but missed target gold chunks",
+      "generated_answer": "There is insufficient evidence in the provided context to determine the primary authors of the GraphRAG-R1 paper proposing process-constrained reinforcement learning.",
+      "assembled_context": "=== KNOWLEDGE GRAPH FACTS ===\n[graph] Fact 1: Entity 'Process-Constrained Reinforcement Learning' -[:USES_METHOD]- 'GraphRAG-R1' (Paper) [chunk: chunk_arxiv_2507_23581v2_002].\n[graph] Fact 2: Entity 'Process-Constrained Reinforcement Learning' -[:USES_METHOD]- 'GraphRAG-R1' (Paper) [chunk: chunk_arxiv_2507_23581v2_000].\n[graph] Fact 3: Entity 'GraphRAG-R1' -[:USES_DATASET]- 'out-of-domain datasets' (Dataset) [chunk: chunk_arxiv_2507_23581v2_002].\n[graph] Fact 4: Entity 'GraphRAG-R1' -[:USES_DATASET]- 'in-domain datasets' (Dataset) [chunk: chunk_arxiv_2507_23581v2_002].\n[graph] Fact 5: Entity 'GraphRAG-R1' -[:EXTENDS]- 'GraphRAG' (Method) [chunk: chunk_arxiv_2507_23581v2_002].\n[graph] Fact 6: Entity 'GraphRAG-R1' -[:PUBLISHED_IN]- 'arXiv' (Venue) [chunk: chunk_arxiv_2507_23581v2_002].\n[graph] Fact 7: Entity 'GraphRAG-R1' -[:HAS_TOPIC]- 'Graph Retrieval-Augmented Generation' (Topic) [chunk: chunk_arxiv_2507_23581v2_002].\n[graph] Fact 8: Entity 'GraphRAG-R1' -[:USES_METHOD]- 'Graph-textual retrieval' (Method) [chunk: chunk_arxiv_2507_23581v2_002].\n\n=== RETRIEVED DOCUMENT PASSAGES ===\n[retrieved] [chunk_arxiv_2507_23581v2_002] (Paper: 'GraphRAG-R1: Graph Retrieval-Augmented Generation with Process-Constrained Reinforcement Learning', Section: 'Abstract')\nraining stages corresponding to cold start and these two rewards. Lastly, our method adopts a hybrid graph-textual retrieval to improve the reasoning capacity. Extensive experimental results demonstrate that GraphRAG-R1 boosts LLM capabilities in solving complex reasoning problems compared to state-of-the-art GraphRAG methods on both in-domain and out-of-domain datasets. Furthermore, our framework can be flexibly integrated with various existing retrieval methods, consistently delivering performance improvements.\n\n[retrieved] [chunk_arxiv_2507_23581v2_000] (Paper: 'GraphRAG-R1: Graph Retrieval-Augmented Generation with Process-Constrained Reinforcement Learning', Section: 'Abstract')\nGraph Retrieval-Augmented Generation (GraphRAG) has shown great effectiveness in enhancing the reasoning abilities of LLMs by leveraging graph structures for knowledge representation and modeling complex real-world relationships. However, existing GraphRAG methods still face significant bottlenecks when handling complex problems that require multi-hop reasoning, as their query and retrieval phases are largely based on pre-defined heuristics and do not fully utilize the reasoning potentials of LLMs. To address this problem, we propose GraphRAG-R1, an adaptive GraphRAG framework by training LLMs with process-constrained outcome-based reinforcement learning (RL) to enhance the multi-hop reasoning ability.\n"
+    },
+    {
+      "question_id": "q_1hop_02",
+      "hop_type": "1-hop",
+      "question": "What benchmark is proposed in 'When to use Graphs in RAG' to evaluate GraphRAG models?",
+      "retrieval_stage": "✅",
+      "evidence_stage": "❌",
+      "context_stage": "✅",
+      "generation_stage": "❌",
+      "vector_fact": 0.0,
+      "hybrid_fact": 0.0,
+      "oracle_fact": 1.0,
+      "hybrid_recall": 0.0,
+      "hybrid_tokens": 383,
+      "failure_type": "B",
+      "diagnostic_reasoning": "Graph traversal found relationships, but missed target gold chunks",
+      "generated_answer": "There is insufficient evidence in the provided context to determine the benchmark proposed in 'When to use Graphs in RAG' to evaluate GraphRAG models.",
+      "assembled_context": "=== KNOWLEDGE GRAPH FACTS ===\n[graph] Fact 1: Entity 'GraphRAG' -[:USES_METHOD]- 'GragPoison' (Method) [chunk: chunk_arxiv_2501_14050v4_001].\n[graph] Fact 2: Entity 'GraphRAG' -[:EXTENDS]- 'GragPoison' (Method) [chunk: chunk_arxiv_2501_14050v4_001].\n[graph] Fact 3: Entity 'GraphRAG' -[:EXTENDS]- 'RAGSearch' (Paper) [chunk: chunk_arxiv_2607_11683v1_000].\n[graph] Fact 4: Entity 'GraphRAG' -[:USES_METHOD]- 'RAGSearch' (Paper) [chunk: chunk_arxiv_2607_11683v1_000].\n[graph] Fact 5: Entity 'GraphRAG' -[:USES_METHOD]- 'Toward Robust GraphRAG: Mitigating Retrieval Drift and Hallucination from Imperfect Knowledge Graphs' (Paper) [chunk: chunk_arxiv_2603_14828v2_001].\n[graph] Fact 6: Entity 'GraphRAG' -[:EXTENDS]- 'Graph Retrieval-Augmented Generation' (Method) [chunk: chunk_arxiv_2603_14828v2_000].\n[graph] Fact 7: Entity 'GraphRAG' -[:USES_METHOD]- 'RAG' (Method) [chunk: chunk_arxiv_2603_14828v2_000].\n[graph] Fact 8: Entity 'GraphRAG' -[:USES_DATASET]- 'Knowledge graph' (Dataset) [chunk: chunk_arxiv_2603_14828v2_000].\n\n=== RETRIEVED DOCUMENT PASSAGES ===\n[retrieved] [chunk_arxiv_2501_09136v4_001] (Paper: 'Agentic Retrieval-Augmented Generation: A Survey on Agentic RAG', Section: 'Abstract')\nranscends these limitations by embedding autonomous AI agents into the RAG pipeline. These agents leverage agentic design patterns reflection, planning, tool use, and multi-agent collaboration to dynamically manage retrieval strategies, iteratively refine contextual understanding, and adapt workflows through operational structures ranging from sequential steps to adaptive collaboration. This integration enables Agentic RAG systems to deliver flexibility, scalability, and context-awareness across diverse applications. This paper presents an analytical survey of Agentic RAG systems.\n\n[retrieved] [chunk_arxiv_2606_25656v1_001] (Paper: 'Is GraphRAG Needed? From Basic RAG to Graph-/Agentic Solutions with Context Optimization', Section: 'Abstract')\nnd agent-graph integration. Besides, we present a novel context engineering method for GraphRAG and Agentic RAG, addressing the context/memory overflow issues, efficiently managing text and graph retrievals with new representations and agentic loop design, leading to 19%-53% reduction on token usage. Moreover, further analysis identifies a retrieval-generation gap where expanded retrieval does not proportionally improve generation quality, suggesting retrieval-oriented metrics overstate advanced retrieval benefits. This work provides data-driven insights on when and how to use them for building production-ready intelligent RAG systems.\n"
+    },
+    {
+      "question_id": "q_1hop_03",
+      "hop_type": "1-hop",
+      "question": "What dataset was introduced in 'From RAG to Agentic RAG' for faithful Islamic question answering?",
+      "retrieval_stage": "✅",
+      "evidence_stage": "❌",
+      "context_stage": "✅",
+      "generation_stage": "❌",
+      "vector_fact": 0.0,
+      "hybrid_fact": 0.0,
+      "oracle_fact": 1.0,
+      "hybrid_recall": 0.0,
+      "hybrid_tokens": 392,
+      "failure_type": "B",
+      "diagnostic_reasoning": "Graph traversal found relationships, but missed target gold chunks",
+      "generated_answer": "There is insufficient evidence in the provided context to determine the dataset introduced in 'From RAG to Agentic RAG' for faithful Islamic question answering.",
+      "assembled_context": "=== KNOWLEDGE GRAPH FACTS ===\n[graph] Fact 1: Entity 'Agentic RAG' -[:USES_METHOD]- 'LatentRAG' (Paper) [chunk: chunk_arxiv_2605_06285v1_000].\n[graph] Fact 2: Entity 'Agentic RAG' -[:USES_METHOD]- 'RAG' (Method) [chunk: chunk_arxiv_2507_10411v1_001].\n[graph] Fact 3: Entity 'Agentic RAG' -[:EXTENDS]- 'RAG' (Method) [chunk: chunk_arxiv_2507_10411v1_000].\n[graph] Fact 4: Entity 'Agentic RAG' -[:USES_METHOD]- 'R1-Searcher' (Paper) [chunk: chunk_arxiv_2507_10411v1_000].\n[graph] Fact 5: Entity 'Agentic RAG' -[:USES_METHOD]- 'Search-R1' (Paper) [chunk: chunk_arxiv_2507_10411v1_000].\n[graph] Fact 6: Entity 'Agentic RAG' -[:USES_METHOD]- 'AgenticRAGTracer: A Hop-Aware Benchmark for Diagnosing Multi-Step Retrieval Reasoning in Agentic RAG' (Paper) [chunk: chunk_arxiv_2602_19127v2_000].\n[graph] Fact 7: Entity 'Agentic RAG' -[:USES_METHOD]- 'Natural Language Processing' (Topic) [chunk: chunk_arxiv_2606_25656v1_001].\n[graph] Fact 8: Entity 'Agentic RAG' -[:EXTENDS]- 'GraphRAG' (Method) [chunk: chunk_arxiv_2606_25656v1_001].\n\n=== RETRIEVED DOCUMENT PASSAGES ===\n[retrieved] [chunk_arxiv_2501_09136v4_001] (Paper: 'Agentic Retrieval-Augmented Generation: A Survey on Agentic RAG', Section: 'Abstract')\nranscends these limitations by embedding autonomous AI agents into the RAG pipeline. These agents leverage agentic design patterns reflection, planning, tool use, and multi-agent collaboration to dynamically manage retrieval strategies, iteratively refine contextual understanding, and adapt workflows through operational structures ranging from sequential steps to adaptive collaboration. This integration enables Agentic RAG systems to deliver flexibility, scalability, and context-awareness across diverse applications. This paper presents an analytical survey of Agentic RAG systems.\n\n[retrieved] [chunk_arxiv_2606_25656v1_001] (Paper: 'Is GraphRAG Needed? From Basic RAG to Graph-/Agentic Solutions with Context Optimization', Section: 'Abstract')\nnd agent-graph integration. Besides, we present a novel context engineering method for GraphRAG and Agentic RAG, addressing the context/memory overflow issues, efficiently managing text and graph retrievals with new representations and agentic loop design, leading to 19%-53% reduction on token usage. Moreover, further analysis identifies a retrieval-generation gap where expanded retrieval does not proportionally improve generation quality, suggesting retrieval-oriented metrics overstate advanced retrieval benefits. This work provides data-driven insights on when and how to use them for building production-ready intelligent RAG systems.\n"
+    },
+    {
+      "question_id": "q_2hop_06",
+      "hop_type": "2-hop",
+      "question": "What dual failure modes does Yizhuo Ma et al. identify when knowledge graphs are constructed by LLMs for GraphRAG?",
+      "retrieval_stage": "✅",
+      "evidence_stage": "✅",
+      "context_stage": "✅",
+      "generation_stage": "❌",
+      "vector_fact": 0.0,
+      "hybrid_fact": 0.0,
+      "oracle_fact": 1.0,
+      "hybrid_recall": 1.0,
+      "hybrid_tokens": 721,
+      "failure_type": "E",
+      "diagnostic_reasoning": "Gold chunk retrieved (recall 1.00), Oracle got 1.00, but Hybrid LLM answer failed fact coverage (0.00)",
+      "generated_answer": "There is insufficient evidence in the provided context to identify the dual failure modes that Yizhuo Ma et al. identify when knowledge graphs are constructed by LLMs for GraphRAG.",
+      "assembled_context": "=== KNOWLEDGE GRAPH FACTS ===\n[graph] Fact 1: Entity 'knowledge graph QA tasks' -[:USES_DATASET]- 'GraphRAG-FI' (Method) [chunk: chunk_arxiv_2503_13804v1_001].\n[graph] Fact 2: Entity 'Knowledge graph retrieval-augmented generation (KG-RAG)' -[:USES_METHOD]- 'RAG' (Method) [chunk: chunk_arxiv_2508_09460v1_000].\n[graph] Fact 3: Entity 'Knowledge graph retrieval-augmented generation (KG-RAG)' -[:EXTENDS]- 'RAG' (Method) [chunk: chunk_arxiv_2508_09460v1_000].\n[graph] Fact 4: Entity 'Knowledge graph retrieval-augmented generation (KG-RAG)' -[:USES_DATASET]- 'Knowledge graph' (Dataset) [chunk: chunk_arxiv_2508_09460v1_000].\n[graph] Fact 5: Entity 'Knowledge graph retrieval-augmented generation (KG-RAG)' -[:USES_DATASET]- 'Knowledge graph' (Dataset) [chunk: chunk_arxiv_2605_28175v2_000].\n[graph] Fact 6: Entity 'Knowledge graph retrieval-augmented generation (KG-RAG)' -[:EXTENDS]- 'LLM-based recommender systems' (Method) [chunk: chunk_arxiv_2605_28175v2_000].\n[graph] Fact 7: Entity 'Knowledge graph retrieval-augmented generation (KG-RAG)' -[:USES_METHOD]- 'LLM-based recommender systems' (Method) [chunk: chunk_arxiv_2605_28175v2_000].\n[graph] Fact 8: Entity 'Knowledge graph' -[:USES_DATASET]- 'Knowledge graph retrieval-augmented generation (KG-RAG)' (Method) [chunk: chunk_arxiv_2508_09460v1_000].\n[graph] Fact 9: Entity 'Knowledge graph' -[:HAS_TOPIC]- 'evidence chaining' (Topic) [chunk: chunk_arxiv_2603_14828v2_000].\n[graph] Fact 10: Entity 'Knowledge graph' -[:HAS_TOPIC]- 'multi-hop reasoning' (Topic) [chunk: chunk_arxiv_2603_14828v2_000].\n[graph] Fact 11: Entity 'Knowledge graph' -[:USES_DATASET]- 'GraphRAG' (Method) [chunk: chunk_arxiv_2603_14828v2_000].\n[graph] Fact 12: Entity 'Knowledge graph' -[:USES_DATASET]- 'Knowledge graph retrieval-augmented generation (KG-RAG)' (Method) [chunk: chunk_arxiv_2605_28175v2_000].\n[graph] Fact 13: Entity 'Mixture-of-Experts Knowledge Graph Retrieval-Augmented Generation for Multi-Agent LLM-based Recommendation' -[:PUBLISHED_IN]- 'arXiv' (Venue) [chunk: chunk_arxiv_2605_28175v2_002].\n[graph] Fact 14: Entity 'Knowledge Graph Retrieval-Augmented Generation' -[:USES_METHOD]- 'RAG' (Method) [chunk: chunk_arxiv_2601_09241v2_000].\n[graph] Fact 15: Entity 'Knowledge Graph Retrieval-Augmented Generation' -[:USES_METHOD]- 'RAG' (Method) [chunk: chunk_arxiv_2601_09241v2_000].\n[graph] Fact 16: Entity 'Knowledge Graph Retrieval-Augmented Generation' -[:EXTENDS]- 'RAG paradigm' (Method) [chunk: chunk_arxiv_2601_09241v2_000].\n[graph] Fact 17: Entity 'Toward Robust GraphRAG: Mitigating Retrieval Drift and Hallucination from Imperfect Knowledge Graphs' -[:PUBLISHED_IN]- 'arXiv' (Venue) [chunk: chunk_arxiv_2603_14828v2_001].\n[graph] Fact 18: Entity 'Toward Robust GraphRAG: Mitigating Retrieval Drift and Hallucination from Imperfect Knowledge Graphs' -[:HAS_TOPIC]- 'Natural Language Processing' (Topic) [chunk: chunk_arxiv_2603_14828v2_001].\n[graph] Fact 19: Entity 'Toward Robust GraphRAG: Mitigating Retrieval Drift and Hallucination from Imperfect Knowledge Graphs' -[:HAS_TOPIC]- 'Knowledge Graphs' (Topic) [chunk: chunk_arxiv_2603_14828v2_001].\n[graph] Fact 20: Entity 'Toward Robust GraphRAG: Mitigating Retrieval Drift and Hallucination from Imperfect Knowledge Graphs' -[:USES_METHOD]- 'CS-RAG' (Method) [chunk: chunk_arxiv_2603_14828v2_001].\n[graph] Fact 21: Entity 'Toward Robust GraphRAG: Mitigating Retrieval Drift and Hallucination from Imperfect Knowledge Graphs' -[:USES_METHOD]- 'GraphRAG' (Method) [chunk: chunk_arxiv_2603_14828v2_001].\n[graph] Fact 22: Entity 'Knowledge Graphs' -[:HAS_TOPIC]- 'Toward Robust GraphRAG: Mitigating Retrieval Drift and Hallucination from Imperfect Knowledge Graphs' (Paper) [chunk: chunk_arxiv_2603_14828v2_001].\n[graph] Fact 23: Entity 'Knowledge Graph Retrieval Augmented Generation' -[:HAS_TOPIC]- 'MetaKGRAG' (Paper) [chunk: chunk_arxiv_2508_09460v1_001].\n\n=== RETRIEVED DOCUMENT PASSAGES ===\n[retrieved] [chunk_arxiv_2507_23581v2_002] (Paper: 'GraphRAG-R1: Graph Retrieval-Augmented Generation with Process-Constrained Reinforcement Learning', Section: 'Abstract')\nraining stages corresponding to cold start and these two rewards. Lastly, our method adopts a hybrid graph-textual retrieval to improve the reasoning capacity. Extensive experimental results demonstrate that GraphRAG-R1 boosts LLM capabilities in solving complex reasoning problems compared to state-of-the-art GraphRAG methods on both in-domain and out-of-domain datasets. Furthermore, our framework can be flexibly integrated with various existing retrieval methods, consistently delivering performance improvements.\n\n[retrieved] [chunk_arxiv_2501_09136v4_001] (Paper: 'Agentic Retrieval-Augmented Generation: A Survey on Agentic RAG', Section: 'Abstract')\nranscends these limitations by embedding autonomous AI agents into the RAG pipeline. These agents leverage agentic design patterns reflection, planning, tool use, and multi-agent collaboration to dynamically manage retrieval strategies, iteratively refine contextual understanding, and adapt workflows through operational structures ranging from sequential steps to adaptive collaboration. This integration enables Agentic RAG systems to deliver flexibility, scalability, and context-awareness across diverse applications. This paper presents an analytical survey of Agentic RAG systems.\n"
+    },
+    {
+      "question_id": "q_3hop_03",
+      "hop_type": "3-hop",
+      "question": "How does Dissecting Agentic RAG isolate the individual performance contributions of query decomposition and adaptive retrieval?",
+      "retrieval_stage": "✅",
+      "evidence_stage": "❌",
+      "context_stage": "✅",
+      "generation_stage": "❌",
+      "vector_fact": 0.3333,
+      "hybrid_fact": 0.3333,
+      "oracle_fact": 1.0,
+      "hybrid_recall": 0.5,
+      "hybrid_tokens": 380,
+      "failure_type": "E",
+      "diagnostic_reasoning": "Gold chunk retrieved (recall 0.50), Oracle got 1.00, but Hybrid LLM answer failed fact coverage (0.33)",
+      "generated_answer": "There is insufficient evidence in the provided context to answer how Dissecting Agentic RAG isolates the individual performance contributions of query decomposition and adaptive retrieval.",
+      "assembled_context": "=== KNOWLEDGE GRAPH FACTS ===\n[graph] Fact 1: Entity 'Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model' -[:USES_METHOD]- 'Qwen2.5-7B-Instruct' (Method) [chunk: chunk_arxiv_2606_21553v1_000].\n[graph] Fact 2: Entity 'Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model' -[:USES_DATASET]- 'HotpotQA distractor development set' (Dataset) [chunk: chunk_arxiv_2606_21553v1_000].\n[graph] Fact 3: Entity 'Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model' -[:AUTHORED_BY]- 'Unknown Author' (Author) [chunk: chunk_arxiv_2606_21553v1_000].\n[graph] Fact 4: Entity 'Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model' -[:PUBLISHED_IN]- 'arXiv' (Venue) [chunk: chunk_arxiv_2606_21553v1_000].\n[graph] Fact 5: Entity 'Naive Retrieval-Augmented Generation (RAG)' -[:EXTENDS]- 'GRAG: Graph Retrieval-Augmented Generation' (Paper) [chunk: chunk_arxiv_2405_16506v3_000].\n[graph] Fact 6: Entity 'Naive Retrieval-Augmented Generation (RAG)' -[:USES_METHOD]- 'GRAG: Graph Retrieval-Augmented Generation' (Paper) [chunk: chunk_arxiv_2405_16506v3_000].\n\n=== RETRIEVED DOCUMENT PASSAGES ===\n[retrieved] [chunk_arxiv_2501_09136v4_001] (Paper: 'Agentic Retrieval-Augmented Generation: A Survey on Agentic RAG', Section: 'Abstract')\nranscends these limitations by embedding autonomous AI agents into the RAG pipeline. These agents leverage agentic design patterns reflection, planning, tool use, and multi-agent collaboration to dynamically manage retrieval strategies, iteratively refine contextual understanding, and adapt workflows through operational structures ranging from sequential steps to adaptive collaboration. This integration enables Agentic RAG systems to deliver flexibility, scalability, and context-awareness across diverse applications. This paper presents an analytical survey of Agentic RAG systems.\n\n[retrieved] [chunk_arxiv_2508_20324v4_001] (Paper: 'Can Compact Language Models Search Like Agents? Distillation-Guided Policy Optimization for Preserving Agentic RAG Capabilities', Section: 'Abstract')\n(ARC), a fine-grained metric analyzing reasoning, search coordination, and response synthesis. Comprehensive experiments demonstrate that DGPO enables compact models to achieve sophisticated agentic search behaviors, even outperforming the larger teacher model in some cases. DGPO makes agentic RAG feasible in computing resource-constrained environments.\n"
+    },
+    {
+      "question_id": "q_3hop_09",
+      "hop_type": "3-hop",
+      "question": "How does RAGU's multi-step graph construction pipeline mitigate entity noise compared to single-pass extraction?",
+      "retrieval_stage": "✅",
+      "evidence_stage": "✅",
+      "context_stage": "✅",
+      "generation_stage": "❌",
+      "vector_fact": 0.3333,
+      "hybrid_fact": 0.3333,
+      "oracle_fact": 1.0,
+      "hybrid_recall": 1.0,
+      "hybrid_tokens": 732,
+      "failure_type": "E",
+      "diagnostic_reasoning": "Gold chunk retrieved (recall 1.00), Oracle got 1.00, but Hybrid LLM answer failed fact coverage (0.33)",
+      "generated_answer": "There is insufficient evidence in the provided context to answer the question about how RAGU's multi-step graph construction pipeline mitigates entity noise compared to single-pass extraction.",
+      "assembled_context": "=== KNOWLEDGE GRAPH FACTS ===\n[graph] Fact 1: Entity 'RAGSearch' -[:COMPARED_WITH]- 'HippoRAG2' (Method) [chunk: chunk_arxiv_2607_11683v1_001].\n[graph] Fact 2: Entity 'RAGSearch' -[:EXTENDS]- 'HippoRAG2' (Method) [chunk: chunk_arxiv_2607_11683v1_001].\n[graph] Fact 3: Entity 'RAGSearch' -[:USES_DATASET]- 'GraphRAG-Bench (Medical)' (Dataset) [chunk: chunk_arxiv_2607_11683v1_001].\n[graph] Fact 4: Entity 'RAGSearch' -[:HAS_TOPIC]- 'GraphRAG' (Topic) [chunk: chunk_arxiv_2607_11683v1_001].\n[graph] Fact 5: Entity 'RAGSearch' -[:PUBLISHED_IN]- 'arXiv' (Venue) [chunk: chunk_arxiv_2607_11683v1_001].\n[graph] Fact 6: Entity 'RAGSearch' -[:USES_METHOD]- 'Qwen2.5-32B' (Method) [chunk: chunk_arxiv_2607_11683v1_001].\n[graph] Fact 7: Entity 'RAGSearch' -[:USES_METHOD]- 'Meno-Lite-0.1' (Method) [chunk: chunk_arxiv_2607_11683v1_001].\n[graph] Fact 8: Entity 'RAGSearch' -[:PUBLISHED_IN]- 'arXiv' (Venue) [chunk: chunk_arxiv_2607_11683v1_000].\n\n=== RETRIEVED DOCUMENT PASSAGES ===\n[retrieved] [chunk_arxiv_2501_09136v4_001] (Paper: 'Agentic Retrieval-Augmented Generation: A Survey on Agentic RAG', Section: 'Abstract')\nranscends these limitations by embedding autonomous AI agents into the RAG pipeline. These agents leverage agentic design patterns reflection, planning, tool use, and multi-agent collaboration to dynamically manage retrieval strategies, iteratively refine contextual understanding, and adapt workflows through operational structures ranging from sequential steps to adaptive collaboration. This integration enables Agentic RAG systems to deliver flexibility, scalability, and context-awareness across diverse applications. This paper presents an analytical survey of Agentic RAG systems.\n\n[retrieved] [chunk_arxiv_2606_25656v1_001] (Paper: 'Is GraphRAG Needed? From Basic RAG to Graph-/Agentic Solutions with Context Optimization', Section: 'Abstract')\nnd agent-graph integration. Besides, we present a novel context engineering method for GraphRAG and Agentic RAG, addressing the context/memory overflow issues, efficiently managing text and graph retrievals with new representations and agentic loop design, leading to 19%-53% reduction on token usage. Moreover, further analysis identifies a retrieval-generation gap where expanded retrieval does not proportionally improve generation quality, suggesting retrieval-oriented metrics overstate advanced retrieval benefits. This work provides data-driven insights on when and how to use them for building production-ready intelligent RAG systems.\n\n[retrieved] [chunk_arxiv_2601_07528v2_001] (Paper: 'From RAG to Agentic RAG for Faithful Islamic Question Answering', Section: 'Abstract')\nArabic text-grounded SFT reasoning pairs, (ii) 5K bilingual preference samples for reward-guided alignment, and (iii) a verse-level Qur'an retrieval corpus of ~6k atomic verses (ayat). Building on these resources, we develop an agentic Quran-grounding framework (agentic RAG) that uses structured tool calls for iterative evidence seeking and answer revision. Experiments across Arabic-centric and multilingual LLMs show that retrieval improves correctness and that agentic RAG yields the largest gains beyond standard RAG, achieving state-of-the-art performance and stronger Arabic-English robustness even with a small model (i.e., Qwen3 4B). We made the datasets are publicly available. https://huggingface.co/datasets/QCRI/IslamicFaithQA\n\n[retrieved] [chunk_arxiv_2603_14828v2_002] (Paper: 'Toward Robust GraphRAG: Mitigating Retrieval Drift and Hallucination from Imperfect Knowledge Graphs', Section: 'Abstract')\neriments on three multi-hop QA benchmarks show that CS-RAG is less sensitive to builder choice and remains stable under controlled KG issue injection. Code is available at: https://github.com/myz12138/CS-RAG/\n\n[retrieved] [chunk_arxiv_2508_20324v4_000] (Paper: 'Can Compact Language Models Search Like Agents? Distillation-Guided Policy Optimization for Preserving Agentic RAG Capabilities', Section: 'Abstract')\nReinforcement Learning has emerged as a dominant post-training approach to elicit agentic RAG behaviors such as search and planning from language models. Despite its success with larger models, applying RL to compact models (e.g., 0.5--1B parameters) presents unique challenges. The compact models exhibit poor initial performance, resulting in sparse rewards and unstable training. To overcome these difficulties, we propose Distillation-Guided Policy Optimization (DGPO), which employs cold-start initialization from teacher demonstrations and continuous teacher guidance during policy optimization. To understand how compact models preserve agentic behavior, we introduce Agentic RAG Capabilities (ARC), a fine-grained metric analyzing reasoning, search coordination, and response synthesis.\n"
+    },
+    {
+      "question_id": "q_1hop_04",
+      "hop_type": "1-hop",
+      "question": "Who authored the component ablation study 'Dissecting Agentic RAG' for multi-hop QA?",
+      "retrieval_stage": "✅",
+      "evidence_stage": "❌",
+      "context_stage": "✅",
+      "generation_stage": "❌",
+      "vector_fact": 0.0,
+      "hybrid_fact": 0.5,
+      "oracle_fact": 1.0,
+      "hybrid_recall": 0.5,
+      "hybrid_tokens": 344,
+      "failure_type": "E",
+      "diagnostic_reasoning": "Gold chunk retrieved (recall 0.50), Oracle got 1.00, but Hybrid LLM answer failed fact coverage (0.50)",
+      "generated_answer": "Unfortunately, the context does not provide information about the author of the paper 'Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model'. The only information available is that the paper was authored by Unknown Author [chunk: chunk_arxiv_2606_21553v1_000].",
+      "assembled_context": "=== KNOWLEDGE GRAPH FACTS ===\n[graph] Fact 1: Paper 'Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model' was authored by Unknown Author [chunk: chunk_arxiv_2606_21553v1_000].\n\n=== RETRIEVED DOCUMENT PASSAGES ===\n[retrieved] [chunk_arxiv_2606_21553v1_000] (Paper: 'Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model', Section: 'Abstract')\nAgentic retrieval-augmented generation (RAG) systems combine iterative reasoning loops, query decomposition, and adaptive retrieval to tackle multi-hop question answering. However, the contribution of each component remains poorly understood, particularly under resource-constrained settings using only local language models. Many agentic designs add adaptive retrieval routing and deeper retrieval loops on the assumption that the added complexity helps. To test whether it does, we run a controlled ablation study of a full agentic RAG pipeline evaluated on 5,000 questions from the HotpotQA distractor development set using a local 7B parameter model (Qwen2.5-7B-Instruct).\n\n[retrieved] [chunk_arxiv_2606_21553v1_001] (Paper: 'Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model', Section: 'Abstract')\nves EM=53.2% and F1=61.6%, compared to a single-pass dense-retrieval baseline of EM=43.1% and F1=54.0%. Across eight ablation conditions, we find that: (1) fixed hybrid retrieval via reciprocal rank fusion consistently outperforms rule-based adaptive routing (+1.8 EM, +1.9 F1), as the routing heuristic over-routes to BM25 by firing on named entities present in nearly all multi-hop sub-questions; (2) two retrieval iterations over the decomposed sub-questions capture 95% of the gains of five, with no meaningful benefit from deeper loops; and (3) query decomposition and cross-encoder reranking each contribute statistically significant but smaller gains (p<0.01 and p<0.001 respectively).\n"
+    },
+    {
+      "question_id": "q_1hop_06",
+      "hop_type": "1-hop",
+      "question": "What document structure does GRAG address that naive RAG fails to handle?",
+      "retrieval_stage": "✅",
+      "evidence_stage": "❌",
+      "context_stage": "✅",
+      "generation_stage": "❌",
+      "vector_fact": 0.0,
+      "hybrid_fact": 0.5,
+      "oracle_fact": 1.0,
+      "hybrid_recall": 0.0,
+      "hybrid_tokens": 315,
+      "failure_type": "B",
+      "diagnostic_reasoning": "Graph traversal found relationships, but missed target gold chunks",
+      "generated_answer": "GRAG addresses the issue of context/memory overflow in RAG, which naive RAG fails to handle, by incorporating a novel context engineering method for GraphRAG and Agentic RAG [chunk_arxiv_2606_25656v1_001].",
+      "assembled_context": "=== KNOWLEDGE GRAPH FACTS ===\n[graph] Fact 1: Paper 'GraphSearch' uses method 'RAG' [chunk: chunk_arxiv_2607_27918v1_001].\n[graph] Fact 2: Paper 'GraphSearch' uses method 'GraphRAG' [chunk: chunk_arxiv_2607_27918v1_000].\n[graph] Fact 3: Paper 'GraphSearch' uses method 'RAG' [chunk: chunk_arxiv_2405_16506v3_001].\n[graph] Fact 4: Paper 'GraphSearch' uses method 'Dual-channel retrieval strategy' [chunk: chunk_arxiv_2509_22009v2_001].\n[graph] Fact 5: Paper 'GraphSearch' uses method 'GraphRAG' [chunk: chunk_arxiv_2509_22009v2_000].\n\n=== RETRIEVED DOCUMENT PASSAGES ===\n[retrieved] [chunk_arxiv_2405_16506v3_001] (Paper: 'GRAG: Graph Retrieval-Augmented Generation', Section: 'Abstract')\no achieve graph context-aware generation, incorporate textual graphs into LLMs through two complementary views-the text view and the graph view-enabling LLMs to more effectively comprehend and utilize the graph context. Extensive experiments on graph reasoning benchmarks demonstrate that in scenarios requiring multi-hop reasoning on textual graphs, our GRAG approach significantly outperforms current state-of-the-art RAG methods. Our datasets as well as codes of GRAG are available at https://github.com/HuieL/GRAG.\n\n[retrieved] [chunk_arxiv_2606_25656v1_001] (Paper: 'Is GraphRAG Needed? From Basic RAG to Graph-/Agentic Solutions with Context Optimization', Section: 'Abstract')\nnd agent-graph integration. Besides, we present a novel context engineering method for GraphRAG and Agentic RAG, addressing the context/memory overflow issues, efficiently managing text and graph retrievals with new representations and agentic loop design, leading to 19%-53% reduction on token usage. Moreover, further analysis identifies a retrieval-generation gap where expanded retrieval does not proportionally improve generation quality, suggesting retrieval-oriented metrics overstate advanced retrieval benefits. This work provides data-driven insights on when and how to use them for building production-ready intelligent RAG systems.\n"
+    },
+    {
+      "question_id": "q_1hop_09",
+      "hop_type": "1-hop",
+      "question": "What diagnostic benchmark is introduced in AgenticRAGTracer?",
+      "retrieval_stage": "✅",
+      "evidence_stage": "✅",
+      "context_stage": "✅",
+      "generation_stage": "❌",
+      "vector_fact": 0.5,
+      "hybrid_fact": 0.5,
+      "oracle_fact": 1.0,
+      "hybrid_recall": 1.0,
+      "hybrid_tokens": 238,
+      "failure_type": "E",
+      "diagnostic_reasoning": "Gold chunk retrieved (recall 1.00), Oracle got 1.00, but Hybrid LLM answer failed fact coverage (0.50)",
+      "generated_answer": "AgenticRAGTracer is introduced as the first Agentic RAG benchmark that is primarily constructed automatically by large language models and designed to support step-by-step validation [chunk_arxiv_2602_19127v2_001].",
+      "assembled_context": "=== KNOWLEDGE GRAPH FACTS ===\n[graph] Fact 1: Entity 'AgenticRAGTracer: A Hop-Aware Benchmark for Diagnosing Multi-Step Retrieval Reasoning in Agentic RAG' -[:USES_METHOD]- 'Agentic RAG' (Method) [chunk: chunk_arxiv_2602_19127v2_000].\n[graph] Fact 2: Entity 'AgenticRAGTracer: A Hop-Aware Benchmark for Diagnosing Multi-Step Retrieval Reasoning in Agentic RAG' -[:HAS_TOPIC]- 'Agentic RAG' (Topic) [chunk: chunk_arxiv_2602_19127v2_000].\n[graph] Fact 3: Entity 'AgenticRAGTracer: A Hop-Aware Benchmark for Diagnosing Multi-Step Retrieval Reasoning in Agentic RAG' -[:PUBLISHED_IN]- 'arXiv' (Venue) [chunk: chunk_arxiv_2602_19127v2_000].\n\n=== RETRIEVED DOCUMENT PASSAGES ===\n[retrieved] [chunk_arxiv_2602_19127v2_001] (Paper: 'AgenticRAGTracer: A Hop-Aware Benchmark for Diagnosing Multi-Step Retrieval Reasoning in Agentic RAG', Section: 'Abstract')\nstructed, which is both time-consuming and labor-intensive, while also limiting scalability and generalization. To address these challenges, we introduce AgenticRAGTracer, the first Agentic RAG benchmark that is primarily constructed automatically by large language models and designed to support step-by-step validation. Our benchmark spans multiple domains, contains 1,305 data points, and has no overlap with existing mainstream benchmarks. Extensive experiments demonstrate that even the best large language models perform poorly on our dataset. For instance, GPT-5 attains merely 22.6\\% EM accuracy on the hardest portion of our dataset.\n"
+    },
+    {
+      "question_id": "q_2hop_03",
+      "hop_type": "2-hop",
+      "question": "What three agentic components are ablated in Sheroz Shaikh's study on multi-hop QA?",
+      "retrieval_stage": "✅",
+      "evidence_stage": "✅",
+      "context_stage": "❌",
+      "generation_stage": "❌",
+      "vector_fact": 0.0,
+      "hybrid_fact": 0.5,
+      "oracle_fact": 0.0,
+      "hybrid_recall": 1.0,
+      "hybrid_tokens": 448,
+      "failure_type": "C",
+      "diagnostic_reasoning": "Partial evidence retrieved but relational continuity broken across context blocks",
+      "generated_answer": "Unfortunately, the provided context does not contain sufficient information to answer the question about the three agentic components ablated in Sheroz Shaikh's study on multi-hop QA. The context mentions that the study \"finds that: (1) fixed hybrid retrieval via reciprocal rank fusion consistently outperforms rule-based adaptive routing (+1.8 EM, +1.9 F1), as the routing heuristic over-routes to BM25 by firing on named entities present in nearly all multi-hop sub-questions; (2) two retrieval iterations over the decomposed sub-questions capture 95% of the gains of five, with no meaningful benefit from deeper loops; and (3) query decomposition and cross-encoder reranking each contribute statistically significant but smaller gains (p<0.01 and p<0.001 respectively)\" [chunk_arxiv_2606_21553v1_001], but it does not specify the three agentic components being ablated.",
+      "assembled_context": "=== KNOWLEDGE GRAPH FACTS ===\n[graph] Fact 1: Entity 'Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model' -[:USES_METHOD]- 'Qwen2.5-7B-Instruct' (Method) [chunk: chunk_arxiv_2606_21553v1_000].\n[graph] Fact 2: Entity 'Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model' -[:USES_DATASET]- 'HotpotQA distractor development set' (Dataset) [chunk: chunk_arxiv_2606_21553v1_000].\n[graph] Fact 3: Entity 'Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model' -[:AUTHORED_BY]- 'Unknown Author' (Author) [chunk: chunk_arxiv_2606_21553v1_000].\n[graph] Fact 4: Entity 'Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model' -[:PUBLISHED_IN]- 'arXiv' (Venue) [chunk: chunk_arxiv_2606_21553v1_000].\n[graph] Fact 5: Entity 'A Component Ablation for Multi-Hop QA with a Local 7B Model' -[:CITES]- 'Dissecting Agentic RAG' (Paper) [chunk: chunk_arxiv_2606_21553v1_001].\n[graph] Fact 6: Entity 'Multi-Hop QA' -[:HAS_TOPIC]- 'Dissecting Agentic RAG' (Paper) [chunk: chunk_arxiv_2606_21553v1_001].\n[graph] Fact 7: Entity 'multi-hop QA benchmarks' -[:USES_DATASET]- 'CS-RAG' (Method) [chunk: chunk_arxiv_2603_14828v2_002].\n\n=== RETRIEVED DOCUMENT PASSAGES ===\n[retrieved] [chunk_arxiv_2606_21553v1_001] (Paper: 'Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model', Section: 'Abstract')\nves EM=53.2% and F1=61.6%, compared to a single-pass dense-retrieval baseline of EM=43.1% and F1=54.0%. Across eight ablation conditions, we find that: (1) fixed hybrid retrieval via reciprocal rank fusion consistently outperforms rule-based adaptive routing (+1.8 EM, +1.9 F1), as the routing heuristic over-routes to BM25 by firing on named entities present in nearly all multi-hop sub-questions; (2) two retrieval iterations over the decomposed sub-questions capture 95% of the gains of five, with no meaningful benefit from deeper loops; and (3) query decomposition and cross-encoder reranking each contribute statistically significant but smaller gains (p<0.01 and p<0.001 respectively).\n\n[retrieved] [chunk_arxiv_2606_21553v1_002] (Paper: 'Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model', Section: 'Abstract')\nogether, on a fixed local-model budget, the simpler and fixed choices turn out to be competitive with or better than their adaptive versions: most of the gain comes from running a short retrieval loop, not from adaptive routing or from many iterations. We use no proprietary APIs or large-scale compute.\n"
+    }
+  ]
+}

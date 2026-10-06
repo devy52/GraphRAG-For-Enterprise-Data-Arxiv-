@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise GraphRAG — Material 3 Workspace</title>
+  
+  <!-- Google Fonts: Roboto & Google Sans + Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  
+  <!-- Vis-Network for High-Performance 60FPS Force-Directed Graph Rendering (Zero Node.js dependency) -->
+  <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  
+  <!-- Material 3 Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="m3-dark-theme">
+  <div class="m3-app-shell">
+    
+    <!-- Top App Bar -->
+    <header class="m3-top-app-bar">
+      <div class="app-bar-start">
+        <button class="m3-icon-button" id="toggle-rail-btn" title="Toggle Navigation Rail">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="brand-container">
+          <span class="brand-icon material-symbols-outlined">hub</span>
+          <span class="brand-title">Enterprise GraphRAG</span>
+          <span class="m3-badge m3-badge-tonal">Material 3</span>
+        </div>
+      </div>
+      
+      <div class="app-bar-center">
+        <!-- Live System Telemetry Badges -->
+        <div class="system-status-pills">
+          <div class="status-pill" id="postgres-status" title="PostgreSQL / pgvector Status">
+            <span class="status-dot dot-pending"></span>
+            <span class="status-text">pgvector</span>
+          </div>
+          <div class="status-pill" id="neo4j-status" title="Neo4j Knowledge Graph Status">
+            <span class="status-dot dot-pending"></span>
+            <span class="status-text">Neo4j</span>
+          </div>
+          <div class="status-pill" id="cache-status" title="Normalized Response Cache">
+            <span class="material-symbols-outlined pill-icon">bolt</span>
+            <span class="status-text" id="cache-stat-text">Cache: --</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="app-bar-end">
+        <button class="m3-button m3-button-tonal app-bar-btn" id="open-ingest-dialog-btn" title="Open Ingestion & Population Dialog">
+          <span class="material-symbols-outlined btn-icon">cloud_upload</span>
+          <span class="btn-text">Ingest Corpus</span>
+        </button>
+        <button class="m3-icon-button" id="theme-toggle-btn" title="Toggle Light/Dark Theme">
+          <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+        </button>
+        <a href="/docs" target="_blank" class="m3-icon-button" title="OpenAPI Documentation (Swagger)">
+          <span class="material-symbols-outlined">api</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- App Body: Navigation Rail + Main Viewports -->
+    <div class="m3-body-layout">
+      
+      <!-- Navigation Rail -->
+      <nav class="m3-navigation-rail" id="nav-rail">
+        <div class="rail-items">
+          <button class="rail-destination active" data-view="chat-view">
+            <div class="dest-icon-container">
+              <span class="material-symbols-outlined">forum</span>
+            </div>
+            <span class="dest-label">Chat</span>
+          </button>
+          
+          <button class="rail-destination" data-view="graph-view">
+            <div class="dest-icon-container">
+              <span class="material-symbols-outlined">scatter_plot</span>
+            </div>
+            <span class="dest-label">Graph</span>
+          </button>
+
+          <button class="rail-destination" data-view="telemetry-view">
+            <div class="dest-icon-container">
+              <span class="material-symbols-outlined">analytics</span>
+            </div>
+            <span class="dest-label">Telemetry</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Main Workspace Viewport -->
+      <main class="m3-workspace-viewport">
+        
+        <!-- ============================================================== -->
+        <!-- VIEW 1: Grounded GraphRAG Chat Workspace                       -->
+        <!-- ============================================================== -->
+        <section class="viewport-section active" id="chat-view">
+          <div class="chat-container">
+            
+            <!-- Message Stream Area -->
+            <div class="chat-messages" id="chat-messages">
+              <!-- Welcome Hero Banner -->
+              <div class="m3-welcome-card" id="welcome-card">
+                <div class="welcome-header">
+                  <div class="welcome-icon-box">
+                    <span class="material-symbols-outlined">psychology</span>
+                  </div>
+                  <div class="welcome-titles">
+                    <h2>Enterprise Hybrid GraphRAG</h2>
+                    <p>Dual-retrieval platform fusing Neo4j knowledge graph topology with pgvector dense embeddings and zero citation hallucination.</p>
+                  </div>
+                </div>
+                
+                <div class="suggested-prompts-label">Try one of the benchmark queries:</div>
+                <div class="suggested-chips">
+                  <button class="m3-chip m3-chip-assist prompt-chip" data-prompt="What is AR-RAG and how does it enhance image generation?">
+                    <span class="material-symbols-outlined chip-icon">image</span>
+                    <span class="chip-text">What is AR-RAG?</span>
+                  </button>
+                  <button class="m3-chip m3-chip-assist prompt-chip" data-prompt="What frameworks are introduced in AR-RAG and what benchmarks were used?">
+                    <span class="material-symbols-outlined chip-icon">account_tree</span>
+                    <span class="chip-text">AR-RAG frameworks & benchmarks</span>
+                  </button>
+                  <button class="m3-chip m3-chip-assist prompt-chip" data-prompt="What is EVOR and how does it address static knowledge bases in code generation?">
+                    <span class="material-symbols-outlined chip-icon">terminal</span>
+                    <span class="chip-text">What is EVOR?</span>
+                  </button>
+                  <button class="m3-chip m3-chip-assist prompt-chip" data-prompt="Explain retrieval-augmented generation and its multi-hop limitations.">
+                    <span class="material-symbols-outlined chip-icon">schema</span>
+                    <span class="chip-text">Multi-hop RAG limitations</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chat Input Area (Material 3 Docked Bar) -->
+            <div class="chat-input-bar">
+              <div class="input-controls-row">
+                <div class="input-toggle-group">
+                  <label class="m3-switch" title="Toggle Response Caching">
+                    <input type="checkbox" id="cache-toggle" checked>
+                    <span class="switch-slider"></span>
+                    <span class="switch-label">Cache</span>
+                  </label>
+                  <div class="session-indicator" id="session-tag" title="Multi-Turn Session ID">
+                    <span class="material-symbols-outlined">history</span>
+                    <span id="session-id-label">session-default</span>
+                  </div>
+                </div>
+                <div class="chat-actions-group">
+                  <button class="m3-text-button" id="export-chat-btn" title="Export Conversation to Markdown">
+                    <span class="material-symbols-outlined">download</span>
+                    <span>Export</span>
+                  </button>
+                  <button class="m3-text-button" id="clear-chat-btn" title="Clear Conversation">
+                    <span class="material-symbols-outlined">restart_alt</span>
+                    <span>New Session</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="input-field-container">
+                <textarea 
+                  id="query-input" 
+                  class="m3-text-area" 
+                  placeholder="Ask a relational or semantic question across the corpus..." 
+                  rows="1"
+                ></textarea>
+                <button class="m3-filled-button send-btn" id="send-btn" title="Execute Query (Enter)">
+                  <span class="material-symbols-outlined">send</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 2: Interactive Neo4j Topology Visualizer                 -->
+        <!-- ============================================================== -->
+        <section class="viewport-section" id="graph-view">
+          <div class="graph-explorer-container">
+            
+            <!-- Graph Toolbar -->
+            <div class="graph-toolbar">
+              <div class="toolbar-left">
+                <div class="m3-search-box">
+                  <span class="material-symbols-outlined search-icon">search</span>
+                  <input type="text" id="graph-search-input" placeholder="Search node in graph...">
+                </div>
+
+                <!-- Entity Filter Chips -->
+                <div class="filter-chips-row">
+                  <button class="m3-filter-chip active" data-filter="all">All</button>
+                  <button class="m3-filter-chip chip-paper" data-filter="Paper">Paper</button>
+                  <button class="m3-filter-chip chip-method" data-filter="Method">Method</button>
+                  <button class="m3-filter-chip chip-dataset" data-filter="Dataset">Dataset</button>
+                  <button class="m3-filter-chip chip-author" data-filter="Author">Author</button>
+                  <button class="m3-filter-chip chip-topic" data-filter="Topic">Topic</button>
+                </div>
+              </div>
+
+              <div class="toolbar-right">
+                <span class="topology-counter" id="topology-counter">Nodes: -- | Edges: --</span>
+                <button class="m3-icon-button" id="refresh-graph-btn" title="Refresh Graph Data">
+                  <span class="material-symbols-outlined">refresh</span>
+                </button>
+                <button class="m3-icon-button" id="fit-graph-btn" title="Fit to Screen">
+                  <span class="material-symbols-outlined">fit_screen</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Canvas Container -->
+            <div class="graph-canvas-wrapper">
+              <div id="vis-network-canvas" class="vis-canvas"></div>
+              
+              <!-- Floating Legend -->
+              <div class="graph-legend-card">
+                <div class="legend-header">Ontology Legend</div>
+                <div class="legend-items">
+                  <div class="legend-item"><span class="legend-dot dot-paper"></span> Paper</div>
+                  <div class="legend-item"><span class="legend-dot dot-method"></span> Method</div>
+                  <div class="legend-item"><span class="legend-dot dot-dataset"></span> Dataset</div>
+                  <div class="legend-item"><span class="legend-dot dot-author"></span> Author</div>
+                  <div class="legend-item"><span class="legend-dot dot-topic"></span> Topic</div>
+                </div>
+              </div>
+
+              <!-- Node Inspection Side Panel -->
+              <div class="node-inspector-card" id="node-inspector" style="display: none;">
+                <div class="inspector-header">
+                  <span class="inspector-title" id="inspector-name">Entity Name</span>
+                  <button class="m3-icon-button close-inspector" id="close-inspector-btn">
+                    <span class="material-symbols-outlined">close</span>
+                  </button>
+                </div>
+                <div class="inspector-badge" id="inspector-type">Type</div>
+                <div class="inspector-section">
+                  <div class="sec-label">Aliases:</div>
+                  <div class="sec-content" id="inspector-aliases">None</div>
+                </div>
+                <div class="inspector-section">
+                  <div class="sec-label">Connected Relationships:</div>
+                  <div class="sec-list" id="inspector-edges">None</div>
+                </div>
+                <div class="inspector-actions">
+                  <button class="m3-filled-tonal-button" id="query-entity-btn">
+                    <span class="material-symbols-outlined">search</span>
+                    <span>Query this entity</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 3: System Telemetry & Compliance Dashboard               -->
+        <!-- ============================================================== -->
+        <section class="viewport-section" id="telemetry-view">
+          <div class="telemetry-container">
+            <div class="telemetry-grid">
+              
+              <!-- Card 1: Infrastructure Health -->
+              <div class="m3-card">
+                <div class="card-header">
+                  <span class="material-symbols-outlined card-icon">dns</span>
+                  <h3>Infrastructure Services</h3>
+                </div>
+                <div class="card-body">
+                  <div class="metric-row">
+                    <span class="metric-name">PostgreSQL / pgvector Target</span>
+                    <span class="metric-val code-val" id="t-postgres-target">localhost:5432</span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">Neo4j Bolt Target</span>
+                    <span class="metric-val code-val" id="t-neo4j-target">bolt://localhost:7687</span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">FastAPI Status</span>
+                    <span class="m3-badge m3-badge-success" id="t-api-badge">Online (Port 8000)</span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">Dense Embeddings Dimension</span>
+                    <span class="metric-val" id="t-embedding-dim">2048 dims</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 2: Query Cache Efficiency -->
+              <div class="m3-card">
+                <div class="card-header">
+                  <span class="material-symbols-outlined card-icon">bolt</span>
+                  <h3>Query Response Cache (LRU)</h3>
+                </div>
+                <div class="card-body">
+                  <div class="stat-highlight">
+                    <div class="stat-big" id="t-hit-rate">0.0%</div>
+                    <div class="stat-sub">Cache Hit Rate</div>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">Total Evaluated Queries</span>
+                    <span class="metric-val" id="t-total-queries">0</span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">Cache Hits / Misses</span>
+                    <span class="metric-val" id="t-hits-misses">0 / 0</span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">Cached Answer Entries</span>
+                    <span class="metric-val" id="t-cached-count">0</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 3: Model Gateway Configuration -->
+              <div class="m3-card">
+                <div class="card-header">
+                  <span class="material-symbols-outlined card-icon">memory</span>
+                  <h3 id="t-gateway-title">Model Gateway</h3>
+                </div>
+                <div class="card-body">
+                  <div class="metric-row">
+                    <span class="metric-name">Extraction Engine</span>
+                    <span class="metric-val code-val" id="t-model-extraction">--</span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">Intent Router</span>
+                    <span class="metric-val code-val" id="t-model-router">--</span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">Grounded Synthesizer</span>
+                    <span class="metric-val code-val" id="t-model-synthesis">--</span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">Dense Embedder</span>
+                    <span class="metric-val code-val" id="t-model-embedding">--</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 4: Open Access Terms & Attribution -->
+              <div class="m3-card">
+                <div class="card-header">
+                  <span class="material-symbols-outlined card-icon">verified</span>
+                  <h3>Open Access Compliance</h3>
+                </div>
+                <div class="card-body">
+                  <p class="compliance-quote" id="t-attribution">
+                    "Thank you to arXiv for use of its open access interoperability."
+                  </p>
+                  <div class="metric-row">
+                    <span class="metric-name">API Rate Limit Throttle</span>
+                    <span class="metric-val">&ge; 3.0s Polite Delay</span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">Citation Hallucination Gate</span>
+                    <span class="m3-badge m3-badge-tonal">Strict 0.0% Gate</span>
+                  </div>
+                  <div class="metric-row">
+                    <span class="metric-name">Full PDF Storage</span>
+                    <span class="metric-val">Disabled (Abstracts Only)</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- Citation Chunk Inspector Dialog (Material 3 Modal)             -->
+    <!-- ============================================================== -->
+    <div class="m3-dialog-backdrop" id="citation-dialog" style="display: none;">
+      <div class="m3-dialog-container">
+        <div class="m3-dialog-header">
+          <div class="dialog-title-group">
+            <span class="material-symbols-outlined dialog-icon">verified</span>
+            <div>
+              <h3 class="dialog-title">Source Citation Verification</h3>
+              <p class="dialog-subtitle" id="dialog-chunk-id">chunk_id</p>
+            </div>
+          </div>
+          <button class="m3-icon-button" id="close-dialog-btn">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        
+        <div class="m3-dialog-content">
+          <div class="chunk-meta-strip">
+            <div class="chunk-meta-item">
+              <span class="meta-label">Publication:</span>
+              <span class="meta-value" id="dialog-paper-title">--</span>
+            </div>
+            <div class="chunk-meta-item">
+              <span class="meta-label">Section:</span>
+              <span class="meta-value" id="dialog-section-path">--</span>
+            </div>
+            <div class="chunk-meta-item">
+              <span class="meta-label">Document ID:</span>
+              <span class="meta-value code-val" id="dialog-doc-id">--</span>
+            </div>
+          </div>
+
+          <div class="chunk-passage-box">
+            <div class="passage-header">Grounding Passage Content:</div>
+            <div class="passage-text" id="dialog-passage-text">Loading passage...</div>
+          </div>
+
+          <div class="chunk-entities-box">
+            <div class="entities-label">Recognized Entities in Passage:</div>
+            <div class="entities-chips" id="dialog-entities-chips">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <div class="m3-dialog-actions">
+          <button class="m3-filled-button" id="dialog-done-btn">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Material 3 Ingestion & Population Dialog -->
+    <div class="m3-dialog-scrim" id="ingest-modal-scrim" style="display: none;">
+      <div class="m3-dialog ingest-dialog" role="dialog" aria-modal="true">
+        <div class="m3-dialog-header">
+          <div class="dialog-title-group">
+            <span class="material-symbols-outlined dialog-header-icon">cloud_upload</span>
+            <div>
+              <h3 class="dialog-title">Corpus Ingestion & Graph Population</h3>
+              <p class="dialog-subtitle">Acquire arXiv research literature, generate vector embeddings, and build Neo4j fact topology.</p>
+            </div>
+          </div>
+          <button class="m3-icon-button" id="close-ingest-dialog-btn">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <div class="m3-dialog-content">
+          <!-- Ingestion Mode Selector -->
+          <div class="form-section">
+            <label class="form-section-label">Source Mode</label>
+            <div class="segmented-control">
+              <label class="segmented-option">
+                <input type="radio" name="ingest-mode" value="existing_corpus" checked id="mode-existing">
+                <span class="segmented-pill">
+                  <span class="material-symbols-outlined opt-icon">dataset</span>
+                  Existing Chunks (115)
+                </span>
+              </label>
+              <label class="segmented-option">
+                <input type="radio" name="ingest-mode" value="harvest_arxiv" id="mode-harvest">
+                <span class="segmented-pill">
+                  <span class="material-symbols-outlined opt-icon">travel_explore</span>
+                  Harvest from arXiv
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Harvest Parameters (Dynamic) -->
+          <div class="form-section harvest-params-group" id="harvest-params-group" style="display: none;">
+            <div class="form-row">
+              <div class="form-field flex-2">
+                <label for="ingest-query-input" class="form-field-label">Search Query (arXiv)</label>
+                <input type="text" id="ingest-query-input" class="m3-text-input" value="retrieval-augmented generation" placeholder="e.g. graph neural networks">
+              </div>
+              <div class="form-field flex-1">
+                <label for="ingest-paper-limit" class="form-field-label">Max Papers</label>
+                <input type="number" id="ingest-paper-limit" class="m3-text-input" value="50" min="5" max="200">
+              </div>
+            </div>
+          </div>
+
+          <!-- Processing & Target Toggles -->
+          <div class="form-section">
+            <div class="form-row">
+              <div class="form-field flex-1">
+                <label for="ingest-chunk-limit" class="form-field-label">Chunk Batch Limit</label>
+                <input type="number" id="ingest-chunk-limit" class="m3-text-input" placeholder="Leave empty for all chunks" min="1">
+              </div>
+            </div>
+
+            <div class="checkbox-group">
+              <label class="m3-checkbox-label">
+                <input type="checkbox" id="ingest-pop-neo4j" checked class="m3-checkbox">
+                <span>Populate Neo4j Knowledge Graph (LLM Fact Extraction + Resolution)</span>
+              </label>
+              <label class="m3-checkbox-label">
+                <input type="checkbox" id="ingest-pop-vector" checked class="m3-checkbox">
+                <span>Populate pgvector (Dense 2048-dim Embeddings)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Real-Time Progress Telemetry -->
+          <div class="ingest-telemetry-panel" id="ingest-telemetry-panel" style="display: none;">
+            <div class="telemetry-status-row">
+              <div class="status-badge-wrap">
+                <span class="m3-badge m3-badge-primary" id="ingest-stage-badge">idle</span>
+              </div>
+              <div class="status-message-wrap" id="ingest-status-message">Ready to begin</div>
+              <div class="status-pct-wrap" id="ingest-status-pct">0%</div>
+            </div>
+
+            <div class="m3-linear-progress-track">
+              <div class="m3-linear-progress-bar" id="ingest-progress-bar" style="width: 0%;"></div>
+            </div>
+
+            <div class="ingest-terminal-header">
+              <span class="material-symbols-outlined terminal-icon">terminal</span>
+              <span>Live Ingestion Console</span>
+            </div>
+            <div class="ingest-log-terminal" id="ingest-log-terminal">
+              <!-- Dynamically populated log entries -->
+            </div>
+          </div>
+        </div>
+
+        <div class="m3-dialog-actions">
+          <button class="m3-button m3-button-text" id="cancel-ingest-btn">Cancel</button>
+          <button class="m3-filled-button" id="start-ingest-btn">
+            <span class="material-symbols-outlined btn-icon">play_arrow</span>
+            <span>Start Ingestion</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Client Application Script with Cache Buster -->
+  <script src="app.js?v=3"></script>
+</body>
+</html>

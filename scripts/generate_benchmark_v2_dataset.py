@@ -1,0 +1,803 @@
+# -*- coding: utf-8 -*-
+"""
+Generates the Authoritative Fact-Level Ground Truth Dataset (V2) for Modern GraphRAG & Agentic RAG Corpus.
+
+Architecture Role:
+    Constructs 50 stratified benchmark records covering:
+    - 10 x 1-Hop (Direct Lookup)
+    - 10 x 2-Hop (Multi-Hop Traversal)
+    - 10 x 3-Hop (Deep Multi-Step / Multi-Paper)
+    - 10 x Aggregation / Comparative
+    - 10 x Out-of-Scope (Unanswerable Abstention)
+
+Outputs:
+    - data/benchmark_v2_dataset.jsonl
+"""
+
+import json
+import sys
+from pathlib import Path
+from typing import List
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from src.eval.models_v2 import (
+    BenchmarkQuestionV2,
+    EvalHopTypeV2,
+    GoldEvidenceItem,
+    GoldEvidenceType,
+    OptionalFact,
+    RequiredFact,
+)
+
+OUTPUT_FILE = REPO_ROOT / "data" / "benchmark_v2_dataset.jsonl"
+
+
+def create_questions() -> List[BenchmarkQuestionV2]:
+    return [
+        # ======================================================================
+        # 1-Hop Questions (Direct Lookup) - 10 Questions
+        # ======================================================================
+        BenchmarkQuestionV2(
+            id="q_1hop_01",
+            question="Who are the primary authors of the GraphRAG-R1 paper proposing process-constrained reinforcement learning?",
+            hop_type=EvalHopTypeV2.ONE_HOP,
+            answerable=True,
+            reference_answer="The primary authors of GraphRAG-R1 are Chuanyue Yu, Kuo Zhao, Yuhan Li, and Heng Chang.",
+            required_facts=[
+                RequiredFact(id="q1_f1", fact="Chuanyue Yu is an author", weight=1.0, aliases=["chuanyue yu", "yu"]),
+                RequiredFact(id="q1_f2", fact="Kuo Zhao is an author", weight=1.0, aliases=["kuo zhao", "zhao"]),
+                RequiredFact(id="q1_f3", fact="Heng Chang is an author", weight=1.0, aliases=["heng chang", "chang"]),
+            ],
+            optional_facts=[
+                OptionalFact(id="q1_o1", fact="Yuhan Li is an author", weight=0.5, aliases=["yuhan li", "li"]),
+            ],
+            target_entities=["GraphRAG-R1", "Chuanyue Yu"],
+            gold_chunk_ids=[],
+            gold_evidence=[
+                GoldEvidenceItem(
+                    type=GoldEvidenceType.METADATA,
+                    id="meta_arxiv_2507_23581v2_authors",
+                    supports=["q1_f1", "q1_f2", "q1_f3"],
+                    document_id="arxiv_2507.23581v2",
+                    field="authors",
+                ),
+            ],
+        ),
+        BenchmarkQuestionV2(
+            id="q_1hop_02",
+            question="What benchmark is proposed in 'When to use Graphs in RAG' to evaluate GraphRAG models?",
+            hop_type=EvalHopTypeV2.ONE_HOP,
+            answerable=True,
+            reference_answer="The paper proposes GraphRAG-Bench, a comprehensive benchmark designed to evaluate GraphRAG models on both hierarchical knowledge retrieval and deep contextual reasoning.",
+            required_facts=[
+                RequiredFact(id="q2_f1", fact="Proposes GraphRAG-Bench", weight=1.0, aliases=["graphrag-bench", "graphrag bench"]),
+                RequiredFact(id="q2_f2", fact="Evaluates hierarchical retrieval and contextual reasoning", weight=1.0, aliases=["hierarchical knowledge retrieval", "hierarchical retrieval", "contextual reasoning"]),
+            ],
+            target_entities=["GraphRAG-Bench", "GraphRAG"],
+            gold_chunk_ids=["chunk_arxiv_2506_05690v3_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_1hop_03",
+            question="What dataset was introduced in 'From RAG to Agentic RAG' for faithful Islamic question answering?",
+            hop_type=EvalHopTypeV2.ONE_HOP,
+            answerable=True,
+            reference_answer="The authors introduced IslamicFaithQA, a 3,810-item bilingual (Arabic/English) generative benchmark with atomic single-gold answers for measuring hallucination and abstention.",
+            required_facts=[
+                RequiredFact(id="q3_f1", fact="Introduces IslamicFaithQA benchmark", weight=1.0, aliases=["islamicfaithqa", "islamic faith qa"]),
+                RequiredFact(id="q3_f2", fact="Dataset contains 3,810 items", weight=1.0, aliases=["3,810", "3810"]),
+            ],
+            target_entities=["IslamicFaithQA", "Agentic RAG"],
+            gold_chunk_ids=["chunk_arxiv_2601_07528v2_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_1hop_04",
+            question="Who authored the component ablation study 'Dissecting Agentic RAG' for multi-hop QA?",
+            hop_type=EvalHopTypeV2.ONE_HOP,
+            answerable=True,
+            reference_answer="'Dissecting Agentic RAG: A Component Ablation for Multi-Hop QA with a Local 7B Model' was authored by Sheroz Shaikh.",
+            required_facts=[
+                RequiredFact(id="q4_f1", fact="Sheroz Shaikh is the author", weight=1.0, aliases=["sheroz shaikh", "shaikh"]),
+                RequiredFact(id="q4_f2", fact="Evaluates a local 7B model", weight=1.0, aliases=["local 7b model", "7b model", "7b"]),
+            ],
+            target_entities=["Agentic RAG", "Sheroz Shaikh"],
+            gold_chunk_ids=["chunk_arxiv_2606_21553v1_000"],
+            gold_evidence=[
+                GoldEvidenceItem(
+                    type=GoldEvidenceType.METADATA,
+                    id="meta_arxiv_2606_21553v1_authors",
+                    supports=["q4_f1"],
+                    document_id="arxiv_2606.21553v1",
+                    field="authors",
+                ),
+                GoldEvidenceItem(
+                    type=GoldEvidenceType.CHUNK,
+                    id="chunk_arxiv_2606_21553v1_000",
+                    supports=["q4_f2"],
+                    document_id="arxiv_2606.21553v1",
+                ),
+            ],
+        ),
+        BenchmarkQuestionV2(
+            id="q_1hop_05",
+            question="What framework is proposed in DyG-RAG for temporal reasoning in GraphRAG?",
+            hop_type=EvalHopTypeV2.ONE_HOP,
+            answerable=True,
+            reference_answer="DyG-RAG proposes Dynamic Graph Retrieval-Augmented Generation with event-centric reasoning to model the evolution of temporal facts.",
+            required_facts=[
+                RequiredFact(id="q5_f1", fact="Proposes DyG-RAG dynamic graph retrieval", weight=1.0, aliases=["dyg-rag", "dynamic graph retrieval-augmented generation"]),
+                RequiredFact(id="q5_f2", fact="Uses event-centric reasoning", weight=1.0, aliases=["event-centric reasoning", "event-centric"]),
+            ],
+            target_entities=["DyG-RAG", "Temporal Reasoning"],
+            gold_chunk_ids=["chunk_arxiv_2507_13396v1_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_1hop_06",
+            question="What document structure does GRAG address that naive RAG fails to handle?",
+            hop_type=EvalHopTypeV2.ONE_HOP,
+            answerable=True,
+            reference_answer="GRAG addresses networked documents, such as citation graphs, social media networks, and knowledge graphs, where naive RAG falls short by focusing only on individual documents.",
+            required_facts=[
+                RequiredFact(id="q6_f1", fact="Addresses networked documents", weight=1.0, aliases=["networked documents", "networked document"]),
+                RequiredFact(id="q6_f2", fact="Includes citation graphs and knowledge graphs", weight=1.0, aliases=["citation graphs", "knowledge graphs", "social media"]),
+            ],
+            target_entities=["GRAG", "Naive RAG"],
+            gold_chunk_ids=["chunk_arxiv_2405_16506v3_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_1hop_07",
+            question="What scientific domain does Plasma GraphRAG target for parameter selection?",
+            hop_type=EvalHopTypeV2.ONE_HOP,
+            answerable=True,
+            reference_answer="Plasma GraphRAG introduces a framework for physics-grounded parameter selection for gyrokinetic plasma simulations.",
+            required_facts=[
+                RequiredFact(id="q7_f1", fact="Targets gyrokinetic plasma simulations", weight=1.0, aliases=["gyrokinetic plasma simulations", "gyrokinetic", "plasma simulations"]),
+                RequiredFact(id="q7_f2", fact="Physics-grounded parameter selection", weight=1.0, aliases=["parameter selection", "physics-grounded"]),
+            ],
+            target_entities=["Plasma GraphRAG"],
+            gold_chunk_ids=["chunk_arxiv_2604_06279v1_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_1hop_08",
+            question="What context construction approach does ACE-GraphRAG introduce for hierarchical GraphRAG?",
+            hop_type=EvalHopTypeV2.ONE_HOP,
+            answerable=True,
+            reference_answer="ACE-GraphRAG introduces Agentic Context Engineering (ACE) to dynamically construct context from multi-resolution hierarchical graph representations.",
+            required_facts=[
+                RequiredFact(id="q8_f1", fact="Introduces Agentic Context Engineering", weight=1.0, aliases=["agentic context engineering", "ace"]),
+                RequiredFact(id="q8_f2", fact="Hierarchical GraphRAG context construction", weight=1.0, aliases=["hierarchical graphrag", "multi-resolution", "multi-resolution representations"]),
+            ],
+            target_entities=["ACE-GraphRAG"],
+            gold_chunk_ids=["chunk_arxiv_2608_01269v2_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_1hop_09",
+            question="What diagnostic benchmark is introduced in AgenticRAGTracer?",
+            hop_type=EvalHopTypeV2.ONE_HOP,
+            answerable=True,
+            reference_answer="AgenticRAGTracer introduces a hop-aware benchmark for diagnosing multi-step retrieval reasoning in Agentic RAG.",
+            required_facts=[
+                RequiredFact(id="q9_f1", fact="Introduces AgenticRAGTracer", weight=1.0, aliases=["agenticragtracer", "agentic rag tracer"]),
+                RequiredFact(id="q9_f2", fact="Hop-aware benchmark for multi-step retrieval reasoning", weight=1.0, aliases=["hop-aware", "multi-step retrieval reasoning", "multi-step reasoning"]),
+            ],
+            target_entities=["AgenticRAGTracer"],
+            gold_chunk_ids=["chunk_arxiv_2602_19127v2_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_1hop_10",
+            question="What is RAGU and what model architecture does it incorporate?",
+            hop_type=EvalHopTypeV2.ONE_HOP,
+            answerable=True,
+            reference_answer="RAGU is a multi-step GraphRAG engine that incorporates a compact domain-adapted LLM to overcome single extraction pass limitations.",
+            required_facts=[
+                RequiredFact(id="q10_f1", fact="RAGU is a multi-step GraphRAG engine", weight=1.0, aliases=["ragu", "multi-step graphrag engine"]),
+                RequiredFact(id="q10_f2", fact="Uses compact domain-adapted LLM", weight=1.0, aliases=["compact domain-adapted llm", "domain-adapted llm", "compact llm"]),
+            ],
+            target_entities=["RAGU", "GraphRAG"],
+            gold_chunk_ids=["chunk_arxiv_2607_11683v1_000"],
+        ),
+
+        # ======================================================================
+        # 2-Hop Questions (Multi-Hop Traversal) - 10 Questions
+        # ======================================================================
+        BenchmarkQuestionV2(
+            id="q_2hop_01",
+            question="Which reinforcement learning method does Chuanyue Yu and colleagues use to enhance reasoning in GraphRAG?",
+            hop_type=EvalHopTypeV2.TWO_HOP,
+            answerable=True,
+            reference_answer="Chuanyue Yu and colleagues propose GraphRAG-R1, which utilizes process-constrained reinforcement learning (RL) to guide graph traversal and reasoning.",
+            required_facts=[
+                RequiredFact(id="q2hop1_f1", fact="Proposes GraphRAG-R1", weight=1.0, aliases=["graphrag-r1", "graphrag r1"]),
+                RequiredFact(id="q2hop1_f2", fact="Process-constrained reinforcement learning", weight=1.0, aliases=["process-constrained reinforcement learning", "process-constrained rl", "reinforcement learning"]),
+            ],
+            target_entities=["GraphRAG-R1", "Chuanyue Yu"],
+            gold_chunk_ids=["chunk_arxiv_2507_23581v2_000", "chunk_arxiv_2507_23581v2_001"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_2hop_02",
+            question="What four task categories are covered by the GraphRAG-Bench evaluation suite introduced by Zhishang Xiang et al.?",
+            hop_type=EvalHopTypeV2.TWO_HOP,
+            answerable=True,
+            reference_answer="GraphRAG-Bench covers four tasks of increasing difficulty: fact retrieval, complex reasoning, contextual summarization, and creative generation.",
+            required_facts=[
+                RequiredFact(id="q2hop2_f1", fact="Fact retrieval and complex reasoning", weight=1.0, aliases=["fact retrieval", "complex reasoning"]),
+                RequiredFact(id="q2hop2_f2", fact="Contextual summarization and creative generation", weight=1.0, aliases=["contextual summarization", "creative generation"]),
+            ],
+            target_entities=["GraphRAG-Bench", "Zhishang Xiang"],
+            gold_chunk_ids=["chunk_arxiv_2506_05690v3_000", "chunk_arxiv_2506_05690v3_001"],
+            gold_evidence=[
+                GoldEvidenceItem(
+                    type=GoldEvidenceType.CHUNK,
+                    id="chunk_arxiv_2506_05690v3_000",
+                    supports=["q2hop2_f1"],
+                    document_id="arxiv_2506.05690v3",
+                ),
+                GoldEvidenceItem(
+                    type=GoldEvidenceType.CHUNK,
+                    id="chunk_arxiv_2506_05690v3_001",
+                    supports=["q2hop2_f2"],
+                    document_id="arxiv_2506.05690v3",
+                ),
+            ],
+        ),
+        BenchmarkQuestionV2(
+            id="q_2hop_03",
+            question="What three agentic components are ablated in Sheroz Shaikh's study on multi-hop QA?",
+            hop_type=EvalHopTypeV2.TWO_HOP,
+            answerable=True,
+            reference_answer="The study dissects agentic RAG by ablating iterative reasoning loops, query decomposition, and adaptive retrieval on a local 7B model.",
+            required_facts=[
+                RequiredFact(id="q2hop3_f1", fact="Iterative reasoning loops", weight=1.0, aliases=["iterative reasoning loops", "iterative reasoning"]),
+                RequiredFact(id="q2hop3_f2", fact="Query decomposition and adaptive retrieval", weight=1.0, aliases=["query decomposition", "adaptive retrieval"]),
+            ],
+            target_entities=["Dissecting Agentic RAG", "Sheroz Shaikh"],
+            gold_chunk_ids=["chunk_arxiv_2606_21553v1_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_2hop_04",
+            question="What hardware deployment setting does the HeRo framework target for adaptive agentic RAG orchestration?",
+            hop_type=EvalHopTypeV2.TWO_HOP,
+            answerable=True,
+            reference_answer="HeRo targets local execution on heterogeneous mobile System-on-Chips (SoCs) for mobile device deployment.",
+            required_facts=[
+                RequiredFact(id="q2hop4_f1", fact="Heterogeneous mobile System-on-Chips (SoCs)", weight=1.0, aliases=["heterogeneous mobile soc", "mobile socs", "soc", "socs"]),
+                RequiredFact(id="q2hop4_f2", fact="Adaptive orchestration on mobile devices", weight=1.0, aliases=["mobile devices", "mobile", "adaptive orchestration"]),
+            ],
+            target_entities=["HeRo", "Agentic RAG"],
+            gold_chunk_ids=["chunk_arxiv_2603_01661v2_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_2hop_05",
+            question="What retrieval corpus granularity does the IslamicFaithQA framework develop for agentic Quran-grounding?",
+            hop_type=EvalHopTypeV2.TWO_HOP,
+            answerable=True,
+            reference_answer="The framework develops a verse-level Qur'an retrieval corpus comprising approximately 6,000 atomic verses (ayat) for tool-based evidence seeking.",
+            required_facts=[
+                RequiredFact(id="q2hop5_f1", fact="Verse-level retrieval corpus", weight=1.0, aliases=["verse-level", "atomic verses", "ayat"]),
+                RequiredFact(id="q2hop5_f2", fact="Approximately 6,000 verses", weight=1.0, aliases=["~6k", "6k", "6,000", "6000"]),
+            ],
+            target_entities=["IslamicFaithQA", "Agentic RAG"],
+            gold_chunk_ids=["chunk_arxiv_2601_07528v2_000", "chunk_arxiv_2601_07528v2_001"],
+            gold_evidence=[
+                GoldEvidenceItem(
+                    type=GoldEvidenceType.CHUNK,
+                    id="chunk_arxiv_2601_07528v2_000",
+                    supports=["q2hop5_f1"],
+                    document_id="arxiv_2601.07528v2",
+                ),
+                GoldEvidenceItem(
+                    type=GoldEvidenceType.CHUNK,
+                    id="chunk_arxiv_2601_07528v2_001",
+                    supports=["q2hop5_f1", "q2hop5_f2"],
+                    document_id="arxiv_2601.07528v2",
+                ),
+            ],
+        ),
+        BenchmarkQuestionV2(
+            id="q_2hop_06",
+            question="What dual failure modes does Yizhuo Ma et al. identify when knowledge graphs are constructed by LLMs for GraphRAG?",
+            hop_type=EvalHopTypeV2.TWO_HOP,
+            answerable=True,
+            reference_answer="Yizhuo Ma et al. identify retrieval drift and hallucinations arising from imperfect, noisy LLM-constructed knowledge graphs.",
+            required_facts=[
+                RequiredFact(id="q2hop6_f1", fact="Retrieval drift", weight=1.0, aliases=["retrieval drift", "drift"]),
+                RequiredFact(id="q2hop6_f2", fact="Hallucination from imperfect knowledge graphs", weight=1.0, aliases=["hallucination", "hallucinations", "imperfect knowledge graphs", "noisy kgs"]),
+            ],
+            target_entities=["Toward Robust GraphRAG", "Yizhuo Ma"],
+            gold_chunk_ids=["chunk_arxiv_2603_14828v2_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_2hop_07",
+            question="What parameter size of language models does Kotoge et al. study for distillation-guided agentic search?",
+            hop_type=EvalHopTypeV2.TWO_HOP,
+            answerable=True,
+            reference_answer="Kotoge et al. investigate compact language models in the 0.5 to 1 billion parameter range (0.5-1B) using distillation-guided policy optimization.",
+            required_facts=[
+                RequiredFact(id="q2hop7_f1", fact="Compact language models of 0.5 to 1B parameters", weight=1.0, aliases=["0.5--1b", "0.5-1b", "0.5 to 1b", "0.5-1 billion"]),
+                RequiredFact(id="q2hop7_f2", fact="Distillation-guided policy optimization", weight=1.0, aliases=["distillation-guided policy optimization", "distillation", "policy optimization"]),
+            ],
+            target_entities=["Agentic RAG", "Rikuto Kotoge"],
+            gold_chunk_ids=["chunk_arxiv_2508_20324v4_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_2hop_08",
+            question="What limitations in existing GraphRAG approaches motivated the design of GraphSearch by Cehao Yang et al.?",
+            hop_type=EvalHopTypeV2.TWO_HOP,
+            answerable=True,
+            reference_answer="GraphSearch was motivated by two core limitations: shallow retrieval that fails to explore deep graph structures, and lack of agentic search workflows.",
+            required_facts=[
+                RequiredFact(id="q2hop8_f1", fact="Shallow retrieval in existing GraphRAG", weight=1.0, aliases=["shallow retrieval", "shallow"]),
+                RequiredFact(id="q2hop8_f2", fact="Agentic deep searching workflow", weight=1.0, aliases=["agentic deep searching workflow", "agentic search", "deep searching"]),
+            ],
+            target_entities=["GraphSearch", "Cehao Yang"],
+            gold_chunk_ids=["chunk_arxiv_2509_22009v2_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_2hop_09",
+            question="What structural document challenge is addressed by HVM-GraphRAG across modalities?",
+            hop_type=EvalHopTypeV2.TWO_HOP,
+            answerable=True,
+            reference_answer="HVM-GraphRAG addresses question answering over complex documents where evidence is distributed across distant document regions and different modalities.",
+            required_facts=[
+                RequiredFact(id="q2hop9_f1", fact="Distributed evidence across distant document regions", weight=1.0, aliases=["distant document regions", "distant regions", "complex documents"]),
+                RequiredFact(id="q2hop9_f2", fact="Multimodal evidence integration", weight=1.0, aliases=["multimodal", "modalities", "multimodal evidence"]),
+            ],
+            target_entities=["HVM-GraphRAG", "Multimodal GraphRAG"],
+            gold_chunk_ids=["chunk_arxiv_2607_24861v1_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_2hop_10",
+            question="Why do traditional GraphRAG methods fail on temporal reasoning tasks according to DyG-RAG?",
+            hop_type=EvalHopTypeV2.TWO_HOP,
+            answerable=True,
+            reference_answer="Traditional GraphRAG methods fail on temporal reasoning because they rely on static graphs and are unable to model the temporal evolution of events and facts.",
+            required_facts=[
+                RequiredFact(id="q2hop10_f1", fact="Relies on static graphs", weight=1.0, aliases=["static graphs", "static graph", "static"]),
+                RequiredFact(id="q2hop10_f2", fact="Inability to model temporal evolution", weight=1.0, aliases=["temporal reasoning", "temporal evolution", "evolution of facts", "temporal"]),
+            ],
+            target_entities=["DyG-RAG", "Temporal Reasoning"],
+            gold_chunk_ids=["chunk_arxiv_2507_13396v1_000"],
+        ),
+
+        # ======================================================================
+        # 3-Hop Questions (Deep Multi-Step / Multi-Paper) - 10 Questions
+        # ======================================================================
+        BenchmarkQuestionV2(
+            id="q_3hop_01",
+            question="How does GraphRAG-R1's reinforcement learning framework enforce constraints on graph traversal during generation?",
+            hop_type=EvalHopTypeV2.THREE_HOP,
+            answerable=True,
+            reference_answer="GraphRAG-R1 integrates process-constrained reinforcement learning that constrains the reasoning process along valid graph structures, preventing hallucinated paths and improving factual consistency.",
+            required_facts=[
+                RequiredFact(id="q3hop1_f1", fact="Process-constrained reinforcement learning framework", weight=1.0, aliases=["process-constrained reinforcement learning", "process-constrained", "rl"]),
+                RequiredFact(id="q3hop1_f2", fact="Constrains reasoning along graph structures", weight=1.0, aliases=["graph structures", "valid paths", "graph traversal"]),
+                RequiredFact(id="q3hop1_f3", fact="Mitigates hallucinated connections and improves consistency", weight=1.0, aliases=["hallucination", "factual consistency", "reasoning abilities"]),
+            ],
+            target_entities=["GraphRAG-R1"],
+            gold_chunk_ids=["chunk_arxiv_2507_23581v2_000", "chunk_arxiv_2507_23581v2_001"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_3hop_02",
+            question="How does AgenticRAGTracer diagnose multi-step retrieval reasoning failures in agentic systems across individual hops?",
+            hop_type=EvalHopTypeV2.THREE_HOP,
+            answerable=True,
+            reference_answer="AgenticRAGTracer establishes a hop-aware diagnostic protocol that evaluates each intermediate reasoning step and tool call, pinpointing whether failure occurred during retrieval, decomposition, or multi-step synthesis.",
+            required_facts=[
+                RequiredFact(id="q3hop2_f1", fact="Hop-aware diagnostic benchmark", weight=1.0, aliases=["hop-aware", "agenticragtracer"]),
+                RequiredFact(id="q3hop2_f2", fact="Evaluates intermediate reasoning steps and tool calls", weight=1.0, aliases=["multi-step interaction", "deliberate thinking", "intermediate steps"]),
+                RequiredFact(id="q3hop2_f3", fact="Diagnoses multi-step retrieval reasoning failures", weight=1.0, aliases=["diagnosing", "multi-step retrieval reasoning", "retrieval reasoning"]),
+            ],
+            target_entities=["AgenticRAGTracer", "Multi-Hop Reasoning"],
+            gold_chunk_ids=["chunk_arxiv_2602_19127v2_000", "chunk_arxiv_2602_19127v2_001"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_3hop_03",
+            question="How does Dissecting Agentic RAG isolate the individual performance contributions of query decomposition and adaptive retrieval?",
+            hop_type=EvalHopTypeV2.THREE_HOP,
+            answerable=True,
+            reference_answer="The study uses a systematic component ablation framework on a local 7B model, isolating iterative reasoning loops, query decomposition, and adaptive retrieval to evaluate their standalone and combined multi-hop impact.",
+            required_facts=[
+                RequiredFact(id="q3hop3_f1", fact="Component ablation framework", weight=1.0, aliases=["component ablation", "ablation"]),
+                RequiredFact(id="q3hop3_f2", fact="Evaluates query decomposition and adaptive retrieval", weight=1.0, aliases=["query decomposition", "adaptive retrieval"]),
+                RequiredFact(id="q3hop3_f3", fact="Measured on multi-hop question answering with a local 7B model", weight=1.0, aliases=["multi-hop qa", "local 7b model", "7b model"]),
+            ],
+            target_entities=["Dissecting Agentic RAG"],
+            gold_chunk_ids=["chunk_arxiv_2606_21553v1_000", "chunk_arxiv_2606_21553v1_001"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_3hop_04",
+            question="How does ACE-GraphRAG overcome fixed context construction limitations in hierarchical knowledge graphs?",
+            hop_type=EvalHopTypeV2.THREE_HOP,
+            answerable=True,
+            reference_answer="ACE-GraphRAG introduces Agentic Context Engineering, which dynamically selects and reorganizes hierarchical graph representations across multiple resolutions to match the specific granularity needed by the query.",
+            required_facts=[
+                RequiredFact(id="q3hop4_f1", fact="Agentic Context Engineering framework", weight=1.0, aliases=["agentic context engineering", "ace"]),
+                RequiredFact(id="q3hop4_f2", fact="Reorganizes multi-resolution hierarchical representations", weight=1.0, aliases=["multi-resolution", "multi-level granularity", "hierarchical graphrag"]),
+                RequiredFact(id="q3hop4_f3", fact="Dynamically adapts context to query needs", weight=1.0, aliases=["context construction", "suited to the query", "dynamic context"]),
+            ],
+            target_entities=["ACE-GraphRAG"],
+            gold_chunk_ids=["chunk_arxiv_2608_01269v2_000", "chunk_arxiv_2608_01269v2_001"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_3hop_05",
+            question="How does the comparative study 'RAG vs. GraphRAG' analyze performance trade-offs on structured knowledge graph data?",
+            hop_type=EvalHopTypeV2.THREE_HOP,
+            answerable=True,
+            reference_answer="The study performs a systematic evaluation comparing standard text RAG and GraphRAG across structured knowledge graphs, identifying scenarios where relational graph indexing outperforms dense passage retrieval.",
+            required_facts=[
+                RequiredFact(id="q3hop5_f1", fact="Systematic evaluation of RAG versus GraphRAG", weight=1.0, aliases=["systematic evaluation", "rag vs graphrag", "rag vs. graphrag"]),
+                RequiredFact(id="q3hop5_f2", fact="Evaluates structured data and knowledge graphs", weight=1.0, aliases=["structured data", "knowledge graphs", "kg"]),
+                RequiredFact(id="q3hop5_f3", fact="Identifies trade-offs between text retrieval and graph indexing", weight=1.0, aliases=["text-based tasks", "relational", "key insights"]),
+            ],
+            target_entities=["RAG vs. GraphRAG"],
+            gold_chunk_ids=["chunk_arxiv_2502_11371v3_000", "chunk_arxiv_2502_11371v3_001"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_3hop_06",
+            question="How do imperfect LLM-generated knowledge graphs cause retrieval drift in multi-hop GraphRAG according to Yizhuo Ma et al.?",
+            hop_type=EvalHopTypeV2.THREE_HOP,
+            answerable=True,
+            reference_answer="Yizhuo Ma et al. show that spurious entities and erroneous relations in LLM-constructed KGs cause multi-hop graph traversals to deviate along incorrect paths, leading to retrieval drift and hallucinations.",
+            required_facts=[
+                RequiredFact(id="q3hop6_f1", fact="LLM-constructed KGs contain noise and errors", weight=1.0, aliases=["llm-constructed kgs", "imperfect knowledge graphs", "noisy kgs"]),
+                RequiredFact(id="q3hop6_f2", fact="Multi-hop traversals deviate along incorrect paths", weight=1.0, aliases=["retrieval drift", "deviate", "multi-hop reasoning"]),
+                RequiredFact(id="q3hop6_f3", fact="Produces hallucinated downstream generations", weight=1.0, aliases=["hallucination", "hallucinations", "drift"]),
+            ],
+            target_entities=["Toward Robust GraphRAG"],
+            gold_chunk_ids=["chunk_arxiv_2603_14828v2_000", "chunk_arxiv_2603_14828v2_001"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_3hop_07",
+            question="How does LatentRAG combine latent reasoning and retrieval to solve complex multi-hop questions efficiently?",
+            hop_type=EvalHopTypeV2.THREE_HOP,
+            answerable=True,
+            reference_answer="LatentRAG replaces explicit single-step retrieval by embedding reasoning steps directly into a latent space, enabling the model to interleave latent reasoning and retrieval for complex multi-hop queries.",
+            required_facts=[
+                RequiredFact(id="q3hop7_f1", fact="Replaces single-step retrieval with latent reasoning", weight=1.0, aliases=["latent reasoning", "latent reasoning and retrieval", "latentrags"]),
+                RequiredFact(id="q3hop7_f2", fact="Operates in latent representation space", weight=1.0, aliases=["latent space", "latent"]),
+                RequiredFact(id="q3hop7_f3", fact="Addresses complex question answering efficiency", weight=1.0, aliases=["complex questions", "complex question answering", "efficient agentic rag"]),
+            ],
+            target_entities=["LatentRAG"],
+            gold_chunk_ids=["chunk_arxiv_2605_06285v1_000", "chunk_arxiv_2605_06285v1_001"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_3hop_08",
+            question="How does the survey by Aditi Singh et al. define the core architectural transition from standard RAG to Agentic RAG?",
+            hop_type=EvalHopTypeV2.THREE_HOP,
+            answerable=True,
+            reference_answer="The survey explains that standard RAG relies on static, single-turn retrieval pipelines, whereas Agentic RAG incorporates autonomous agents capable of iterative planning, tool use, dynamic query reformulation, and self-reflection.",
+            required_facts=[
+                RequiredFact(id="q3hop8_f1", fact="Standard RAG is static single-turn retrieval", weight=1.0, aliases=["static", "single-step", "traditional rag", "static training data"]),
+                RequiredFact(id="q3hop8_f2", fact="Agentic RAG incorporates autonomous planning and tool use", weight=1.0, aliases=["autonomous agents", "tools", "planning", "agentic rag"]),
+                RequiredFact(id="q3hop8_f3", fact="Enables dynamic iterative responses to complex queries", weight=1.0, aliases=["dynamic real-time queries", "iterative", "agentic"]),
+            ],
+            target_entities=["Agentic RAG Survey"],
+            gold_chunk_ids=["chunk_arxiv_2501_09136v4_000", "chunk_arxiv_2501_09136v4_001"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_3hop_09",
+            question="How does RAGU's multi-step graph construction pipeline mitigate entity noise compared to single-pass extraction?",
+            hop_type=EvalHopTypeV2.THREE_HOP,
+            answerable=True,
+            reference_answer="RAGU replaces single-pass extraction with a multi-step pipeline using a compact domain-adapted LLM, systematically validating, filtering, and refining extracted entities before graph indexing.",
+            required_facts=[
+                RequiredFact(id="q3hop9_f1", fact="Replaces single extraction pass", weight=1.0, aliases=["single extraction pass", "single-pass"]),
+                RequiredFact(id="q3hop9_f2", fact="Uses compact domain-adapted LLM", weight=1.0, aliases=["compact domain-adapted llm", "domain-adapted"]),
+                RequiredFact(id="q3hop9_f3", fact="Reduces noisy entities and brittle retrieval", weight=1.0, aliases=["noisy entities", "brittle retrieval", "multi-step graphrag"]),
+            ],
+            target_entities=["RAGU"],
+            gold_chunk_ids=["chunk_arxiv_2607_11683v1_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_3hop_10",
+            question="How does MetaRAG align agent belief and action policies during iterative search decisions?",
+            hop_type=EvalHopTypeV2.THREE_HOP,
+            answerable=True,
+            reference_answer="MetaRAG aligns the language model's internal belief about evidence sufficiency with its external search actions using belief-action aligned policy optimization, deciding whether to search further or answer.",
+            required_facts=[
+                RequiredFact(id="q3hop10_f1", fact="Belief-action aligned policy optimization", weight=1.0, aliases=["belief-action aligned", "belief-action", "policy optimization"]),
+                RequiredFact(id="q3hop10_f2", fact="Models agent internal belief of evidence sufficiency", weight=1.0, aliases=["internal belief", "belief"]),
+                RequiredFact(id="q3hop10_f3", fact="Decides whether to continue searching or answer", weight=1.0, aliases=["continue searching", "when to answer", "search decision"]),
+            ],
+            target_entities=["MetaRAG"],
+            gold_chunk_ids=["chunk_arxiv_2608_24214v1_000"],
+        ),
+
+        # ======================================================================
+        # Aggregation / Comparative Questions - 10 Questions
+        # ======================================================================
+        BenchmarkQuestionV2(
+            id="q_agg_01",
+            question="Compare the primary evaluation objectives of GraphRAG-Bench and IslamicFaithQA.",
+            hop_type=EvalHopTypeV2.AGGREGATION,
+            answerable=True,
+            reference_answer="GraphRAG-Bench focuses on evaluating hierarchical knowledge retrieval and complex reasoning across four task difficulties, while IslamicFaithQA specifically evaluates hallucination, evidence grounding, and justified abstention on atomic single-gold questions.",
+            required_facts=[
+                RequiredFact(id="qagg1_f1", fact="GraphRAG-Bench evaluates hierarchical retrieval and multi-task reasoning", weight=1.0, aliases=["graphrag-bench", "hierarchical knowledge retrieval", "complex reasoning"]),
+                RequiredFact(id="qagg1_f2", fact="IslamicFaithQA measures hallucination and abstention", weight=1.0, aliases=["islamicfaithqa", "hallucination", "abstention", "grounding"]),
+            ],
+            target_entities=["GraphRAG-Bench", "IslamicFaithQA"],
+            gold_chunk_ids=["chunk_arxiv_2506_05690v3_000", "chunk_arxiv_2601_07528v2_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_agg_02",
+            question="What shared limitations of vanilla RAG are identified in both GRAG and 'When to use Graphs in RAG'?",
+            hop_type=EvalHopTypeV2.AGGREGATION,
+            answerable=True,
+            reference_answer="Both papers highlight that vanilla RAG focuses on isolated document passages, failing to capture networked, interconnected relationships such as citation networks and hierarchical concept structures.",
+            required_facts=[
+                RequiredFact(id="qagg2_f1", fact="Vanilla RAG focuses on isolated documents", weight=1.0, aliases=["individual documents", "isolated documents", "vanilla rag"]),
+                RequiredFact(id="qagg2_f2", fact="Fails to capture interconnected and hierarchical structures", weight=1.0, aliases=["networked documents", "hierarchical structure", "networked", "graphs"]),
+            ],
+            target_entities=["GRAG", "GraphRAG-Bench"],
+            gold_chunk_ids=["chunk_arxiv_2405_16506v3_000", "chunk_arxiv_2506_05690v3_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_agg_03",
+            question="Compare how GraphSearch and LatentRAG address the limitations of shallow, single-step retrieval.",
+            hop_type=EvalHopTypeV2.AGGREGATION,
+            answerable=True,
+            reference_answer="GraphSearch develops an agentic deep searching workflow that explicitly navigates graph structures, whereas LatentRAG replaces single-step retrieval with latent reasoning and retrieval in representation space.",
+            required_facts=[
+                RequiredFact(id="qagg3_f1", fact="GraphSearch uses an agentic deep searching workflow", weight=1.0, aliases=["graphsearch", "deep searching workflow", "agentic deep searching"]),
+                RequiredFact(id="qagg3_f2", fact="LatentRAG uses latent reasoning and retrieval", weight=1.0, aliases=["latentrags", "latent reasoning", "latent representation"]),
+            ],
+            target_entities=["GraphSearch", "LatentRAG"],
+            gold_chunk_ids=["chunk_arxiv_2509_22009v2_000", "chunk_arxiv_2605_06285v1_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_agg_04",
+            question="Compare the efficiency strategies of HeRo and Kotoge et al. for running Agentic RAG on resource-constrained hardware.",
+            hop_type=EvalHopTypeV2.AGGREGATION,
+            answerable=True,
+            reference_answer="HeRo uses adaptive orchestration across heterogeneous mobile SoCs, while Kotoge et al. employ distillation-guided policy optimization to preserve search capabilities in compact 0.5-1B language models.",
+            required_facts=[
+                RequiredFact(id="qagg4_f1", fact="HeRo optimizes adaptive orchestration on mobile SoCs", weight=1.0, aliases=["hero", "heterogeneous mobile soc", "mobile socs"]),
+                RequiredFact(id="qagg4_f2", fact="Kotoge et al. distill agentic search into compact 0.5-1B models", weight=1.0, aliases=["distillation-guided", "compact models", "0.5--1b", "0.5-1b"]),
+            ],
+            target_entities=["HeRo", "Compact Agentic RAG"],
+            gold_chunk_ids=["chunk_arxiv_2603_01661v2_000", "chunk_arxiv_2508_20324v4_000"],
+            gold_evidence=[
+                GoldEvidenceItem(
+                    type=GoldEvidenceType.CHUNK,
+                    id="chunk_arxiv_2603_01661v2_000",
+                    supports=["qagg4_f1"],
+                    document_id="arxiv_2603.01661v2",
+                ),
+                GoldEvidenceItem(
+                    type=GoldEvidenceType.CHUNK,
+                    id="chunk_arxiv_2508_20324v4_000",
+                    supports=["qagg4_f2"],
+                    document_id="arxiv_2508.20324v4",
+                ),
+                GoldEvidenceItem(
+                    type=GoldEvidenceType.METADATA,
+                    id="meta_arxiv_2508_20324v4_authors",
+                    supports=["qagg4_f2"],
+                    document_id="arxiv_2508.20324v4",
+                    field="authors",
+                ),
+            ],
+        ),
+        BenchmarkQuestionV2(
+            id="q_agg_05",
+            question="Compare the scope of evaluation in 'RAG vs. GraphRAG' and 'Do We Still Need GraphRAG?'.",
+            hop_type=EvalHopTypeV2.AGGREGATION,
+            answerable=True,
+            reference_answer="'RAG vs. GraphRAG' systematically benchmarks text RAG against GraphRAG across structured knowledge graphs, while 'Do We Still Need GraphRAG?' investigates whether GraphRAG remains necessary when agentic search systems are available.",
+            required_facts=[
+                RequiredFact(id="qagg5_f1", fact="RAG vs GraphRAG benchmarks structured knowledge graph tasks", weight=1.0, aliases=["rag vs. graphrag", "structured data", "knowledge graphs"]),
+                RequiredFact(id="qagg5_f2", fact="Do We Still Need GraphRAG benchmarks against agentic search systems", weight=1.0, aliases=["do we still need graphrag", "agentic search systems", "agentic search"]),
+            ],
+            target_entities=["RAG Evaluation Benchmarks"],
+            gold_chunk_ids=["chunk_arxiv_2502_11371v3_000", "chunk_arxiv_2604_09666v1_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_agg_06",
+            question="What complementary context optimization approaches are proposed by ACE-GraphRAG and Empowering GraphRAG?",
+            hop_type=EvalHopTypeV2.AGGREGATION,
+            answerable=True,
+            reference_answer="ACE-GraphRAG uses agentic context engineering to assemble multi-resolution hierarchical representations, while Empowering GraphRAG focuses on knowledge filtering and integration to remove irrelevant facts.",
+            required_facts=[
+                RequiredFact(id="qagg6_f1", fact="ACE-GraphRAG uses agentic context engineering for multi-resolution graphs", weight=1.0, aliases=["ace-graphrag", "agentic context engineering", "multi-resolution"]),
+                RequiredFact(id="qagg6_f2", fact="Empowering GraphRAG uses knowledge filtering and integration", weight=1.0, aliases=["empowering graphrag", "knowledge filtering", "filtering and integration"]),
+            ],
+            target_entities=["ACE-GraphRAG", "Empowering GraphRAG"],
+            gold_chunk_ids=["chunk_arxiv_2608_01269v2_000", "chunk_arxiv_2503_13804v1_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_agg_07",
+            question="Compare how AgenticRAGTracer and Dissecting Agentic RAG approach diagnostic evaluation in Agentic RAG.",
+            hop_type=EvalHopTypeV2.AGGREGATION,
+            answerable=True,
+            reference_answer="AgenticRAGTracer uses a hop-aware benchmark to trace multi-step reasoning failures across sequential steps, whereas Dissecting Agentic RAG performs a component ablation on local 7B models across iterative loops, query decomposition, and retrieval.",
+            required_facts=[
+                RequiredFact(id="qagg7_f1", fact="AgenticRAGTracer traces step-by-step multi-hop reasoning", weight=1.0, aliases=["agenticragtracer", "hop-aware", "multi-step retrieval reasoning"]),
+                RequiredFact(id="qagg7_f2", fact="Dissecting Agentic RAG conducts component ablation on local 7B model", weight=1.0, aliases=["dissecting agentic rag", "component ablation", "local 7b"]),
+            ],
+            target_entities=["Agentic RAG Diagnostics"],
+            gold_chunk_ids=["chunk_arxiv_2602_19127v2_000", "chunk_arxiv_2606_21553v1_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_agg_08",
+            question="How do DyG-RAG and HVM-GraphRAG expand the dimensions of GraphRAG beyond standard text documents?",
+            hop_type=EvalHopTypeV2.AGGREGATION,
+            answerable=True,
+            reference_answer="DyG-RAG expands GraphRAG into the temporal dimension through event-centric dynamic graphs, while HVM-GraphRAG expands into the multimodal dimension across distant document regions.",
+            required_facts=[
+                RequiredFact(id="qagg8_f1", fact="DyG-RAG adds temporal and event-centric modeling", weight=1.0, aliases=["dyg-rag", "temporal reasoning", "event-centric", "dynamic graph"]),
+                RequiredFact(id="qagg8_f2", fact="HVM-GraphRAG adds multimodal evidence integration", weight=1.0, aliases=["hvm-graphrag", "multimodal", "modalities", "complex document"]),
+            ],
+            target_entities=["DyG-RAG", "HVM-GraphRAG"],
+            gold_chunk_ids=["chunk_arxiv_2507_13396v1_000", "chunk_arxiv_2607_24861v1_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_agg_09",
+            question="Compare the vulnerability analyses in 'GraphRAG under Fire' and 'Toward Robust GraphRAG'.",
+            hop_type=EvalHopTypeV2.AGGREGATION,
+            answerable=True,
+            reference_answer="'GraphRAG under Fire' analyzes adversarial robustness and attack vulnerabilities against multi-scale knowledge graphs, while 'Toward Robust GraphRAG' focuses on mitigating retrieval drift and hallucinations caused by noisy, imperfect LLM-constructed graphs.",
+            required_facts=[
+                RequiredFact(id="qagg9_f1", fact="GraphRAG under Fire evaluates robustness and attack vulnerabilities", weight=1.0, aliases=["graphrag under fire", "robustness", "adversarial", "under fire"]),
+                RequiredFact(id="qagg9_f2", fact="Toward Robust GraphRAG mitigates drift and imperfect KG noise", weight=1.0, aliases=["toward robust graphrag", "retrieval drift", "imperfect knowledge graphs", "hallucination"]),
+            ],
+            target_entities=["Robust GraphRAG Analysis"],
+            gold_chunk_ids=["chunk_arxiv_2501_14050v4_000", "chunk_arxiv_2603_14828v2_000"],
+        ),
+        BenchmarkQuestionV2(
+            id="q_agg_10",
+            question="Compare the reinforcement learning formulations used in GraphRAG-R1 and MetaRAG.",
+            hop_type=EvalHopTypeV2.AGGREGATION,
+            answerable=True,
+            reference_answer="GraphRAG-R1 uses process-constrained reinforcement learning to enforce structural graph adherence during generation, whereas MetaRAG uses belief-action aligned policy optimization to align search actions with the model's internal confidence.",
+            required_facts=[
+                RequiredFact(id="qagg10_f1", fact="GraphRAG-R1 uses process-constrained reinforcement learning", weight=1.0, aliases=["graphrag-r1", "process-constrained reinforcement learning", "process-constrained"]),
+                RequiredFact(id="qagg10_f2", fact="MetaRAG uses belief-action aligned policy optimization", weight=1.0, aliases=["metarag", "belief-action aligned", "belief-action"]),
+            ],
+            target_entities=["GraphRAG-R1", "MetaRAG"],
+            gold_chunk_ids=["chunk_arxiv_2507_23581v2_000", "chunk_arxiv_2608_24214v1_000"],
+        ),
+
+        # ======================================================================
+        # Out-of-Scope (Unanswerable / Abstention) - 10 Questions
+        # ======================================================================
+        BenchmarkQuestionV2(
+            id="q_oos_01",
+            question="What is the biochemical mechanism of light-independent reactions in C4 carbon fixation?",
+            hop_type=EvalHopTypeV2.OUT_OF_SCOPE,
+            answerable=False,
+            reference_answer="I cannot answer this question because the provided enterprise research corpus contains no evidence on plant biology, photosynthesis, or C4 carbon fixation.",
+            required_facts=[
+                RequiredFact(id="qoos1_f1", fact="States lack of evidence in corpus / abstains", weight=1.0, aliases=["insufficient evidence", "cannot answer", "lacks sufficient evidence", "no evidence"]),
+            ],
+            target_entities=[],
+            gold_chunk_ids=[],
+        ),
+        BenchmarkQuestionV2(
+            id="q_oos_02",
+            question="What monetary currency reforms were enacted by Roman Emperor Diocletian in 301 AD?",
+            hop_type=EvalHopTypeV2.OUT_OF_SCOPE,
+            answerable=False,
+            reference_answer="I cannot answer this question because the provided enterprise research corpus contains no evidence on Roman history, ancient currency, or the Edict on Maximum Prices.",
+            required_facts=[
+                RequiredFact(id="qoos2_f1", fact="States lack of evidence in corpus / abstains", weight=1.0, aliases=["insufficient evidence", "cannot answer", "lacks sufficient evidence", "no evidence"]),
+            ],
+            target_entities=[],
+            gold_chunk_ids=[],
+        ),
+        BenchmarkQuestionV2(
+            id="q_oos_03",
+            question="How does CRISPR-Cas9 ribonucleoprotein delivery mediate targeted mutagenesis in Glycine max soybean crops?",
+            hop_type=EvalHopTypeV2.OUT_OF_SCOPE,
+            answerable=False,
+            reference_answer="I cannot answer this question because the provided enterprise research corpus contains no evidence on agricultural genetics, CRISPR mutagenesis, or soybean cultivation.",
+            required_facts=[
+                RequiredFact(id="qoos3_f1", fact="States lack of evidence in corpus / abstains", weight=1.0, aliases=["insufficient evidence", "cannot answer", "lacks sufficient evidence", "no evidence"]),
+            ],
+            target_entities=[],
+            gold_chunk_ids=[],
+        ),
+        BenchmarkQuestionV2(
+            id="q_oos_04",
+            question="What tectonic plate subduction processes formed the Mariana Trench in the western Pacific Ocean?",
+            hop_type=EvalHopTypeV2.OUT_OF_SCOPE,
+            answerable=False,
+            reference_answer="I cannot answer this question because the provided enterprise research corpus contains no evidence on plate tectonics, oceanography, or the Mariana Trench.",
+            required_facts=[
+                RequiredFact(id="qoos4_f1", fact="States lack of evidence in corpus / abstains", weight=1.0, aliases=["insufficient evidence", "cannot answer", "lacks sufficient evidence", "no evidence"]),
+            ],
+            target_entities=[],
+            gold_chunk_ids=[],
+        ),
+        BenchmarkQuestionV2(
+            id="q_oos_05",
+            question="What ratio of butter, water, and flour is required to achieve proper emulsion in classical French choux pastry?",
+            hop_type=EvalHopTypeV2.OUT_OF_SCOPE,
+            answerable=False,
+            reference_answer="I cannot answer this question because the provided enterprise research corpus contains no evidence on culinary arts, baking recipes, or French pastry preparation.",
+            required_facts=[
+                RequiredFact(id="qoos5_f1", fact="States lack of evidence in corpus / abstains", weight=1.0, aliases=["insufficient evidence", "cannot answer", "lacks sufficient evidence", "no evidence"]),
+            ],
+            target_entities=[],
+            gold_chunk_ids=[],
+        ),
+        BenchmarkQuestionV2(
+            id="q_oos_06",
+            question="What are the clinical diagnostic biomarkers and ceruloplasmin levels used to detect Wilson's disease?",
+            hop_type=EvalHopTypeV2.OUT_OF_SCOPE,
+            answerable=False,
+            reference_answer="I cannot answer this question because the provided enterprise research corpus contains no evidence on clinical medicine, hepatology, or Wilson's disease.",
+            required_facts=[
+                RequiredFact(id="qoos6_f1", fact="States lack of evidence in corpus / abstains", weight=1.0, aliases=["insufficient evidence", "cannot answer", "lacks sufficient evidence", "no evidence"]),
+            ],
+            target_entities=[],
+            gold_chunk_ids=[],
+        ),
+        BenchmarkQuestionV2(
+            id="q_oos_07",
+            question="What acoustic resonance frequencies and varnish treatments distinguish Antonius Stradivarius violins?",
+            hop_type=EvalHopTypeV2.OUT_OF_SCOPE,
+            answerable=False,
+            reference_answer="I cannot answer this question because the provided enterprise research corpus contains no evidence on musical instrument craftsmanship, acoustics, or violin varnishes.",
+            required_facts=[
+                RequiredFact(id="qoos7_f1", fact="States lack of evidence in corpus / abstains", weight=1.0, aliases=["insufficient evidence", "cannot answer", "lacks sufficient evidence", "no evidence"]),
+            ],
+            target_entities=[],
+            gold_chunk_ids=[],
+        ),
+        BenchmarkQuestionV2(
+            id="q_oos_08",
+            question="How does quantum chromodynamics calculate asymptotic freedom in quark-gluon plasma interactions?",
+            hop_type=EvalHopTypeV2.OUT_OF_SCOPE,
+            answerable=False,
+            reference_answer="I cannot answer this question because the provided enterprise research corpus contains no evidence on quantum chromodynamics, particle physics, or quark-gluon plasma.",
+            required_facts=[
+                RequiredFact(id="qoos8_f1", fact="States lack of evidence in corpus / abstains", weight=1.0, aliases=["insufficient evidence", "cannot answer", "lacks sufficient evidence", "no evidence"]),
+            ],
+            target_entities=[],
+            gold_chunk_ids=[],
+        ),
+        BenchmarkQuestionV2(
+            id="q_oos_09",
+            question="What architectural engineering innovations enabled the ribbed vaults of 12th-century French Gothic cathedrals?",
+            hop_type=EvalHopTypeV2.OUT_OF_SCOPE,
+            answerable=False,
+            reference_answer="I cannot answer this question because the provided enterprise research corpus contains no evidence on medieval architecture, Gothic masonry, or ribbed vault engineering.",
+            required_facts=[
+                RequiredFact(id="qoos9_f1", fact="States lack of evidence in corpus / abstains", weight=1.0, aliases=["insufficient evidence", "cannot answer", "lacks sufficient evidence", "no evidence"]),
+            ],
+            target_entities=[],
+            gold_chunk_ids=[],
+        ),
+        BenchmarkQuestionV2(
+            id="q_oos_10",
+            question="What is the transmission cycle and tick vector ecology of Borrelia burgdorferi causing Lyme disease?",
+            hop_type=EvalHopTypeV2.OUT_OF_SCOPE,
+            answerable=False,
+            reference_answer="I cannot answer this question because the provided enterprise research corpus contains no evidence on vector-borne epidemiology, entomology, or Lyme disease.",
+            required_facts=[
+                RequiredFact(id="qoos10_f1", fact="States lack of evidence in corpus / abstains", weight=1.0, aliases=["insufficient evidence", "cannot answer", "lacks sufficient evidence", "no evidence"]),
+            ],
+            target_entities=[],
+            gold_chunk_ids=[],
+        ),
+    ]
+
+
+def main() -> None:
+    from src.eval.benchmark_integrity import validate_v2_dataset
+    questions = create_questions()
+    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        for q in questions:
+            f.write(json.dumps(q.model_dump(), ensure_ascii=False) + "\n")
+    print(f"Wrote {len(questions)} authoritative benchmark questions to {OUTPUT_FILE}")
+    report = validate_v2_dataset(OUTPUT_FILE, REPO_ROOT / "data" / "corpus" / "chunks.json")
+    print(f"Validation passed: {report}")
+
+
+if __name__ == "__main__":
+    main()
+

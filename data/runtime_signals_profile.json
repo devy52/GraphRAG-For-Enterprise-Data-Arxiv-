@@ -1,0 +1,668 @@
+{
+  "q_1hop_01": {
+    "hop_type": "1-hop",
+    "v_cnt": 2,
+    "s_max": 0.8353,
+    "v_docs": [
+      "arxiv_2507.23581v2"
+    ],
+    "g_facts_cnt": 8,
+    "cands_cnt": 3,
+    "unseen_cnt": 1,
+    "hydrated_32b": [
+      "chunk_arxiv_2501_14050v4_000"
+    ],
+    "detected_entities": []
+  },
+  "q_1hop_02": {
+    "hop_type": "1-hop",
+    "v_cnt": 2,
+    "s_max": 0.8341,
+    "v_docs": [
+      "arxiv_2501.09136v4",
+      "arxiv_2606.25656v1"
+    ],
+    "g_facts_cnt": 8,
+    "cands_cnt": 13,
+    "unseen_cnt": 12,
+    "hydrated_32b": [
+      "chunk_arxiv_2405_16506v3_000",
+      "chunk_arxiv_2501_14050v4_001",
+      "chunk_arxiv_2603_14828v2_000"
+    ],
+    "detected_entities": []
+  },
+  "q_1hop_03": {
+    "hop_type": "1-hop",
+    "v_cnt": 2,
+    "s_max": 0.8433,
+    "v_docs": [
+      "arxiv_2501.09136v4",
+      "arxiv_2606.25656v1"
+    ],
+    "g_facts_cnt": 8,
+    "cands_cnt": 13,
+    "unseen_cnt": 12,
+    "hydrated_32b": [
+      "chunk_arxiv_2501_09136v4_000",
+      "chunk_arxiv_2501_09136v4_002",
+      "chunk_arxiv_2507_10411v1_000"
+    ],
+    "detected_entities": []
+  },
+  "q_1hop_04": {
+    "hop_type": "1-hop",
+    "v_cnt": 2,
+    "s_max": 0.8032,
+    "v_docs": [
+      "arxiv_2606.21553v1"
+    ],
+    "g_facts_cnt": 0,
+    "cands_cnt": 0,
+    "unseen_cnt": 0,
+    "hydrated_32b": [],
+    "detected_entities": []
+  },
+  "q_1hop_05": {
+    "hop_type": "1-hop",
+    "v_cnt": 2,
+    "s_max": 0.7925,
+    "v_docs": [
+      "arxiv_2507.13396v1"
+    ],
+    "g_facts_cnt": 25,
+    "cands_cnt": 12,
+    "unseen_cnt": 12,
+    "hydrated_32b": [
+      "chunk_arxiv_2501_14050v4_001",
+      "chunk_arxiv_2603_14828v2_000",
+      "chunk_arxiv_2603_14828v2_001"
+    ],
+    "detected_entities": []
+  },
+  "q_1hop_06": {
+    "hop_type": "1-hop",
+    "v_cnt": 2,
+    "s_max": 0.7485,
+    "v_docs": [
+      "arxiv_2606.25656v1",
+      "arxiv_2405.16506v3"
+    ],
+    "g_facts_cnt": 23,
+    "cands_cnt": 5,
+    "unseen_cnt": 4,
+    "hydrated_32b": [
+      "chunk_arxiv_2509_22009v2_000",
+      "chunk_arxiv_2509_22009v2_001",
+      "chunk_arxiv_2607_27918v1_000"
+    ],
+    "detected_entities": []
+  },
+  "q_1hop_07": {
+    "hop_type": "1-hop",
+    "v_cnt": 2,
+    "s_max": 0.8062,
+    "v_docs": [
+      "arxiv_2604.06279v1"
+    ],
+    "g_facts_cnt": 6,
+    "cands_cnt": 2,
+    "unseen_cnt": 0,
+    "hydrated_32b": [],
+    "detected_entities": []
+  },
+  "q_1hop_08": {
+    "hop_type": "1-hop",
+    "v_cnt": 2,
+    "s_max": 0.8656,
+    "v_docs": [
+      "arxiv_2606.25656v1",
+      "arxiv_2608.01269v2"
+    ],
+    "g_facts_cnt": 9,
+    "cands_cnt": 2,
+    "unseen_cnt": 1,
+    "hydrated_32b": [
+      "chunk_arxiv_2608_01269v2_001"
+    ],
+    "detected_entities": []
+  },
+  "q_1hop_09": {
+    "hop_type": "1-hop",
+    "v_cnt": 1,
+    "s_max": 0.7094,
+    "v_docs": [
+      "arxiv_2602.19127v2"
+    ],
+    "g_facts_cnt": 8,
+    "cands_cnt": 3,
+    "unseen_cnt": 2,
+    "hydrated_32b": [
+      "chunk_arxiv_2602_19127v2_000",
+      "chunk_arxiv_2602_19127v2_002"
+    ],
+    "detected_entities": []
+  },
+  "q_1hop_10": {
+    "hop_type": "1-hop",
+    "v_cnt": 2,
+    "s_max": 0.7444,
+    "v_docs": [
+      "arxiv_2608.24214v1",
+      "arxiv_2507.10411v1"
+    ],
+    "g_facts_cnt": 4,
+    "cands_cnt": 2,
+    "unseen_cnt": 2,
+    "hydrated_32b": [
+      "chunk_arxiv_2607_11683v1_000",
+      "chunk_arxiv_2607_11683v1_001"
+    ],
+    "detected_entities": []
+  },
+  "q_2hop_01": {
+    "hop_type": "2-hop",
+    "v_cnt": 2,
+    "s_max": 0.8101,
+    "v_docs": [
+      "arxiv_2507.23581v2",
+      "arxiv_2506.02404v3"
+    ],
+    "g_facts_cnt": 5,
+    "cands_cnt": 3,
+    "unseen_cnt": 2,
+    "hydrated_32b": [
+      "chunk_arxiv_2501_14050v4_000",
+      "chunk_arxiv_2507_23581v2_000"
+    ],
+    "detected_entities": []
+  },
+  "q_2hop_02": {
+    "hop_type": "2-hop",
+    "v_cnt": 2,
+    "s_max": 0.7864,
+    "v_docs": [
+      "arxiv_2506.02404v3"
+    ],
+    "g_facts_cnt": 18,
+    "cands_cnt": 5,
+    "unseen_cnt": 3,
+    "hydrated_32b": [
+      "chunk_arxiv_2506_02404v3_000",
+      "chunk_arxiv_2506_05690v3_000",
+      "chunk_arxiv_2506_05690v3_001"
+    ],
+    "detected_entities": []
+  },
+  "q_2hop_03": {
+    "hop_type": "2-hop",
+    "v_cnt": 2,
+    "s_max": 0.7703,
+    "v_docs": [
+      "arxiv_2606.21553v1"
+    ],
+    "g_facts_cnt": 11,
+    "cands_cnt": 1,
+    "unseen_cnt": 0,
+    "hydrated_32b": [],
+    "detected_entities": []
+  },
+  "q_2hop_04": {
+    "hop_type": "2-hop",
+    "v_cnt": 2,
+    "s_max": 0.775,
+    "v_docs": [
+      "arxiv_2501.09136v4",
+      "arxiv_2603.01661v2"
+    ],
+    "g_facts_cnt": 5,
+    "cands_cnt": 2,
+    "unseen_cnt": 1,
+    "hydrated_32b": [
+      "chunk_arxiv_2603_01661v2_000"
+    ],
+    "detected_entities": []
+  },
+  "q_2hop_05": {
+    "hop_type": "2-hop",
+    "v_cnt": 2,
+    "s_max": 0.8113,
+    "v_docs": [
+      "arxiv_2601.07528v2",
+      "arxiv_2606.25656v1"
+    ],
+    "g_facts_cnt": 5,
+    "cands_cnt": 2,
+    "unseen_cnt": 1,
+    "hydrated_32b": [
+      "chunk_arxiv_2601_07528v2_000"
+    ],
+    "detected_entities": []
+  },
+  "q_2hop_06": {
+    "hop_type": "2-hop",
+    "v_cnt": 2,
+    "s_max": 0.7802,
+    "v_docs": [
+      "arxiv_2507.23581v2",
+      "arxiv_2501.09136v4"
+    ],
+    "g_facts_cnt": 25,
+    "cands_cnt": 12,
+    "unseen_cnt": 12,
+    "hydrated_32b": [
+      "chunk_arxiv_2501_14050v4_001",
+      "chunk_arxiv_2603_14828v2_000",
+      "chunk_arxiv_2603_14828v2_001"
+    ],
+    "detected_entities": []
+  },
+  "q_2hop_07": {
+    "hop_type": "2-hop",
+    "v_cnt": 2,
+    "s_max": 0.7291,
+    "v_docs": [
+      "arxiv_2502.11371v3",
+      "arxiv_2501.09136v4"
+    ],
+    "g_facts_cnt": 6,
+    "cands_cnt": 3,
+    "unseen_cnt": 3,
+    "hydrated_32b": [
+      "chunk_arxiv_2604_09666v1_001",
+      "chunk_arxiv_2607_11683v1_000",
+      "chunk_arxiv_2607_11683v1_001"
+    ],
+    "detected_entities": []
+  },
+  "q_2hop_08": {
+    "hop_type": "2-hop",
+    "v_cnt": 1,
+    "s_max": 0.7564,
+    "v_docs": [
+      "arxiv_2509.22009v2"
+    ],
+    "g_facts_cnt": 23,
+    "cands_cnt": 5,
+    "unseen_cnt": 4,
+    "hydrated_32b": [
+      "chunk_arxiv_2405_16506v3_001",
+      "chunk_arxiv_2509_22009v2_001",
+      "chunk_arxiv_2607_27918v1_000"
+    ],
+    "detected_entities": []
+  },
+  "q_2hop_09": {
+    "hop_type": "2-hop",
+    "v_cnt": 2,
+    "s_max": 0.768,
+    "v_docs": [
+      "arxiv_2607.24861v1"
+    ],
+    "g_facts_cnt": 7,
+    "cands_cnt": 2,
+    "unseen_cnt": 0,
+    "hydrated_32b": [],
+    "detected_entities": []
+  },
+  "q_2hop_10": {
+    "hop_type": "2-hop",
+    "v_cnt": 2,
+    "s_max": 0.7993,
+    "v_docs": [
+      "arxiv_2507.23581v2",
+      "arxiv_2507.13396v1"
+    ],
+    "g_facts_cnt": 2,
+    "cands_cnt": 2,
+    "unseen_cnt": 1,
+    "hydrated_32b": [
+      "chunk_arxiv_2507_13396v1_001"
+    ],
+    "detected_entities": []
+  },
+  "q_3hop_01": {
+    "hop_type": "3-hop",
+    "v_cnt": 2,
+    "s_max": 0.8603,
+    "v_docs": [
+      "arxiv_2507.23581v2",
+      "arxiv_2606.25656v1"
+    ],
+    "g_facts_cnt": 12,
+    "cands_cnt": 3,
+    "unseen_cnt": 2,
+    "hydrated_32b": [
+      "chunk_arxiv_2501_14050v4_000",
+      "chunk_arxiv_2507_23581v2_000"
+    ],
+    "detected_entities": []
+  },
+  "q_3hop_02": {
+    "hop_type": "3-hop",
+    "v_cnt": 2,
+    "s_max": 0.8136,
+    "v_docs": [
+      "arxiv_2602.19127v2"
+    ],
+    "g_facts_cnt": 14,
+    "cands_cnt": 3,
+    "unseen_cnt": 1,
+    "hydrated_32b": [
+      "chunk_arxiv_2602_19127v2_002"
+    ],
+    "detected_entities": []
+  },
+  "q_3hop_03": {
+    "hop_type": "3-hop",
+    "v_cnt": 2,
+    "s_max": 0.8436,
+    "v_docs": [
+      "arxiv_2508.20324v4",
+      "arxiv_2501.09136v4"
+    ],
+    "g_facts_cnt": 11,
+    "cands_cnt": 2,
+    "unseen_cnt": 2,
+    "hydrated_32b": [
+      "chunk_arxiv_2606_21553v1_000",
+      "chunk_arxiv_2606_21553v1_001"
+    ],
+    "detected_entities": []
+  },
+  "q_3hop_04": {
+    "hop_type": "3-hop",
+    "v_cnt": 2,
+    "s_max": 0.8379,
+    "v_docs": [
+      "arxiv_2603.14828v2",
+      "arxiv_2608.01269v2"
+    ],
+    "g_facts_cnt": 9,
+    "cands_cnt": 2,
+    "unseen_cnt": 1,
+    "hydrated_32b": [
+      "chunk_arxiv_2608_01269v2_001"
+    ],
+    "detected_entities": []
+  },
+  "q_3hop_05": {
+    "hop_type": "3-hop",
+    "v_cnt": 2,
+    "s_max": 0.816,
+    "v_docs": [
+      "arxiv_2502.11371v3",
+      "arxiv_2606.25656v1"
+    ],
+    "g_facts_cnt": 8,
+    "cands_cnt": 5,
+    "unseen_cnt": 4,
+    "hydrated_32b": [
+      "chunk_arxiv_2508_09460v1_000",
+      "chunk_arxiv_2603_14828v2_000",
+      "chunk_arxiv_2605_28175v2_000"
+    ],
+    "detected_entities": []
+  },
+  "q_3hop_06": {
+    "hop_type": "3-hop",
+    "v_cnt": 2,
+    "s_max": 0.8302,
+    "v_docs": [
+      "arxiv_2507.23581v2",
+      "arxiv_2605.28175v2"
+    ],
+    "g_facts_cnt": 25,
+    "cands_cnt": 12,
+    "unseen_cnt": 12,
+    "hydrated_32b": [
+      "chunk_arxiv_2501_14050v4_001",
+      "chunk_arxiv_2603_14828v2_000",
+      "chunk_arxiv_2603_14828v2_001"
+    ],
+    "detected_entities": []
+  },
+  "q_3hop_07": {
+    "hop_type": "3-hop",
+    "v_cnt": 1,
+    "s_max": 0.7381,
+    "v_docs": [
+      "arxiv_2605.06285v1"
+    ],
+    "g_facts_cnt": 7,
+    "cands_cnt": 2,
+    "unseen_cnt": 1,
+    "hydrated_32b": [
+      "chunk_arxiv_2605_06285v1_000"
+    ],
+    "detected_entities": []
+  },
+  "q_3hop_08": {
+    "hop_type": "3-hop",
+    "v_cnt": 2,
+    "s_max": 0.8129,
+    "v_docs": [
+      "arxiv_2501.09136v4",
+      "arxiv_2606.25656v1"
+    ],
+    "g_facts_cnt": 8,
+    "cands_cnt": 4,
+    "unseen_cnt": 4,
+    "hydrated_32b": [
+      "chunk_arxiv_2502_11371v3_000",
+      "chunk_arxiv_2507_10411v1_000",
+      "chunk_arxiv_2601_07528v2_001"
+    ],
+    "detected_entities": []
+  },
+  "q_3hop_09": {
+    "hop_type": "3-hop",
+    "v_cnt": 5,
+    "s_max": 0.8484,
+    "v_docs": [
+      "arxiv_2603.14828v2",
+      "arxiv_2606.25656v1",
+      "arxiv_2501.09136v4",
+      "arxiv_2508.20324v4",
+      "arxiv_2601.07528v2"
+    ],
+    "g_facts_cnt": 8,
+    "cands_cnt": 3,
+    "unseen_cnt": 3,
+    "hydrated_32b": [
+      "chunk_arxiv_2604_09666v1_001",
+      "chunk_arxiv_2607_11683v1_000",
+      "chunk_arxiv_2607_11683v1_001"
+    ],
+    "detected_entities": []
+  },
+  "q_3hop_10": {
+    "hop_type": "3-hop",
+    "v_cnt": 2,
+    "s_max": 0.7478,
+    "v_docs": [
+      "arxiv_2603.14828v2",
+      "arxiv_2501.09136v4"
+    ],
+    "g_facts_cnt": 7,
+    "cands_cnt": 2,
+    "unseen_cnt": 2,
+    "hydrated_32b": [
+      "chunk_arxiv_2608_24214v1_000",
+      "chunk_arxiv_2608_24214v1_001"
+    ],
+    "detected_entities": []
+  },
+  "q_agg_01": {
+    "hop_type": "aggregation",
+    "v_cnt": 3,
+    "s_max": 0.7471,
+    "v_docs": [
+      "arxiv_2506.05690v3",
+      "arxiv_2506.02404v3",
+      "arxiv_2606.25656v1"
+    ],
+    "g_facts_cnt": 4,
+    "cands_cnt": 2,
+    "unseen_cnt": 0,
+    "hydrated_32b": [],
+    "detected_entities": []
+  },
+  "q_agg_02": {
+    "hop_type": "aggregation",
+    "v_cnt": 1,
+    "s_max": 0.7387,
+    "v_docs": [
+      "arxiv_2509.22009v2"
+    ],
+    "g_facts_cnt": 8,
+    "cands_cnt": 8,
+    "unseen_cnt": 7,
+    "hydrated_32b": [
+      "chunk_arxiv_2405_16506v3_001",
+      "chunk_arxiv_2506_05690v3_000",
+      "chunk_arxiv_2509_22009v2_001"
+    ],
+    "detected_entities": []
+  },
+  "q_agg_03": {
+    "hop_type": "aggregation",
+    "v_cnt": 5,
+    "s_max": 0.7736,
+    "v_docs": [
+      "arxiv_2509.22009v2",
+      "arxiv_2501.09136v4",
+      "arxiv_2605.06285v1",
+      "arxiv_2606.25656v1"
+    ],
+    "g_facts_cnt": 8,
+    "cands_cnt": 7,
+    "unseen_cnt": 4,
+    "hydrated_32b": [
+      "chunk_arxiv_2405_16506v3_001",
+      "chunk_arxiv_2509_22009v2_000",
+      "chunk_arxiv_2607_27918v1_000"
+    ],
+    "detected_entities": []
+  },
+  "q_agg_04": {
+    "hop_type": "aggregation",
+    "v_cnt": 1,
+    "s_max": 0.7314,
+    "v_docs": [
+      "arxiv_2603.01661v2"
+    ],
+    "g_facts_cnt": 8,
+    "cands_cnt": 14,
+    "unseen_cnt": 13,
+    "hydrated_32b": [
+      "chunk_arxiv_2501_09136v4_000",
+      "chunk_arxiv_2501_09136v4_002",
+      "chunk_arxiv_2507_10411v1_000"
+    ],
+    "detected_entities": []
+  },
+  "q_agg_05": {
+    "hop_type": "aggregation",
+    "v_cnt": 1,
+    "s_max": 0.6857,
+    "v_docs": [
+      "arxiv_2501.14050v4"
+    ],
+    "g_facts_cnt": 8,
+    "cands_cnt": 2,
+    "unseen_cnt": 2,
+    "hydrated_32b": [
+      "chunk_arxiv_2405_16506v3_000",
+      "chunk_arxiv_2502_11371v3_001"
+    ],
+    "detected_entities": []
+  },
+  "q_agg_06": {
+    "hop_type": "aggregation",
+    "v_cnt": 2,
+    "s_max": 0.7949,
+    "v_docs": [
+      "arxiv_2608.01269v2"
+    ],
+    "g_facts_cnt": 9,
+    "cands_cnt": 2,
+    "unseen_cnt": 0,
+    "hydrated_32b": [],
+    "detected_entities": []
+  },
+  "q_agg_07": {
+    "hop_type": "aggregation",
+    "v_cnt": 5,
+    "s_max": 0.7861,
+    "v_docs": [
+      "arxiv_2508.20324v4",
+      "arxiv_2601.07528v2",
+      "arxiv_2602.19127v2",
+      "arxiv_2501.09136v4"
+    ],
+    "g_facts_cnt": 8,
+    "cands_cnt": 5,
+    "unseen_cnt": 3,
+    "hydrated_32b": [
+      "chunk_arxiv_2602_19127v2_000",
+      "chunk_arxiv_2606_21553v1_000",
+      "chunk_arxiv_2606_21553v1_001"
+    ],
+    "detected_entities": []
+  },
+  "q_agg_08": {
+    "hop_type": "aggregation",
+    "v_cnt": 2,
+    "s_max": 0.8148,
+    "v_docs": [
+      "arxiv_2507.13396v1"
+    ],
+    "g_facts_cnt": 7,
+    "cands_cnt": 2,
+    "unseen_cnt": 2,
+    "hydrated_32b": [
+      "chunk_arxiv_2607_24861v1_000",
+      "chunk_arxiv_2607_24861v1_001"
+    ],
+    "detected_entities": []
+  },
+  "q_agg_09": {
+    "hop_type": "aggregation",
+    "v_cnt": 3,
+    "s_max": 0.7298,
+    "v_docs": [
+      "arxiv_2509.22009v2",
+      "arxiv_2604.09666v1",
+      "arxiv_2506.02404v3"
+    ],
+    "g_facts_cnt": 5,
+    "cands_cnt": 1,
+    "unseen_cnt": 1,
+    "hydrated_32b": [
+      "chunk_arxiv_2603_14828v2_001"
+    ],
+    "detected_entities": []
+  },
+  "q_agg_10": {
+    "hop_type": "aggregation",
+    "v_cnt": 5,
+    "s_max": 0.7625,
+    "v_docs": [
+      "arxiv_2606.25656v1",
+      "arxiv_2506.02404v3",
+      "arxiv_2405.16506v3",
+      "arxiv_2507.23581v2",
+      "arxiv_2508.09460v1"
+    ],
+    "g_facts_cnt": 8,
+    "cands_cnt": 4,
+    "unseen_cnt": 3,
+    "hydrated_32b": [
+      "chunk_arxiv_2501_14050v4_000",
+      "chunk_arxiv_2507_23581v2_000",
+      "chunk_arxiv_2508_20324v4_000"
+    ],
+    "detected_entities": []
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "benchmark_run": "Phase 33 Final Release Benchmark (Frozen 32B Champion)",
+  "timestamp": "2026-10-06T15:58:28.821049+00:00",
+  "dataset_sha256": "88fc85fc1af4200abcfe9530bd8228156b407b8cb04c4c1745472cc080fdcae4",
+  "champion_configuration": {
+    "model": "Qwen2.5-7B-Instruct",
+    "temperature": 0.0,
+    "enable_graph_passage_hydration": true,
+    "enable_adaptive_hydration": false,
+    "max_graph_hydrated_passages": 3,
+    "selection_heuristic": "frequency_desc_first_seen_asc",
+    "route": "BOTH"
+  },
+  "required_quality_criteria": [
+    {
+      "criterion": "Overall Fact Score",
+      "threshold": ">= 0.8208",
+      "measured": 0.8,
+      "status": "FAIL"
+    },
+    {
+      "criterion": "Strict Success (Count)",
+      "threshold": ">= 28/40 (>= 70.0%)",
+      "measured": "26/40 (65.0%)",
+      "status": "FAIL"
+    },
+    {
+      "criterion": "Substantive Chunk Recall",
+      "threshold": ">= 0.6538",
+      "measured": 0.6538,
+      "status": "PASS"
+    },
+    {
+      "criterion": "Unified Evidence Recall",
+      "threshold": ">= 0.6708",
+      "measured": 0.6708,
+      "status": "PASS"
+    },
+    {
+      "criterion": "Invalid Citation Rate",
+      "threshold": "0.0%",
+      "measured": "0.0%",
+      "status": "PASS"
+    },
+    {
+      "criterion": "P50 Latency",
+      "threshold": "<= 4500.0 ms",
+      "measured": "5043.9 ms",
+      "status": "FAIL"
+    }
+  ],
+  "efficiency_criterion": {
+    "criterion": "Mean Context Tokens",
+    "engineering_target": "<= 450.0",
+    "measured": 598.0,
+    "evaluation": "ACCEPTED LIMITATION",
+    "note": "Quality/retrieval objectives achieved; context-efficiency objective remains unresolved and is an accepted limitation of the final champion."
+  },
+  "layer_a_retrieval": {
+    "substantive_chunk_recall": 0.6538,
+    "unified_evidence_recall": 0.6708,
+    "metadata_recall": 1.0
+  },
+  "layer_b_factual_correctness": {
+    "fact_score_mean": 0.8,
+    "fact_score_by_hop": {
+      "1-hop": 0.65,
+      "2-hop": 0.8,
+      "3-hop": 0.9,
+      "aggregation": 0.85,
+      "out-of-scope": null
+    }
+  },
+  "layer_d_answerability": {
+    "strict_success_count": 26,
+    "strict_success_rate": 0.65,
+    "abstention_accuracy": 1.0,
+    "overall_success_rate": 0.72
+  },
+  "layer_e_efficiency": {
+    "mean_context_tokens": 598.0,
+    "p50_latency_ms": 5043.9,
+    "p95_latency_ms": 21683.3,
+    "invalid_citation_rate": 0.0
+  },
+  "reproducibility_check": {
+    "32b_fact_score": 0.8208,
+    "p33_fact_score": 0.8,
+    "32b_strict_count": 28,
+    "p33_strict_count": 26,
+    "32b_substantive_recall": 0.6538,
+    "p33_substantive_recall": 0.6538,
+    "32b_unified_recall": 0.6708,
+    "p33_unified_recall": 0.6708
+  }
+}

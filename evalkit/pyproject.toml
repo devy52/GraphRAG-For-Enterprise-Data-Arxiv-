@@ -1,0 +1,38 @@
+[project]
+name = "evalkit"
+version = "0.1.0"
+description = "A reusable, provider-agnostic evaluation framework for RAG, agentic, and LLM systems."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.0",
+    "pyyaml>=6.0",
+    "litellm>=1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "pytest-cov>=5.0"]
+text-metrics = ["sacrebleu>=2.0", "rouge-score>=0.1"]
+ragas = [
+    "ragas>=0.4",
+    # Workaround: ragas 0.4.3 unconditionally imports
+    # langchain_community.chat_models.vertexai, which was removed as of
+    # langchain-community 0.4.x (it's being sunset in favor of standalone
+    # integration packages). Without this pin, a fresh `pip install
+    # evalkit[ragas]` fails on import with an opaque ModuleNotFoundError
+    # buried in ragas's own import chain. Remove this pin once ragas ships
+    # a fix — check https://github.com/vibrantlabsai/ragas for updates.
+    "langchain-community<0.4",
+]
+
+[project.scripts]
+evalkit = "evalkit.cli:main"
+evalharness = "evalkit.cli:main"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["evalkit*"]

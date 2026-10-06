@@ -1,0 +1,71 @@
+{
+  "layer_a_retrieval": {
+    "precision": 0.2231,
+    "recall": 0.3083,
+    "mrr": 0.3397,
+    "evaluable_questions": 40
+  },
+  "layer_a_unified_retrieval": {
+    "precision": 0.2231,
+    "recall": 0.3083,
+    "mrr": 0.3397,
+    "evaluable_questions": 40
+  },
+  "layer_a_vector_retrieval": {
+    "precision": 0.2231,
+    "recall": 0.2821,
+    "mrr": 0.3397,
+    "evaluable_questions": 39
+  },
+  "layer_a_graph_retrieval": {
+    "precision": null,
+    "recall": null,
+    "mrr": null,
+    "evaluable_questions": 0
+  },
+  "layer_a_substantive_chunk_recall": 0.2821,
+  "layer_a_metadata_recall": 1.0,
+  "layer_a_unified_evidence_recall": 0.3083,
+  "layer_b_factual_correctness": {
+    "evaluable_answerable_questions": 40,
+    "fact_score_by_hop": {
+      "1-hop": 0.8,
+      "2-hop": 0.7,
+      "3-hop": 0.7333,
+      "aggregation": 0.8,
+      "out-of-scope": null
+    },
+    "answerable_only_fact_score": 0.7583,
+    "answerable_accuracy_at_threshold_0_70": 0.6
+  },
+  "layer_c_groundedness": {
+    "mean_context_groundedness": 0.9358,
+    "mean_unsupported_claim_rate": 0.0642,
+    "methods": [
+      "deterministic_refusal_no_factual_claims",
+      "lexical_overlap_heuristic"
+    ]
+  },
+  "layer_d_answerability": {
+    "total_questions": 50,
+    "answerable_questions": 40,
+    "unanswerable_questions": 10,
+    "answerable_correct": 24,
+    "answerable_incorrect": 16,
+    "correctly_abstained": 10,
+    "incorrectly_abstained": 3,
+    "answerable_accuracy": 0.6,
+    "abstention_accuracy": 1.0,
+    "overall_success_rate": 0.68
+  },
+  "layer_e_efficiency": {
+    "p50_latency_ms": 4115.6,
+    "p95_latency_ms": 36333.8,
+    "mean_latency_ms": 8518.1
+  },
+  "lexical_proxies": {
+    "mean_reference_text_token_f1": 0.289,
+    "mean_lexical_chunk_overlap_utilization": 0.5189,
+    "mean_invalid_citation_reference_rate": 0.0
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "timestamp": "2026-10-02T20:22:53.955195+00:00",
+  "dataset_name": "RAG-Enterprise-Benchmark-v1",
+  "total_questions": 50,
+  "vector_baseline": {
+    "system_name": "Plain Vector Baseline",
+    "accuracy_by_hop": {
+      "1-hop": 0.6,
+      "2-hop": 0.2,
+      "3-hop": 0.0,
+      "aggregation": 0.4,
+      "out-of-scope": 1.0
+    },
+    "overall_accuracy": 0.44,
+    "citation_hallucination_rate": 0.08,
+    "p50_latency_ms": 5499.7,
+    "p95_latency_ms": 40368.4,
+    "mean_latency_ms": 10705.0,
+    "estimated_cost_per_query_usd": 0.0012
+  },
+  "hybrid_graphrag": {
+    "system_name": "Hybrid GraphRAG",
+    "accuracy_by_hop": {
+      "1-hop": 0.6,
+      "2-hop": 0.3,
+      "3-hop": 0.6,
+      "aggregation": 0.6,
+      "out-of-scope": 1.0
+    },
+    "overall_accuracy": 0.62,
+    "citation_hallucination_rate": 0.0,
+    "p50_latency_ms": 19184.6,
+    "p95_latency_ms": 77984.0,
+    "mean_latency_ms": 28656.0,
+    "estimated_cost_per_query_usd": 0.0024
+  },
+  "accuracy_delta_by_hop": {
+    "1-hop": 0.0,
+    "2-hop": 10.0,
+    "3-hop": 60.0,
+    "aggregation": 20.0,
+    "out-of-scope": 0.0,
+    "overall": 18.0
+  }
+}

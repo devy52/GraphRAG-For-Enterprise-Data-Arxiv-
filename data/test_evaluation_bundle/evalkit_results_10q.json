@@ -1,0 +1,408 @@
+[
+  {
+    "input": "Who are the primary authors of the Dense Passage Retrieval paper?",
+    "output": "The primary authors of the Dense Passage Retrieval paper are Vladimir Karpukhin [chunk_arxiv_2004_04906_000], Barlas Oguz [chunk_arxiv_2004_04906_000], and Patrick Lewis [chunk_arxiv_2004_04906_000].",
+    "reference": "Key entities: Dense Passage Retrieval, Patrick Lewis. Expected facts: Vladimir Karpukhin, Barlas Oguz, Patrick Lewis.",
+    "context": [
+      "[graph] Paper 'Dense Passage Retrieval for Open-Domain Question Answering' was authored by Vladimir Karpukhin [chunk: chunk_arxiv_2004_04906_000].",
+      "[graph] Paper 'Dense Passage Retrieval for Open-Domain Question Answering' was authored by Barlas Oguz [chunk: chunk_arxiv_2004_04906_000].",
+      "[graph] Paper 'Dense Passage Retrieval for Open-Domain Question Answering' was authored by Patrick Lewis [chunk: chunk_arxiv_2004_04906_000]."
+    ],
+    "scores": {
+      "latency_ms": 10344.71,
+      "rag.faithfulness": 0.716,
+      "rag.context_precision": 0.771,
+      "rag.answer_relevancy": 0.5,
+      "text_similarity.exact_match": 0.0,
+      "text_similarity.f1": 0.5142857142857143
+    },
+    "metadata": {
+      "id": "q_1hop_01",
+      "hop_type": "1-hop",
+      "should_refuse": false,
+      "target_entities": [
+        "Dense Passage Retrieval",
+        "Patrick Lewis"
+      ],
+      "expected_keywords": [
+        "Vladimir Karpukhin",
+        "Barlas Oguz",
+        "Patrick Lewis"
+      ],
+      "route_taken": "graph",
+      "citations": [
+        "chunk_arxiv_2004_04906_000",
+        "chunk_arxiv_2004_04906_000",
+        "chunk_arxiv_2004_04906_000"
+      ],
+      "is_grounded": true,
+      "from_cache": false,
+      "original_question_id": "q_1hop_01"
+    }
+  },
+  {
+    "input": "What primary model architecture is proposed in the RAG paper?",
+    "output": "The primary model architecture proposed is a hierarchical heterogeneous hypergraph that aligns multi\u2011granular knowledge and incorporates deductive pathways to simulate realistic memory structures, as introduced in the IGMiRAG framework [chunk_arxiv_2602_07525v1_000].",
+    "reference": "Key entities: Retrieval-Augmented Generation. Expected facts: RAG-Sequence, RAG-Token, generator, retriever.",
+    "context": [
+      "[retrieved] Large language models (LLMs) are very costly and inefficient to update with new information. To address this limitation, retrieval-augmented generation (RAG) has been proposed as a solution that dynamically incorporates external knowledge during inference, improving factual consistency and reducing hallucinations. Despite its promise, RAG systems face practical challenges-most notably, a strong dependence on the quality of the input query for accurate retrieval. In this paper, we investigate the sensitivity of different components in the RAG pipeline to various types of query perturbations. Our analysis reveals that the performance of commonly used retrievers can degrade significantly even under minor query variations.",
+      "[retrieved] s efficient optimization through problem decomposition. Experimental results show that our method effectively mitigates generation bias while preserving relevance. This work provides a principled approach for fairness-aware retrieval in RAG systems.",
+      "[retrieved] ral Questions (NQ) dataset show that combining predictors from multiple feature categories yields the most accurate estimates of RAG performance.",
+      "[retrieved] Retrieval-augmented generation (RAG) equips large language models (LLMs) with reliable knowledge memory. To strengthen cross-text associations, recent research integrates graphs and hypergraphs into RAG to capture pairwise and multi-entity relations as structured links. However, their misaligned memory organization necessitates costly, disjointed retrieval. To address these limitations, we propose IGMiRAG, a framework inspired by human intuition-guided reasoning. It constructs a hierarchical heterogeneous hypergraph to align multi-granular knowledge, incorporating deductive pathways to simulate realistic memory structures.",
+      "[retrieved] Large Language Models (LLMs) have demonstrated impressive ability in generation and reasoning tasks but struggle with handling up-to-date knowledge, leading to inaccuracies or hallucinations. Retrieval-Augmented Generation (RAG) mitigates this by retrieving and incorporating external knowledge into input prompts. In particular, due to LLMs' context window limitations and long-context hallucinations, only the most relevant \"chunks\" are retrieved."
+    ],
+    "scores": {
+      "latency_ms": 13086.56,
+      "rag.faithfulness": 0.673,
+      "rag.context_precision": 0.788,
+      "rag.answer_relevancy": 0.768,
+      "text_similarity.exact_match": 0.0,
+      "text_similarity.f1": 0.0
+    },
+    "metadata": {
+      "id": "q_1hop_02",
+      "hop_type": "1-hop",
+      "should_refuse": false,
+      "target_entities": [
+        "Retrieval-Augmented Generation"
+      ],
+      "expected_keywords": [
+        "RAG-Sequence",
+        "RAG-Token",
+        "generator",
+        "retriever"
+      ],
+      "route_taken": "vector",
+      "citations": [
+        "chunk_arxiv_2602_07525v1_000"
+      ],
+      "is_grounded": true,
+      "from_cache": false,
+      "original_question_id": "q_1hop_02"
+    }
+  },
+  {
+    "input": "What dataset was used to evaluate Natural Questions in DPR?",
+    "output": "The dataset used to evaluate Natural Questions in DPR is the Dense Passage Retrieval for Open-Domain Question Answering paper. [chunk_arxiv_2004_04906_000]",
+    "reference": "Key entities: Natural Questions, Dense Passage Retrieval. Expected facts: Natural Questions, NQ, Wikipedia.",
+    "context": [
+      "[graph] Entity 'Natural Questions (NQ)' -[:USES_DATASET]- 'Dense Passage Retrieval for Open-Domain Question Answering' (Paper) [chunk: chunk_arxiv_2004_04906_000]."
+    ],
+    "scores": {
+      "latency_ms": 14480.04,
+      "rag.faithfulness": 0.807,
+      "rag.context_precision": 0.466,
+      "rag.answer_relevancy": 0.735,
+      "text_similarity.exact_match": 0.0,
+      "text_similarity.f1": 0.2941176470588235
+    },
+    "metadata": {
+      "id": "q_1hop_03",
+      "hop_type": "1-hop",
+      "should_refuse": false,
+      "target_entities": [
+        "Natural Questions",
+        "Dense Passage Retrieval"
+      ],
+      "expected_keywords": [
+        "Natural Questions",
+        "NQ",
+        "Wikipedia"
+      ],
+      "route_taken": "graph",
+      "citations": [
+        "chunk_arxiv_2004_04906_000"
+      ],
+      "is_grounded": true,
+      "from_cache": false,
+      "original_question_id": "q_1hop_03"
+    }
+  },
+  {
+    "input": "Which sparse retrieval baseline did DPR compare against?",
+    "output": "The provided context does not contain any information about which sparse retrieval baseline DPR compared against, so there is insufficient evidence to answer the question.",
+    "reference": "Key entities: Dense Passage Retrieval, BM25. Expected facts: BM25, Lucene.",
+    "context": [
+      "[graph] Methods 'Dense Passage Retrieval (DPR)' and 'BART' are both evaluated on dataset 'TriviaQA' [chunks: chunk_arxiv_2004_04906_extra_0, chunk_arxiv_2007_01282_000].",
+      "[graph] Methods 'Dense Passage Retrieval (DPR)' and 'BART' are both evaluated on dataset 'TriviaQA' [chunks: chunk_arxiv_2004_04906_000, chunk_arxiv_2007_01282_000].",
+      "[graph] Methods 'Dense Passage Retrieval (DPR)' and 'BART' are both evaluated on dataset 'TriviaQA' [chunks: chunk_arxiv_2004_04906_000, chunk_arxiv_2004_04906_extra_0].",
+      "[graph] Methods 'Dense Passage Retrieval (DPR)' and 'BART' are both evaluated on dataset 'TriviaQA' [chunks: chunk_arxiv_2004_04906_extra_0, chunk_arxiv_2004_04906_000].",
+      "[graph] Methods 'Dense Passage Retrieval (DPR)' and 'BART' are both evaluated on dataset 'WebQuestions' [chunks: chunk_arxiv_2004_04906_extra_0, chunk_arxiv_2007_01282_000].",
+      "[graph] Methods 'Dense Passage Retrieval (DPR)' and 'BART' are both evaluated on dataset 'WebQuestions' [chunks: chunk_arxiv_2004_04906_000, chunk_arxiv_2007_01282_000].",
+      "[graph] Methods 'Dense Passage Retrieval (DPR)' and 'BART' are both evaluated on dataset 'WebQuestions' [chunks: chunk_arxiv_2004_04906_extra_0, chunk_arxiv_2004_12832_000].",
+      "[graph] Methods 'Dense Passage Retrieval (DPR)' and 'BART' are both evaluated on dataset 'WebQuestions' [chunks: chunk_arxiv_2004_04906_000, chunk_arxiv_2004_12832_000].",
+      "[graph] Methods 'Dense Passage Retrieval (DPR)' and 'BART' are both evaluated on dataset 'WebQuestions' [chunks: chunk_arxiv_2004_04906_000, chunk_arxiv_2004_04906_extra_0].",
+      "[graph] Methods 'Dense Passage Retrieval (DPR)' and 'BART' are both evaluated on dataset 'WebQuestions' [chunks: chunk_arxiv_2004_04906_extra_0, chunk_arxiv_2004_04906_000].",
+      "[graph] Methods 'Dense Passage Retrieval (DPR)' and 'BART' are both evaluated on dataset 'MS MARCO' [chunks: chunk_arxiv_2004_04906_extra_0, chunk_arxiv_2004_12832_000]."
+    ],
+    "scores": {
+      "latency_ms": 3865.48,
+      "rag.faithfulness": 0.148,
+      "rag.context_precision": 0.932,
+      "rag.answer_relevancy": 0.286,
+      "text_similarity.exact_match": 0.0,
+      "text_similarity.f1": 0.05714285714285714
+    },
+    "metadata": {
+      "id": "q_1hop_04",
+      "hop_type": "1-hop",
+      "should_refuse": false,
+      "target_entities": [
+        "Dense Passage Retrieval",
+        "BM25"
+      ],
+      "expected_keywords": [
+        "BM25",
+        "Lucene"
+      ],
+      "route_taken": "graph",
+      "citations": [],
+      "is_grounded": true,
+      "from_cache": false,
+      "original_question_id": "q_1hop_04"
+    }
+  },
+  {
+    "input": "Who authored the ColBERT late-interaction retrieval paper?",
+    "output": "The ColBERT late\u2011interaction retrieval paper was authored by Omar Khattab and Matei Zaharia [chunk_arxiv_2004_12832_000].",
+    "reference": "Key entities: ColBERT. Expected facts: Omar Khattab, Matei Zaharia.",
+    "context": [
+      "[graph] Paper 'ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT' was authored by Omar Khattab [chunk: chunk_arxiv_2004_12832_000].",
+      "[graph] Paper 'ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT' was authored by Matei Zaharia [chunk: chunk_arxiv_2004_12832_000]."
+    ],
+    "scores": {
+      "latency_ms": 6801.73,
+      "rag.faithfulness": 0.694,
+      "rag.context_precision": 0.859,
+      "rag.answer_relevancy": 0.523,
+      "text_similarity.exact_match": 0.0,
+      "text_similarity.f1": 0.4166666666666667
+    },
+    "metadata": {
+      "id": "q_1hop_05",
+      "hop_type": "1-hop",
+      "should_refuse": false,
+      "target_entities": [
+        "ColBERT"
+      ],
+      "expected_keywords": [
+        "Omar Khattab",
+        "Matei Zaharia"
+      ],
+      "route_taken": "graph",
+      "citations": [
+        "chunk_arxiv_2004_12832_000"
+      ],
+      "is_grounded": true,
+      "from_cache": false,
+      "original_question_id": "q_1hop_05"
+    }
+  },
+  {
+    "input": "What loss function does DPR use for training its dual encoders?",
+    "output": "DPR uses a negative log\u2011likelihood contrastive loss with in\u2011batch and BM25 hard negatives for training its dual encoders [chunk_arxiv_2004_04906_000].",
+    "reference": "Key entities: Dense Passage Retrieval. Expected facts: negative log-likelihood, contrastive, in-batch negatives.",
+    "context": [
+      "[retrieved] Open-domain question answering relies on efficient passage retrieval to select candidate contexts. We show that retrieval can be practically implemented using dense representations, where embeddings are learned from a small number of questions and passages by a simple dual-encoder framework. When evaluated on a wide range of open-domain QA datasets including Natural Questions (NQ), TriviaQA, and WebQuestions, our Dense Passage Retrieval (DPR) system outperforms strong Lucene BM25 sparse retrieval baselines by a wide margin. DPR uses a BERT-base encoder backbone with 768 embedding dimension and negative log-likelihood contrastive loss with in-batch and BM25 hard negatives. Fast MIPS passage search is executed using FAISS Flat and HNSW index types.",
+      "[retrieved] Dense Passage Retrieval (DPR) pairs with generator models such as BART and T5 for open-domain question answering. Methods extending DPR's dual-encoder architecture and hard negative mining include ANCE, RocketQA, and ColBERT. Both DPR and ColBERT evaluate on shared benchmark datasets including MS MARCO, Natural Questions, and TriviaQA. HotpotQA evaluates multi-hop reasoning over documents retrieved by DPR and dense retrievers.",
+      "[retrieved] RAG datastore. By crafting natural-text queries that are answerable only with the target document's presence, our approach demonstrates successful inference with just 30 queries while remaining stealthy; straightforward detectors identify adversarial prompts from existing methods up to ~76x more frequently than those generated by our attack. We observe a 2x improvement in TPR@1%FPR over prior inference attacks across diverse RAG configurations, all while costing less than $0.02 per document inference.",
+      "[retrieved] , ToR achieves state-of-the-art performance in both retrieval and response generation. In addition, we propose two tree-based search optimization strategies, pruning and effective expansion, to reduce time overhead and increase the diversity of path extension. We will release our code.",
+      "[retrieved] r improvements or no significant regression on the remaining tasks. Furthermore, we demonstrate our multi-task training with relevance label sampling scales well with increased model capacity and achieves state-of-the-art results in five out of seven KILT tasks."
+    ],
+    "scores": {
+      "latency_ms": 3487.76,
+      "rag.faithfulness": 0.892,
+      "rag.context_precision": 0.187,
+      "rag.answer_relevancy": 0.715,
+      "text_similarity.exact_match": 0.0,
+      "text_similarity.f1": 0.4
+    },
+    "metadata": {
+      "id": "q_1hop_06",
+      "hop_type": "1-hop",
+      "should_refuse": false,
+      "target_entities": [
+        "Dense Passage Retrieval"
+      ],
+      "expected_keywords": [
+        "negative log-likelihood",
+        "contrastive",
+        "in-batch negatives"
+      ],
+      "route_taken": "vector",
+      "citations": [
+        "chunk_arxiv_2004_04906_000"
+      ],
+      "is_grounded": true,
+      "from_cache": false,
+      "original_question_id": "q_1hop_06"
+    }
+  },
+  {
+    "input": "What encoder backbone was used in the original DPR experiments?",
+    "output": "The provided context does not contain information about the encoder backbone used in the original DPR experiments, so there is insufficient evidence to answer the question.",
+    "reference": "Key entities: Dense Passage Retrieval, BERT. Expected facts: BERT, BERT-base.",
+    "context": [
+      "[graph] Entity 'Dense Passage Retrieval (DPR)' -[:EXTENDS]- 'ColBERT' (Method) [chunk: chunk_arxiv_2004_04906_extra_0].",
+      "[graph] Entity 'Dense Passage Retrieval (DPR)' -[:EXTENDS]- 'RocketQA' (Method) [chunk: chunk_arxiv_2004_04906_extra_0].",
+      "[graph] Entity 'Dense Passage Retrieval (DPR)' -[:EXTENDS]- 'BART' (Method) [chunk: chunk_arxiv_2004_04906_extra_0].",
+      "[graph] Entity 'Dense Passage Retrieval (DPR)' -[:USES_METHOD]- 'Dense Passage Retrieval for Open-Domain Question Answering' (Paper) [chunk: chunk_arxiv_2004_04906_extra_0].",
+      "[graph] Entity 'Dense Passage Retrieval (DPR)' -[:COMPARED_WITH]- 'Lucene BM25' (Method) [chunk: chunk_arxiv_2004_04906_000].",
+      "[graph] Entity 'Dense Passage Retrieval (DPR)' -[:USES_METHOD]- 'Dense Passage Retrieval for Open-Domain Question Answering' (Paper) [chunk: chunk_arxiv_2004_04906_000]."
+    ],
+    "scores": {
+      "latency_ms": 3901.04,
+      "rag.faithfulness": 0.713,
+      "rag.context_precision": 0.78,
+      "rag.answer_relevancy": 0.394,
+      "text_similarity.exact_match": 0.0,
+      "text_similarity.f1": 0.0
+    },
+    "metadata": {
+      "id": "q_1hop_07",
+      "hop_type": "1-hop",
+      "should_refuse": false,
+      "target_entities": [
+        "Dense Passage Retrieval",
+        "BERT"
+      ],
+      "expected_keywords": [
+        "BERT",
+        "BERT-base"
+      ],
+      "route_taken": "graph",
+      "citations": [],
+      "is_grounded": true,
+      "from_cache": false,
+      "original_question_id": "q_1hop_07"
+    }
+  },
+  {
+    "input": "What generator model is paired with the DPR retriever in the RAG paper?",
+    "output": "The provided context does not contain the specific details about which generator model is paired with the DPR retriever in the Retrieval\u2011Augmented Generation paper, so there is insufficient evidence to answer the question.",
+    "reference": "Key entities: Retrieval-Augmented Generation, BART. Expected facts: BART, BART-large.",
+    "context": [
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks' (Paper) [chunk: chunk_arxiv_2005_11401_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'Fairness-Aware Retrieval Optimization for Retrieval-Augmented Generation' (Paper) [chunk: chunk_arxiv_2605_15790v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'Predicting Retrieval Utility and Answer Quality in Retrieval-Augmented Generation' (Paper) [chunk: chunk_arxiv_2601_14546v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'R^3AG: Retriever Routing for Retrieval-Augmented Generation' (Paper) [chunk: chunk_arxiv_2604_22849v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'VISA: Retrieval Augmented Generation with Visual Source Attribution' (Paper) [chunk: chunk_arxiv_2412_14457v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'Accelerating Retrieval-Augmented Generation' (Paper) [chunk: chunk_arxiv_2412_15246v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'Towards Mixed-Modal Retrieval for Universal Retrieval-Augmented Generation' (Paper) [chunk: chunk_arxiv_2510_17354v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'VeriCite: Towards Reliable Citations in Retrieval-Augmented Generation via Rigorous Verification' (Paper) [chunk: chunk_arxiv_2510_11394v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'Video Enriched Retrieval Augmented Generation Using Aligned Video Captions' (Paper) [chunk: chunk_arxiv_2405_17706v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'A Retrieval-Augmented Generation Framework for Academic Literature Navigation in Data Science' (Paper) [chunk: chunk_arxiv_2412_15404v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'mKG-RAG: Leveraging Multimodal Knowledge Graphs in Retrieval-Augmented Generation for Knowledge-intensive VQA' (Paper) [chunk: chunk_arxiv_2508_05318v2_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'Investigating the Robustness of Retrieval-Augmented Generation at the Query Level' (Paper) [chunk: chunk_arxiv_2507_06956v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'Parser, Chunking, and Embedding Interactions in Retrieval-Augmented Generation over Indian Government Regulatory Documents' (Paper) [chunk: chunk_arxiv_2609_31660v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'Leveraging In-Context Learning and Retrieval-Augmented Generation for Automatic Question Generation in Educational Domains' (Paper) [chunk: chunk_arxiv_2501_17397v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'CRISS: A Retrieval-Augmented AI Chatbot for Assisting Cancer Registrars' (Paper) [chunk: chunk_arxiv_2609_29075v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'Retrieval-Augmented Generation in Industry: An Interview Study on Use Cases, Requirements, Challenges, and Evaluation' (Paper) [chunk: chunk_arxiv_2508_14066v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'Blended RAG: Improving RAG (Retriever-Augmented Generation) Accuracy with Semantic Search and Hybrid Query-Based Retrievers' (Paper) [chunk: chunk_arxiv_2404_07220v2_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'IGMiRAG: Intuition-Guided Retrieval-Augmented Generation with Adaptive Mining of In-Depth Memory' (Paper) [chunk: chunk_arxiv_2602_07525v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'How Do LLMs Cite? A Mechanistic Interpretation of Attribution in Retrieval-Augmented Generation' (Paper) [chunk: chunk_arxiv_2606_28358v2_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'Reconstructing Context: Evaluating Advanced Chunking Strategies for Retrieval-Augmented Generation' (Paper) [chunk: chunk_arxiv_2504_19754v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'A Collaborative Multi-Agent Approach to Retrieval-Augmented Generation Across Diverse Data' (Paper) [chunk: chunk_arxiv_2412_05838v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'FAIR-RAG: Faithful Adaptive Iterative Refinement for Retrieval-Augmented Generation' (Paper) [chunk: chunk_arxiv_2510_22344v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'Engineering the RAG Stack: A Comprehensive Review of the Architecture and Trust Frameworks for Retrieval-Augmented Generation Systems' (Paper) [chunk: chunk_arxiv_2601_05264v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'Automated Literature Review Using NLP Techniques and LLM-Based Retrieval-Augmented Generation' (Paper) [chunk: chunk_arxiv_2411_18583v1_000].",
+      "[graph] Entity 'retrieval-augmented generation (RAG)' -[:HAS_TOPIC]- 'EVOR: Evolving Retrieval for Code Generation' (Paper) [chunk: chunk_arxiv_2402_12317v2_000]."
+    ],
+    "scores": {
+      "latency_ms": 5288.51,
+      "rag.faithfulness": 0.175,
+      "rag.context_precision": 0.555,
+      "rag.answer_relevancy": 0.197,
+      "text_similarity.exact_match": 0.0,
+      "text_similarity.f1": 0.13333333333333333
+    },
+    "metadata": {
+      "id": "q_1hop_08",
+      "hop_type": "1-hop",
+      "should_refuse": false,
+      "target_entities": [
+        "Retrieval-Augmented Generation",
+        "BART"
+      ],
+      "expected_keywords": [
+        "BART",
+        "BART-large"
+      ],
+      "route_taken": "graph",
+      "citations": [],
+      "is_grounded": true,
+      "from_cache": false,
+      "original_question_id": "q_1hop_08"
+    }
+  },
+  {
+    "input": "What index type does DPR employ for fast MIPS passage search?",
+    "output": "DPR employs a Lucene\u202fBM25 index for fast MIPS passage search [chunk_arxiv_2004_04906_000].",
+    "reference": "Key entities: Dense Passage Retrieval, FAISS. Expected facts: FAISS, HNSW, Flat.",
+    "context": [
+      "[graph] Method Lineage: Dense Passage Retrieval (DPR) -> extends -> Lucene BM25 [chunks: chunk_arxiv_2004_04906_000]."
+    ],
+    "scores": {
+      "latency_ms": 12845.61,
+      "rag.faithfulness": 0.523,
+      "rag.context_precision": 0.522,
+      "rag.answer_relevancy": 0.141,
+      "text_similarity.exact_match": 0.0,
+      "text_similarity.f1": 0.08695652173913043
+    },
+    "metadata": {
+      "id": "q_1hop_09",
+      "hop_type": "1-hop",
+      "should_refuse": false,
+      "target_entities": [
+        "Dense Passage Retrieval",
+        "FAISS"
+      ],
+      "expected_keywords": [
+        "FAISS",
+        "HNSW",
+        "Flat"
+      ],
+      "route_taken": "graph",
+      "citations": [
+        "chunk_arxiv_2004_04906_000"
+      ],
+      "is_grounded": true,
+      "from_cache": false,
+      "original_question_id": "q_1hop_09"
+    }
+  },
+  {
+    "input": "What is the dimension of the embedding vectors produced by DPR?",
+    "output": "The provided context does not contain any information about the dimension of the embedding vectors produced by Dense Passage Retrieval (DPR). Therefore, there is insufficient evidence to answer the question.",
+    "reference": "Key entities: Dense Passage Retrieval. Expected facts: 768, dimension.",
+    "context": [
+      "[graph] Method Lineage: Dense Passage Retrieval (DPR) -> extends -> Lucene BM25 [chunks: chunk_arxiv_2004_04906_000]."
+    ],
+    "scores": {
+      "latency_ms": 3973.17,
+      "rag.faithfulness": 0.595,
+      "rag.context_precision": 0.69,
+      "rag.answer_relevancy": 0.995,
+      "text_similarity.exact_match": 0.0,
+      "text_similarity.f1": 0.20512820512820512
+    },
+    "metadata": {
+      "id": "q_1hop_10",
+      "hop_type": "1-hop",
+      "should_refuse": false,
+      "target_entities": [
+        "Dense Passage Retrieval"
+      ],
+      "expected_keywords": [
+        "768",
+        "dimension"
+      ],
+      "route_taken": "graph",
+      "citations": [],
+      "is_grounded": true,
+      "from_cache": false,
+      "original_question_id": "q_1hop_10"
+    }
+  }
+]

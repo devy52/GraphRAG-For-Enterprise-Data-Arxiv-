@@ -1,0 +1,50 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+src/*.egg-info/
+
+# Virtual Environments
+.venv/
+env/
+venv/
+ENV/
+
+# Environment Variables & Secrets
+.env
+
+# Pytest & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local database and cache data
+data/cache/
+data/corpus/
+data/neo4j/
+data/postgres/
+.evalharness/
+.evalkit/
+.deepeval/
+scratch/
+*.zip
+
+# Temporary and transient evaluation artifacts
+temp_*
+data/temp_*
+*.tmp.*
+
+# IDE & Editor Settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS Generated
+.DS_Store
+Thumbs.db
