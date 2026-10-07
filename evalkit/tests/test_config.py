@@ -166,3 +166,11 @@ def test_from_yaml_handles_empty_file(tmp_path):
         assert False, "expected a validation error for missing required fields"
     except Exception as exc:
         assert "track" in str(exc) or "field required" in str(exc).lower()
+
+
+def test_isolated_flag_disables_cache_and_save_run():
+    config = EvalConfig(track="rag", dataset="data.jsonl", adapter="static", isolated=True)
+    assert config.isolated is True
+    assert config.cache is False
+    assert config.save_run is False
+

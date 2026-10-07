@@ -120,10 +120,21 @@ class EvalConfig(BaseModel):
     save_run: bool = True
     runs_dir: str = ".evalkit/runs"
 
+    # Single-parameter execution isolation: when true, disables both judge caching
+    # and historical run persistence.
+    isolated: bool = False
+
     reporter: str = "markdown"
     output: str = "report.md"
 
     thresholds: list[ThresholdConfig] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def _apply_isolation(self) -> "EvalConfig":
+        if self.isolated:
+            self.cache = False
+            self.save_run = False
+        return self
 
     @classmethod
     def from_yaml(cls, path: str) -> "EvalConfig":

@@ -195,8 +195,8 @@ Gives you a direct score diff instead of eyeballing two separate reports.
 A `.jsonl` file — one JSON object per line, no wrapping array, no commas
 between lines.
 
-| Field | Type | Required | Meaning |
-|---|---|---|---|
+|  Field  |  Type  |  Required  |  Meaning  |
+| ----- | ----- | ----- | ----- |
 | `input` | string | **yes** | What's given to your system. |
 | `reference` | string | no | A ground-truth answer. Required by `text_similarity`'s metrics; some other evaluators use it when present. |
 | `context` | list of strings | no | Retrieved passages — only relevant for RAG/retrieval tracks. Omit entirely for non-RAG evaluation. |
@@ -369,6 +369,20 @@ varies per project — build it as a custom evaluator (see
 [Extending evalkit](#extending-evalkit)) once your citation format is
 settled, rather than evalkit guessing at one.
 
+### `track: graph` — GraphRAG relational dimensions (deterministic + LLM judge)
+
+| Metric | Needs | Cost |
+|---|---|---|
+| `graph_utilization_rate` | `context` (or `metadata.graph_facts_retrieved`) | free, deterministic |
+| `community_coherence` | `context` (or `metadata.community_context`) | 1 judge call |
+| `global_diversity` | `output` | free, deterministic |
+| `entity_relation_coverage` | `reference` (or `metadata.gold_entities`) | free if sets provided, 1 judge call if unanchored |
+
+- `graph_utilization_rate`: computes the fraction of retrieved graph edges or facts utilized in the final output (defaults to 0.0 on explicit evidence refusals).
+- `community_coherence`: prompts the judge to evaluate whether a community summary coherently represents its grouped member chunks without apparent hallucination.
+- `global_diversity`: evaluates distinct unigram and bigram coverage across distinct themes for global/aggregation queries.
+- `entity_relation_coverage`: compares extracted entities and relationships against gold reference sets or source reference text.
+
 ### Always present, any track: `latency_ms`
 
 Wall-clock time for your adapter's `run()` call, in milliseconds — measures
@@ -433,12 +447,62 @@ real quality measurement.
 ## CLI
 
 ```bash
-evalkit init                       # scaffold config.yaml, dataset.jsonl, adapter.py
-evalkit test-adapter --config config.yaml  # verify one adapter call before a full run
-evalkit run --config config.yaml       # score a run, write a report
-evalkit assert --config config.yaml    # same, but exit 1 if any threshold fails (for CI)
-evalkit compare --config-a a.yaml --config-b b.yaml   # side-by-side score diff
+# Core execution
+evalkit run --config config.yaml                      # score a run, write report, and persist run
+evalkit run --config config.yaml --isolated           # run in isolation: disables caching and run persistence
+evalkit run --config config.yaml --no-cache           # run with fresh judge calls (no cache hits)
+evalkit run --config config.yaml --no-save-run        # run without saving historical run record
+
+# CI assertions
+evalkit assert --config config.yaml                   # exit non-zero if any threshold fails
+
+# Diffing & regression analysis
+evalkit runs list                                     # list all saved historical runs
+evalkit diff <run_id_a> <run_id_b>                    # compare two saved runs without re-executing
+evalkit compare --config-a a.yaml --config-b b.yaml  # run two configs and diff scores
+
+# Cache management
+evalkit cache clear                                   # clear all cached judge scores
 ```
+
+## Caching & Isolated Execution
+
+To reduce remote LLM judge latency and API calls, evaluations cache judge scores by default:
+- **Location**: Cached as SHA-256 keyed JSON payloads in `.evalkit/cache`.
+- **Invalidation**: Same judge model, backend, and prompt reuse the cached evaluation.
+- **Disabling Cache**: Pass `--no-cache` via the CLI or set `cache: false` in YAML.
+- **Clearing Cache**: `evalkit cache clear` removes all cached responses.
+
+### Single-Parameter Isolation (`isolated: true`)
+
+When testing a pipeline in complete isolation without reusing previous judge calls or writing run records to disk:
+```yaml
+# In config.yaml
+isolated: true    # Disables both cache and save_run in one setting
+```
+Or via the command line:
+```bash
+evalkit run --config config.yaml --isolated
+```
+This single setting disables judge cache reuse and avoids saving run records to `.evalkit/runs`.
+
+---
+
+## Run Storage & Historical Diffing (`evalkit diff`)
+
+Every evaluation is saved by default to `.evalkit/runs/<run_id>.json` (timestamped ID by default, or customized via `--run-id`). This enables offline comparative diffing without re-executing model calls:
+
+1. **List past runs**:
+   ```bash
+   evalkit runs list
+   ```
+2. **Diff two runs**:
+   ```bash
+   evalkit diff 2026-10-06_run_baseline 2026-10-07_run_candidate --regression-threshold 0.05
+   ```
+   Reports aggregate score shifts and lists any per-example regressions exceeding the threshold.
+
+To disable run saving for disposable or testing runs, set `save_run: false` or pass `--no-save-run`.
 
 ## Optional: Ragas-backed RAG evaluator
 

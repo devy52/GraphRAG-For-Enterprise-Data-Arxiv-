@@ -32,23 +32,6 @@ class LiteLLMJudge(BaseJudgeBackend):
     def __init__(self, model: str = "gpt-4o-mini", **litellm_kwargs) -> None:
         self.model = model
         self.litellm_kwargs = litellm_kwargs
-        if "api_base" not in self.litellm_kwargs or "api_key" not in self.litellm_kwargs:
-            try:
-                import os
-                from src.core.config import get_settings
-
-                settings = get_settings()
-                if "fireworks" in self.model.lower():
-                    fw_key = os.getenv("FIREWORKS_API_KEY")
-                    if fw_key and "api_key" not in self.litellm_kwargs:
-                        self.litellm_kwargs["api_key"] = fw_key
-                else:
-                    if "api_base" not in self.litellm_kwargs and getattr(settings, "llm_base_url", None):
-                        self.litellm_kwargs["api_base"] = settings.llm_base_url
-                    if "api_key" not in self.litellm_kwargs and getattr(settings, "llm_api_key", None):
-                        self.litellm_kwargs["api_key"] = settings.llm_api_key
-            except Exception:
-                pass
 
     def score(self, prompt: str) -> float:
         import litellm

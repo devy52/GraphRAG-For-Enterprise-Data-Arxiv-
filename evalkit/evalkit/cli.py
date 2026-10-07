@@ -18,8 +18,14 @@ REGRESSION_DISPLAY_LIMIT = 20
 def _run_from_config(config_path: str, args: argparse.Namespace | None = None) -> tuple[EvalConfig, EvalResult]:
     config = EvalConfig.from_yaml(config_path)
     if args is not None:
+        if getattr(args, "isolated", False):
+            config.isolated = True
+            config.cache = False
+            config.save_run = False
         if getattr(args, "no_cache", False):
             config.cache = False
+        if getattr(args, "no_save_run", False):
+            config.save_run = False
         if getattr(args, "concurrency", None):
             config.max_concurrency = args.concurrency
     result = Runner(config).run()
@@ -168,6 +174,7 @@ def cmd_cache_clear(args: argparse.Namespace) -> int:
 
 
 def _add_run_flags(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("--isolated", action="store_true", dest="isolated", help="Run in complete isolation: disables both caching and run persistence")
     parser.add_argument("--no-cache", action="store_true", dest="no_cache", help="Disable judge-call caching for this run")
     parser.add_argument("--concurrency", type=int, default=None, help="Override max_concurrency from config")
 
