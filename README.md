@@ -35,8 +35,8 @@ All results are evaluated on the canonical 50-question benchmark ([`data/benchma
 | **3-Hop Fact Score** | 0.4000 | 0.8333 ± 0.0577 | **0.9667 ± 0.0289** | **+141.7%** | **+16.0%** | 🟢 Near-Perfect Multi-Hop Traversal |
 | **2-Hop Fact Score** | 0.6000 | 0.8000 ± 0.0000 | **0.8333 ± 0.0289** | **+38.9%** | **+4.2%** | 🟢 Relational Bridge Recovery |
 | **1-Hop Fact Score** | 0.5500 | 0.7833 ± 0.0289 | **0.8000 ± 0.0000** | **+45.5%** | **+2.1%** | 🟢 Definitional Parity Preserved |
-| **Out-of-Scope Abstention** | **10/10 (100%)** | **10/10 (100%)** | **10/10 (100%)** | **Tied** | **Tied** | 🟢 Zero Spurious Generation |
-| **Invalid Citation Rate** | **0.0%** | **0.0%** | **0.0%** | **Tied** | **Tied** | 🟢 Zero AST-Verified Hallucinations |
+| **Out-of-Scope Abstention** | **10/10 (100%)** | **10/10 (100%)** | **10/10 (100%)** | **Tied** | **Tied** | 🟢 0/10 Spurious Generation on Benchmark |
+| **Invalid Citation Rate** | **0.0%** | **0.0%** | **0.0%** | **Tied** | **Tied** | 🟢 0.0% AST-Flagged Invalid Citations on Benchmark |
 | **Mean Context Tokens** | **250.0** | 598.0 | 710.9 | +184.4% | +18.9% | 🟡 Known Context-Expansion Trade-Off |
 | **P50 Latency (ms)** | **1,840.0** | 4,311.4 | 5,874.8 | +219.3% | +36.3% | 🟡 Exceeds 4.5s SLA (Cloud Queue Driven) |
 
@@ -51,8 +51,8 @@ To distinguish genuine architectural improvement from random token sampling or f
   - Run 2: Fact score **0.8708**, Strict success **30/40 (75.0%)**, P50 latency **5,728.0 ms**.
   - Run 3: Fact score **0.8792**, Strict success **31/40 (77.5%)**, P50 latency **4,613.5 ms**.
   - **Aggregate**: Fact score **0.8722 ± 0.0064**, Strict success **30.0 ± 1.0 / 40 (75.0% ± 2.5%)**.
-- **Retrieval & Routing Determinism**: **50/50 (100.0%)** queries produced identical candidate chunks, graph facts, and routing paths across all 3 runs. Zero retrieval divergence observed.
-- **Per-Question Stability**: **45/50 (90.0%)** questions produced completely identical scores across runs. Audit logs confirmed the 5 varying questions were caused solely by remote LLM generator phrasing variations, not retrieval changes.
+- **Retrieval & Routing Determinism**: **50/50 (100.0%)** queries produced identical candidate chunks, graph facts, and routing paths across all 3 runs. No retrieval divergence observed under identical seeding.
+- **Per-Question Stability**: **45/50 (90.0%)** questions produced identical scores across runs. Audit logs confirmed the 5 varying questions were caused solely by remote LLM generator phrasing variations, not retrieval changes.
 - **Empirical Latency Decomposition**:
   - Initial 32B Retrieval: **Median 2,042.7 ms** (~34.2%).
   - LangGraph Refinement Node Execution: **Median 398.6 ms** (~6.7%).
@@ -148,8 +148,8 @@ Queries are classified into `GRAPH`, `VECTOR`, or `BOTH` based on structural vs.
 - **`VECTOR`**: Mathematical formulations, definitions, isolated chunk facts.
 - **`BOTH` (or Confidence < 0.70)**: Composite queries requiring textual explanation anchored to graph relationships.
 
-### 2. Parameterized Cypher Template Catalog (Zero Text-to-Cypher Hallucination)
-The system **never emits raw LLM-generated Cypher**. Instead, queries bind resolved entity parameters to pre-compiled, injection-proof traversal templates ([`src/graph/templates.py`](src/graph/templates.py)):
+### 2. Parameterized Cypher Template Catalog (Constrained Schema Execution)
+The production pipeline avoids unconstrained free-form LLM Cypher generation by binding resolved entity parameters to pre-compiled, parameterized traversal templates ([`src/graph/templates.py`](src/graph/templates.py)):
 - `CITATION_CHAIN`: Traverses 1–3 hop citation directed acyclic graphs.
 - `METHOD_ANCESTRY_EXTENDS`: Traces algorithmic evolutionary lineages.
 - `METHOD_BENCHMARK_COMPARISONS`: Queries method-dataset evaluation matrices.
@@ -172,7 +172,7 @@ Evaluated in [`scripts/langgraph_evidence_refinement.py`](scripts/langgraph_evid
 - **Refined Path (46%)**: Executes a bounded 3-node StateGraph adding ≤ 3 ego-neighborhood facts and ≤ 2 targeted document chunks, improving 3-hop fact score from 0.8333 to **0.9667**.
 
 ### 6. Out-of-Scope Detection & Calibrated Abstention
-When queries address topics outside the indexed corpus, the system achieves **100.0% abstention (10/10)** by detecting ungrounded context and emitting standardized refusal language without hallucinating facts.
+When queries address topics outside the indexed corpus, the system demonstrated **10/10 calibrated abstention** on the benchmark set by detecting ungrounded context and emitting standardized refusal language to minimize hallucination.
 
 ---
 

@@ -27,7 +27,7 @@ graph TD
 
     subgraph QueryExecution ["Query Execution Pipeline (Online REST API)"]
         ClientQuery["Client Query"] --> Router{"Tri-State Intent Router<br/>(RouteClassifier)"}
-        Router -->|"Relational"| NeoTraverse["Parameterized Cypher Catalog<br/>(Zero Raw LLM Cypher)"]
+        Router -->|"Relational"| NeoTraverse["Parameterized Cypher Catalog<br/>(Constrained Schema)"]
         Router -->|"Definitional"| VecSearch["HNSW Vector Search<br/>(Top-k Cosine Distance)"]
         Router -->|"Hybrid"| DualExec["Parallel Execution & Deduplication"]
 
@@ -96,8 +96,8 @@ Classifies incoming questions into `GRAPH`, `VECTOR`, or `BOTH`:
 - **`VECTOR`**: Specific passage lookups, definitions, mathematical loss formulas.
 - **`BOTH` (Escalation)**: Composite queries or cases where confidence $<0.70$.
 
-### 2.6 Parameterized Cypher Template Catalog (Zero Text-to-Cypher)
-To eliminate Cypher syntax errors and schema hallucinations, the LLM **never emits raw Cypher**. Queries are mapped to pre-compiled templates in [`src/graph/templates.py`](../src/graph/templates.py):
+### 2.6 Parameterized Cypher Template Catalog (Constrained Schema Execution)
+To mitigate Cypher syntax errors and schema hallucination risks, the production pipeline avoids unconstrained free-form LLM Cypher generation. Queries are mapped to pre-compiled templates in [`src/graph/templates.py`](../src/graph/templates.py):
 - `CITATION_CHAIN`: Traverses 1–3 hop citation directed acyclic graphs.
 - `METHOD_ANCESTRY_EXTENDS`: Traces algorithmic evolutionary lineages.
 - `METHOD_BENCHMARK_COMPARISONS`: Compares methods across benchmark datasets.
@@ -121,7 +121,7 @@ Implemented in [`src/router/refiner.py`](../src/router/refiner.py) and composed 
 - **Fail-Safe Robustness**: Try/except fallback to unrefined context on external model/DB error; verified across 9 dedicated unit and integration tests.
 
 ### 2.9 Citation AST Hard-Gate
-The `CitationValidator` parses generated inline `[chunk_id]` tags using regular expressions and abstract syntax matching. Any response citing a non-retrieved or fabricated chunk ID is rejected and regenerated (up to `max_attempts=3`). This guarantees a **0.0% citation hallucination rate**.
+The `CitationValidator` parses generated inline `[chunk_id]` tags using regular expressions and abstract syntax matching. Any response citing a non-retrieved or fabricated chunk ID is rejected and regenerated (up to `max_attempts=3`). This is designed to drive invalid citation rates toward 0.0% on verified output.
 
 ### 2.10 REST API & Material 3 Web Interface
 - **FastAPI Backend**: Asynchronous endpoints `/query`, `/health`, `/stats`, `/graph/subgraph`, and `/ingest`.

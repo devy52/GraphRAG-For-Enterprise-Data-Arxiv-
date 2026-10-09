@@ -193,7 +193,7 @@ The Enterprise GraphRAG architecture is built entirely in modern Python ($\ge 3.
 
 1. **Injection Prevention**: Zero unconstrained text-to-Cypher. All graph queries execute parameterized Cypher templates (`CYPHER_TEMPLATES`) where parameters are passed separately from query strings.
 2. **Provenance Invariant**: Every graph relationship and every vector chunk record MUST carry a valid `source_chunk_id`.
-3. **Hard Gate Guarantee**: Answers containing hallucinated citations are blocked at the validator tier and regenerated; non-compliant answers are never served.
+3. **Integrity Hard-Gate**: Answers containing unsupported citations are intercepted at the validator tier and regenerated; non-compliant responses trigger standardized fallback notices.
 4. **Offline Resilience**: When LLM gateway credentials are absent or dummy, deterministic fallback mechanisms activate automatically, allowing 100% offline test execution.
 
 ## 6. External API Compliance & Rate Limiting

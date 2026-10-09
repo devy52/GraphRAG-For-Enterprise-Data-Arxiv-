@@ -65,7 +65,7 @@ Resolves ambiguous demonstratives ("that paper", "this method", "it") using rege
 
 ### 5.3 Tri-State Intent Classification with Fallback Escalation
 Queries are classified into `graph`, `vector`, or `both` using prompt few-shots or deterministic pattern dominance heuristics.
-- **Escalation Rule**: If classification confidence is $< 0.70$, the router automatically escalates to `both` (hybrid route) to guarantee recall.
+- **Escalation Rule**: If classification confidence is $< 0.70$, the router automatically escalates to `both` (hybrid route) to maximize candidate recall.
 
 ## 6. Strict Citation Validation Hard-Gate
 Post-generation verification prevents citation confabulation:
