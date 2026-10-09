@@ -67,51 +67,73 @@ To distinguish genuine architectural improvement from random token sampling or f
 ## 3. Architecture & Request Flow
 
 ```mermaid
-graph TD
+flowchart TD
     User["Client Application / User"] --> API["FastAPI Endpoint (/query)"]
 
-    subgraph CoreEngine ["Production 32B Dual-Store Engine (src/)"]
-        API --> Coord["RetrievalCoordinator"]
-        Coord --> Memory["SessionMemory (k=3 window)"]
-        Coord --> Router{"RouteClassifier<br/>(Intent Score)"}
+    subgraph CoreEngine ["Production Dual-Store Engine (src/)"]
+        Coord["RetrievalCoordinator"]
+        Memory["SessionMemory (k=3 window)"]
+        Router{"RouteClassifier<br/>(Intent Score)"}
+        GraphEng["Neo4j QueryEngine<br/>(Parameterized Cypher)"]
+        VecStore["pgvector Store<br/>(HNSW Cosine Search)"]
+        Both["Execute Both Paths & Deduplicate"]
+        Hydrate["Graph Passage Hydration<br/>(Annotated source_chunk_ids)"]
+        Merge["Context Assembly & Deduplication"]
 
-        Router -->|"Relational / Multi-Hop"| GraphEng["Neo4j QueryEngine<br/>(Parameterized Cypher)"]
-        Router -->|"Semantic / Definitional"| VecStore["pgvector Store<br/>(HNSW Cosine Search)"]
-        Router -->|"Hybrid / Low-Confidence"| Both["Execute Both Paths & Deduplicate"]
-
-        GraphEng --> Hydrate["Graph Passage Hydration<br/>(Annotated source_chunk_ids)"]
-        VecStore --> Merge["Context Assembly & Deduplication"]
+        Coord --> Memory
+        Coord --> Router
+        Router -->|"Relational / Multi-Hop"| GraphEng
+        Router -->|"Semantic / Definitional"| VecStore
+        Router -->|"Hybrid / Low-Confidence"| Both
+        GraphEng --> Hydrate
+        VecStore --> Merge
         Both --> Hydrate
         Hydrate --> Merge
     end
 
-    subgraph HybridRefiner ["Selective Bounded Refinement Layer (src/router/refiner.py; ADR 070)"]
-        Merge --> GapCheck{"Zero-Overhead Evidence Gap Detector<br/>(Missing Named Entity or Document ID?)"}
-        GapCheck -->|"No Gap (54% of queries)"| FastPath["Fast Path: Direct Synthesis"]
-        GapCheck -->|"Gap Detected (46% of queries)"| LGRefine["Bounded 1-Pass LangGraph StateGraph"]
+    API --> Coord
+
+    subgraph HybridRefiner ["Selective Bounded Refinement Layer (src/router/refiner.py - ADR 070)"]
+        GapCheck{"Evidence Gap Detected?<br/>Missing Entity or Target ID"}
+        FastPath["Fast Path: Direct Synthesis"]
+        LGRefine["Bounded 1-Pass LangGraph StateGraph"]
 
         subgraph LangGraphPass ["3-Node Bounded Refinement Graph (~398ms)"]
-            LGRefine --> N1["isolate_gap_node"]
-            N1 --> N2["targeted_retrieval_node<br/>(Ego-Neighborhood + Filtered Vector)"]
-            N2 --> N3["merge_evidence_node<br/>(Strict Caps: <=3 facts, <=2 chunks)"]
+            N1["isolate_gap_node"]
+            N2["targeted_retrieval_node<br/>(Ego-Neighborhood + Filtered Vector)"]
+            N3["merge_evidence_node<br/>(Strict Caps: ≤ 3 facts, ≤ 2 chunks)"]
+            N1 --> N2
+            N2 --> N3
         end
-        N3 --> SynthMerge["Merge Refined Evidence Ledger"]
+        SynthMerge["Merge Refined Evidence Ledger"]
+
+        GapCheck -->|"No Gap (54% of queries)"| FastPath
+        GapCheck -->|"Gap Detected (46% of queries)"| LGRefine
+        LGRefine --> N1
+        N3 --> SynthMerge
     end
 
-    FastPath --> Synth["AnswerSynthesizer"]
+    Merge --> GapCheck
+
+    Synth["AnswerSynthesizer"]
+    FastPath --> Synth
     SynthMerge --> Synth
 
     subgraph ValidationLoop ["Integrity Hard-Gate"]
-        Synth --> Val{"CitationValidator (AST / Regex)"}
-        Val -->|"All [chunk_id] Valid"| Out["Return JSON: answer, citations, route, latencies"]
-        Val -->|"Fabricated Citation"| Regen["Reject & Regenerate (max_attempts=3)"]
+        Val{"CitationValidator (AST / Regex)"}
+        Regen["Reject & Regenerate (max_attempts=3)"]
+        Out["Return JSON: answer, citations, route, latencies"]
+
+        Val -->|"All chunk IDs Valid"| Out
+        Val -->|"Fabricated Citation"| Regen
         Regen --> Synth
     end
 
+    Synth --> Val
     Out --> User
 
-    style CoreEngine fill:#f4f6f9,stroke:#3b82f6,stroke-width:1px
-    style HybridCandidate fill:#faf5ff,stroke:#8b5cf6,stroke-width:1px
+    style CoreEngine fill:#f8fafc,stroke:#3b82f6,stroke-width:1px
+    style HybridRefiner fill:#faf5ff,stroke:#8b5cf6,stroke-width:1px
     style LangGraphPass fill:#f3e8ff,stroke:#7c3aed,stroke-width:1px
     style ValidationLoop fill:#ecfdf5,stroke:#10b981,stroke-width:1px
 ```
@@ -164,7 +186,7 @@ When queries address topics outside the indexed corpus, the system achieves **10
 | **Vector Store** | PostgreSQL 16 + pgvector | HNSW cosine index (`m=16, ef_construction=64`), asyncpg |
 | **Orchestration** | LangGraph & Custom Async | 3-node bounded `StateGraph` for refinement; decoupled pipelines |
 | **LLM Gateway** | OpenAI-Compatible Client | NVIDIA NIM, OpenRouter, local vLLM, or Ollama |
-| **Evaluation Engine**| `evalkit` (in-repo) | Channel-Strict AST evaluator, typed evidence ledgers |
+| **Evaluation Engine**| EvaluatorV2 (`src/eval/`) | Channel-Strict AST evaluator, typed evidence ledgers |
 | **Web UI** | Material 3 Vanilla SPA | Zero-Node, Google M3 tokens, Vis.js Neo4j interactive canvas |
 
 ```
@@ -173,7 +195,7 @@ GraphRAG-For-Enterprise-Data/
 │   ├── ARCHITECTURE.md             # High-level architecture & dual-store design
 │   ├── BENCHMARK_SCORECARD.md      # Comprehensive scorecard across all 11 experimental phases
 │   ├── CODEBASE_MAP.md             # File-by-file directory index & public symbol directory
-│   ├── DECISIONS.md                # Architecture Decision Records (ADR 001–069)
+│   ├── DECISIONS.md                # Architecture Decision Records (ADR 001–070)
 │   ├── DESIGN.md                   # Detailed design & algorithmic specifications
 │   ├── FLOWS.md                    # Sequence diagrams for ingestion, retrieval, and refinement
 │   ├── ONTOLOGY.md                 # Entity and relationship ontology definitions
@@ -182,23 +204,25 @@ GraphRAG-For-Enterprise-Data/
 │   └── TRD.md                      # Technical Requirements Document
 ├── data/                           # Evaluation ledgers, caches, and benchmark datasets
 │   ├── benchmark_v2_dataset.jsonl  # Authoritative 50Q dataset (SHA-256: 88fc85fc1af4...)
-│   ├── hybrid_repeatability_results.json # Machine-readable 3-run repeatability metrics
-│   └── hybrid_repeatability_report.md    # Markdown 3-run stability & repeatability report
-├── evalkit/                        # In-repo evaluation framework (244 unit tests)
-├── scripts/                        # Evaluation, repeatability, and candidate architecture scripts
-│   ├── langgraph_evidence_refinement.py # Candidate Hybrid 32B + LangGraph Refinement
+│   ├── documents_corpus.jsonl      # Curated enterprise arXiv research paper corpus
+│   ├── document_chunks.jsonl       # Bounded 800-char text passages with SHA-256 hashes
+│   └── runtime_signals_profile.json# Routing priors and runtime thresholds
+├── scripts/                        # Benchmark execution and evidence refinement runners
+│   ├── langgraph_evidence_refinement.py # Production LangGraph Evidence Refinement wrapper
+│   ├── run_evidence_refinement_benchmark.py # Refinement benchmark driver
 │   ├── run_hybrid_repeatability_study.py# 3-run repeatability benchmark runner
-│   └── test_langgraph_smoke.py     # StateGraph execution smoke test
-├── src/                            # Production source code (Phase 33D Champion)
+│   └── run_benchmark_v2.py         # Canonical EvaluatorV2 benchmark runner
+├── src/                            # Production source code (Hybrid GraphRAG)
 │   ├── api/                        # FastAPI application routes, schemas & static mount
 │   ├── core/                       # Configuration (Pydantic Settings) & logging
+│   ├── eval/                       # EvaluatorV2, metrics, dataset loaders, and reports
 │   ├── graph/                      # Neo4j query engine, templates, and entity resolver
 │   ├── ingestion/                  # arXiv collector, markdown chunker, and entity extractor
 │   ├── memory/                     # Sliding-window session memory (k=3)
-│   ├── router/                     # Intent classifier & central retrieval coordinator
+│   ├── router/                     # Intent classifier, coordinator, and LangGraph refiner
 │   ├── synthesis/                  # Answer synthesizer & AST citation validator
 │   └── vector/                     # PostgreSQL pgvector indexer & HNSW search
-├── tests/                          # 147 unit & integration tests (100% offline passing)
+├── tests/                          # 17 automated test suites (100% offline passing, 0 regressions)
 ├── docker-compose.yml              # Local container definitions for Neo4j and PostgreSQL
 ├── pyproject.toml                  # Python packaging configuration
 └── requirements.txt                # Pinned production dependencies
@@ -285,25 +309,19 @@ uvicorn src.api.main:app --port 8000 --reload
 ## 7. Testing & Benchmark Reproduction
 
 ### Running Offline Test Suites (No Credentials Required)
-The repository contains 400 automated unit and integration tests that run completely offline with mock fallbacks:
+The repository contains automated unit and integration tests that run completely offline with mock fallbacks:
 
 ```pwsh
-# 1. Run core application test suite (156 tests, including 9 evidence refinement tests)
+# 1. Run core application test suite (133 offline tests, 0 regressions)
 .venv\Scripts\pytest tests/ -q
 
 # 2. Run focused evidence refinement unit & integration tests (ADR 070)
 .venv\Scripts\pytest tests/test_evidence_refinement.py -v
-
-# 3. Run in-repo evalkit framework test suite (244 tests)
-.venv\Scripts\pytest evalkit/tests -q
 ```
-*Expected Result*: 100% green passing across all 400 tests.
+*Expected Result*: 100% green passing across all tests.
 
 ### Running Integrated Hybrid Verification
 ```pwsh
-# Run isolated smoke test on LangGraph orchestrator
-.venv\Scripts\python scripts/test_langgraph_smoke.py
-
 # Run single query on Integrated Hybrid GraphRAG
 .venv\Scripts\python -c "import asyncio; from scripts.langgraph_evidence_refinement import ChampionWithLangGraphRefinement; h = ChampionWithLangGraphRefinement(); res = asyncio.run(h.query('What benchmark is proposed in When to use Graphs in RAG to evaluate GraphRAG models?', use_cache=False)); print(res['answer'])"
 ```

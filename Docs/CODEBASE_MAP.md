@@ -119,98 +119,81 @@ GraphRAG-For-Enterprise-Data/
 │       ├── models.py               # VectorChunkRecord and VectorSearchResult models
 │       ├── schema.py               # SQLAlchemy async ORM DocumentChunkModel & schema init
 │       └── tuning.py               # HNSW ef_search tuner against flat scan ground truth
-├── evalkit/                        # Unified authoritative evaluation framework (14 metrics, caching, regression, CLI)
-│   ├── evalkit/                    # Core evaluation package
-│   │   ├── adapters/               # Target system adapters (e.g. StaticAdapter)
-│   │   ├── contracts/              # Adapter & run contracts (AdapterResponse, MetricResult)
-│   │   ├── core/                   # Runner, report generation, dataset loader, config, cache, regression, run_store
-│   │   ├── evaluators/             # Retrieval (precision, recall, MRR, nDCG), RAG, NLP, Graph
-│   │   └── judges/                 # LiteLLM judge with structured JSON parsing, backoff, and cache fingerprinting
-│   ├── evalharness/                # Internal backward-compatibility forwarding shims pointing to evalkit
-│   └── tests/                      # Full evaluation test suite (244 tests)
-├── tests/                          # Automated verification test suite (156 tests, 100% offline)
+├── tests/                          # Automated verification test suite (17 suites, 100% offline passing)
 │   ├── test_api.py                 # FastAPI endpoint tests (root, health, stats, /query, /graph/communities)
 │   ├── test_community.py           # LPA clustering, summary record, and caching tests
 │   ├── test_config.py              # Settings validation and logger tests
 │   ├── test_eval.py                # Dataset stratification, runner, and report tests
-│   ├── test_eval_v2.py             # 9 integrity regression properties (paraphrase, hyphens, abstention)
-│   ├── test_evalkit_adapter.py     # Evalkit adapter & dataset exporter verification tests
+│   ├── test_eval_v2.py             # 13 integrity regression properties (paraphrase, hyphens, abstention)
+│   ├── test_evaluation_three_way_scripts.py # Browser comparison and evaluation override guards
 │   ├── test_evidence_refinement.py # Bounded LangGraph refinement unit & integration tests (ADR 070)
-│   ├── test_full_evaluation.py     # Multi-track evaluation, stratification, metric filter & aggregation tests
 │   ├── test_graph.py               # Fact extraction, resolution, and cache tests
 │   ├── test_ingestion.py           # Paper model, chunking determinism, collector & incremental tests
 │   ├── test_metadata_resolver.py   # Dedicated MetadataResolver unit tests & coordinator integration (ADR 051)
+│   ├── test_passage_hydration.py   # Multi-hop passage hydration acceptance & adaptive budgeting tests
 │   ├── test_query_engine.py        # Cypher templates, entity lookup, and formatting tests
 │   ├── test_router.py              # Sliding window, coreference, classifier, and coordinator tests
 │   ├── test_synthesis.py           # Context assembly, citation validation, cache, and retries
 │   ├── test_text_norm.py           # Unicode NFKC, hyphen variants, apostrophes, and whitespace tests
 │   └── test_vector.py              # Schema, deterministic unit vectors, and similarity scoring
-├── data/                           # Evaluation reports, benchmark datasets & bundle
-│   ├── evalkit_vs_ragas_comparison.md  # Side-by-side Evalkit vs Ragas calibration report
-│   ├── evalkit_vs_ragas_comparison.json# Raw per-question scores for Evalkit & Ragas
-│   ├── phase30b_path_formatting_report.md # Phase 30B concise relational formatting evaluation report
-│   ├── phase30b_path_formatting_results.json # Phase 30B raw 50Q results & comparative metrics
-│   ├── phase30b_path_formatting_audit.jsonl # Phase 30B exact context & provenance audit ledger
-│   ├── phase30_path_formatting_report.md # Phase 30 relational path formatting evaluation report
-│   ├── phase30_path_formatting_results.json # Phase 30 raw 50Q results & comparative metrics
-│   ├── phase30_path_formatting_audit.jsonl # Phase 30 per-question provenance & evaluation audit
-│   ├── evidence_refinement_benchmark_results.json # 32B Champion + Bounded Refinement metrics (Run 1)
-│   ├── evidence_refinement_benchmark_audit.jsonl # 32B + Refinement per-question context audit (Run 1)
-│   ├── evidence_refinement_benchmark_report.md # 32B + Refinement comparative evaluation report
-│   ├── hybrid_repeatability_results.json # 3-Run repeatability aggregated metrics & stability analysis
-│   ├── hybrid_repeatability_report.md    # 3-Run repeatability markdown report & gate verdicts
-│   ├── hybrid_repeatability_run2_audit.jsonl # Run 2 fresh 50Q rerun audit log
-│   ├── hybrid_repeatability_run3_audit.jsonl # Run 3 fresh 50Q rerun audit log
-│   ├── langgraph_benchmark_results.json # Standalone LangGraph 9-node benchmark metrics
-│   ├── langgraph_benchmark_audit.jsonl  # Standalone LangGraph per-question audit log
-│   ├── langgraph_benchmark_report.md   # Standalone LangGraph evaluation report
-│   ├── run3b_canonical_report.md   # Run 3B canonical entity resolution evaluation report
-│   ├── run3b_canonical_results.json# Run 3B raw 50Q results & comparative metrics
-│   ├── run3b_resolution_audit.jsonl# Run 3B canonical resolver resolution ledger
-│   ├── run3a_precedence_report.md  # Run 3A precedence & suppression evaluation report
-│   ├── run3a_precedence_results.json # Run 3A raw 50Q results & comparative metrics
-│   ├── run2_metadata_ablation_results.json # Run 2 metadata ablation raw scores
-│   ├── full_evaluation/            # Full 50-question multi-track benchmark evaluation outputs
-│   │   ├── full_eval_report.md     # Stratified markdown report with score legitimacy audit
-│   │   ├── full_eval_results.json  # Raw per-question scores across all tracks
-│   │   └── spot_check_samples.md   # Sampled QA pairs for manual verification
-│   └── test_evaluation_bundle/     # Master prompt-ready bundle for Claude/GPT analysis
-│       ├── MASTER_TEST_AND_EVAL_REPORT.md  # Comprehensive testing & evaluation report
-│       ├── EVALUATION_AUDIT_PROOF.md       # Audit and mathematical/empirical score legitimacy proof
-│       ├── benchmark_results_50q.json      # 50-question comparative benchmark run
-│       ├── evalkit_results_10q.json        # External evalkit multi-track evaluation output
-│       ├── evalkit_report_10q.md           # Evalkit formatted report per example
-│       ├── live_eval_run_10q/              # Live 10-question evaluation report with Nemotron-3 judge
-│       ├── live_eval_run_2hop/             # Live 2-hop evaluation report with Nemotron-3 judge
-│       ├── live_eval_run_10q_optimized/    # Optimized 10-question run with ADR 033 dynamic top-k
-│       ├── benchmark_validation/           # Statistical validation, bootstrap CIs & dual-judge report
-│       └── pytest_test_suite_log.txt       # Raw pytest 83-test execution log
-├── scripts/                        # Standalone utility & export scripts
-│   ├── compare_evalkit_vs_ragas.py # Dual-evaluator driver comparing Evalkit vs Ragas on GraphRAG
-│   ├── compile_results_bundle.py   # Compiles evaluation reports, datasets, audit logs & specs into ZIP
-│   ├── export_evalkit_dataset.py   # Exports canonical benchmark dataset to evalkit JSONL
-│   ├── generate_benchmark_v2_dataset.py # Generates authoritative fact ground truth dataset
-│   ├── run_benchmark_v2.py         # Full Evaluation V2 benchmark driver
-│   ├── run_canonical_ablation_run3b.py # Run 3B canonical entity resolution benchmark runner
-│   ├── run_full_evaluation.py      # Multi-track benchmark runner with metric auditing & spot checks
-│   ├── run_path_formatting_phase30.py # Phase 30 relational traversal path benchmark runner
-│   ├── run_path_formatting_phase30b.py # Phase 30B concise relational formatting benchmark runner
-│   ├── recompute_run3b_corrected_accounting.py # Recalculates Run 3B metrics under channel-strict accounting
-│   ├── run_phase31c_oracle_control.py # Phase 31C Oracle Control evaluation driver on 16 failed questions
-│   ├── run_phase33_release_benchmark.py # Phase 33 final re-benchmark & release champion runner
-│   ├── langgraph_evidence_refinement.py # Hybrid 32B Champion + Bounded 1-Pass LangGraph Evidence Refinement
+├── data/                           # Canonical benchmark datasets, corpus, and research ablation records
+│   ├── benchmark_v2_dataset.jsonl  # Authoritative 50Q dataset (SHA-256: 88fc85fc1af4...)
+│   ├── documents_corpus.jsonl      # Curated enterprise arXiv research paper corpus
+│   ├── document_chunks.jsonl       # Bounded 800-char text passages with SHA-256 hashes
+│   ├── runtime_signals_profile.json# Routing priors and runtime thresholds
+│   ├── benchmark_audit_records_v2.jsonl # Per-question evaluation audit records
+│   ├── benchmark_audit_table_v2.md # Markdown evaluation audit table
+│   ├── benchmark_comparison_v1_vs_v2.json # Machine-readable V1 vs V2 metric delta
+│   ├── benchmark_results_50q_v2.json # Machine-readable 50Q baseline evaluation metrics
+│   ├── gold_evidence_audit.json    # Gold evidence audit records across chunks and graph
+│   ├── gold_evidence_audit.md      # Comprehensive gold evidence audit documentation
+│   ├── abcd_ablation_results.json  # 4-way ablation results (Modes A, B, C, D)
+│   ├── abcd_ablation_report.md     # 4-way ablation markdown report
+│   ├── abcd_ablation_audit.jsonl   # 4-way ablation audit ledger
+│   ├── phase30_path_formatting_report.md # Phase 30 relational path formatting report
+│   ├── phase30b_path_formatting_report.md # Phase 30B concise formatting report
+│   ├── phase31c_oracle_report.md   # Phase 31C Oracle Control evaluation report
+│   ├── phase31d_edge_case_report.md # Phase 31D edge-case classification report
+│   ├── phase32b_passage_hydration_report.md # Phase 32B passage hydration report
+│   ├── phase32c_adaptive_hydration_report.md # Phase 32C adaptive hydration report
+│   ├── phase33_final_release_report.md # Phase 33 final release champion report
+│   ├── phase33d_repeatability_report.md # Phase 33D 3-run repeatability study report
+│   ├── run2_metadata_report.md     # Run 2 metadata resolution report
+│   ├── run3a_precedence_report.md  # Run 3A precedence & conflict suppression report
+│   └── run3b_canonical_report.md   # Run 3B canonical entity resolution report
+├── scripts/                        # Production benchmark runners and ingestion pipeline
+│   ├── langgraph_evidence_refinement.py # Production LangGraph Evidence Refinement wrapper
 │   ├── run_evidence_refinement_benchmark.py # Isolated benchmark driver for 32B Champion + Refinement
 │   ├── run_hybrid_repeatability_study.py # 3-Run repeatability study runner across Runs 1-3
-│   ├── validate_benchmark.py       # Independent score validator with bootstrap CIs & dual-judge cross-check
-│   └── verify_basic_metrics.py     # Standalone validation verifying all 10 basic metrics + GraphRAG
+│   ├── run_benchmark_v2.py         # Canonical EvaluatorV2 50Q benchmark driver
+│   ├── generate_benchmark_v2_dataset.py # Generates authoritative fact ground truth dataset
+│   ├── ingest_corpus.py            # Primary corpus acquisition and ingestion driver
+│   ├── fast_complete_ingestion.py  # Rapid full-corpus ingestion script
+│   ├── harvest_new_corpus.py       # Curated arXiv acquisition script with rate limiting
+│   ├── browser_compare_plain_hybrid.py # Headless browser side-by-side video recorder
+│   ├── compare_plain_vector_hybrid.py # CLI comparison between vector and hybrid pipelines
+│   ├── audit_eval_v2.py            # Evaluation V2 integrity verification utility
+│   ├── recompute_run3b_corrected_accounting.py # Recalculates Run 3B under channel-strict accounting
+│   ├── run_abcd_ablation.py        # ABCD ablation benchmark driver
+│   ├── run_canonical_ablation_run3b.py # Run 3B canonical entity resolution benchmark runner
+│   ├── run_metadata_ablation_run2.py # Run 2 metadata ablation runner
+│   ├── run_path_formatting_phase30.py # Phase 30 relational path runner
+│   ├── run_path_formatting_phase30b.py # Phase 30B concise relational formatting runner
+│   ├── run_phase31c_oracle_control.py # Phase 31C Oracle Control runner
+│   ├── run_phase32b_benchmark.py   # Phase 32B passage hydration runner
+│   ├── run_phase32c_benchmark.py   # Phase 32C adaptive hydration runner
+│   ├── run_phase33_release_benchmark.py # Phase 33 release champion runner
+│   ├── run_phase33d_repeatability_study.py # Phase 33D repeatability runner
+│   ├── run_precedence_ablation_run3a.py # Run 3A precedence runner
+│   └── validate_benchmark_v2_dataset.py # Canonical dataset integrity checker
 ├── _local_archive/                 # Local directory for unpushed experimental scripts & audit logs (gitignored)
 │   ├── README.md                   # Archive directory inventory & exclusion rationale
-│   ├── scripts/                    # Exploratory prototypes (langgraph_graphrag, package_codebase, etc.)
-│   ├── data/                       # Local raw benchmark dumps (.json), per-query audit ledgers (.jsonl)
-│   └── legacy/                     # Pre-rename evalharness package copy & test result notes
-├── eval_adapter.py                 # Standalone BaseAdapter wrapping GraphRAG for evalkit
-├── evalkit_config.yaml             # Multi-track evalkit configuration (rag + text_similarity)
-├── run_evalkit.py                  # Standalone evalkit evaluation runner generating reports
+│   ├── scripts/                    # Exploratory prototypes, runners & legacy adapters
+│   ├── data/                       # Raw evaluation dumps (.json), per-query audit ledgers (.jsonl)
+│   ├── legacy/                     # Pre-rename evalharness package copy & test result notes
+│   ├── evalkit/                    # Complete evalkit standalone package
+│   ├── tests/                      # Archived evalkit tests
+│   └── config/                     # Archived evalkit configurations
 ├── docker-compose.yml              # Local container definitions for Neo4j Community & PostgreSQL
 ├── pyproject.toml                  # Python package configuration, dependencies, and pytest options
 ├── requirements.txt                # Pinned production & development dependencies
@@ -480,78 +463,27 @@ GraphRAG-For-Enterprise-Data/
 - **Role**: Repeatability study runner executing 3 independent frozen 50Q runs (Run 1: 32B peak, Run 2: P33 rerun 1, Run 3: P33 rerun 2 fresh) to quantify downstream NIM generator variance, per-question stability matrix, and stage-decomposed latencies.
 - **Outputs**: `data/phase33d_repeatability_results.json`, `data/phase33d_repeatability_report.md`, `data/phase33d_run3_audit.jsonl`.
 
-#### [`run_evalkit.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/run_evalkit.py) & [`evalkit_config.yaml`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalkit_config.yaml)
-- **Role**: Authoritative Enterprise Benchmark Runner. Orchestrates end-to-end multi-track evaluation across 4 tracks (`rag`, `retrieval`, `graph`, `text_similarity`) over `data/benchmark_v2_dataset.jsonl` using `evalharness` engine, LiteLLM judge with NVIDIA NIM auto-credentials, and persistent caching.
-- **Key Symbols**: [`run_evaluation`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/run_evalkit.py), [`main`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/run_evalkit.py).
-- **Inputs**: `evalkit_config.yaml`, `data/benchmark_v2_dataset.jsonl`, `eval_adapter:GraphRAGAdapter`.
-- **Outputs**: `data/evalkit_report.md`, `data/evalkit_results.json`.
-
----
-
-### 2.10 Unified Evaluation Harness (`evalharness/`)
-
-#### [`evalharness/contracts/adapter.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalharness/evalharness/contracts/adapter.py)
-- **Role**: Data contracts defining `BaseAdapter` interface and `AdapterResponse` dataclass.
-- **Key Symbols**: [`AdapterResponse`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalharness/evalharness/contracts/adapter.py), [`BaseAdapter`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalharness/evalharness/contracts/adapter.py).
-
-#### [`evalharness/judges/litellm_judge.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalharness/evalharness/judges/litellm_judge.py)
-- **Role**: LLM-as-a-judge scorer using LiteLLM with structured JSON parsing (`response_format: json_object`), fallback retry, code fence stripping, and range validation ($[0.0, 1.0]$).
-- **Key Symbols**: [`LiteLLMJudge`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalharness/evalharness/judges/litellm_judge.py).
-
-#### [`evalharness/evaluators/retrieval.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalharness/evalharness/evaluators/retrieval.py)
-- **Role**: Evaluates retrieval performance over retrieved chunk IDs against gold targets.
-- **Metrics**: `context_precision`, `context_recall`, `mrr`, `ndcg_at_k` (with position discounting).
-
-#### [`evalharness/evaluators/rag.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalharness/evalharness/evaluators/rag.py)
-- **Role**: LLM-judge evaluated generation metrics measuring context groundedness, relevance, and correctness.
-- **Metrics**: `faithfulness`, `answer_relevancy`, `context_recall`, `answer_correctness`, `hallucination_rate`.
-
-#### [`evalharness/evaluators/graph.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalharness/evalharness/evaluators/graph.py)
-- **Role**: Dedicated GraphRAG dimension evaluator covering Indexing, Search, and Generation layers.
-- **Metrics**: `graph_utilization_rate` (traversal efficiency), `community_coherence` (cluster summary fidelity), `global_diversity` (thematic breadth & non-repetition on global queries), `entity_relation_coverage` (triplet and entity extraction recall).
-
-#### [`evalharness/evaluators/text_similarity.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalharness/evalharness/evaluators/text_similarity.py)
-- **Role**: Traditional lexical and embedding similarity against reference answers.
-- **Metrics**: `bleu_score`, `rouge_l_f1`, `bert_score_f1` (DistilBERT with memory-safe fallback).
-
-#### [`evalharness/core/runner.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalharness/evalharness/core/runner.py)
-- **Role**: Evaluation orchestrator executing adapters against datasets, recording latency and cost, and dispatching to evaluators.
-- **Key Symbols**: [`Runner`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalharness/evalharness/core/runner.py).
-
-#### [`evalharness/cache.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalharness/evalharness/cache.py), [`regression.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalharness/evalharness/regression.py), [`run_store.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalharness/evalharness/run_store.py)
-- **Role**: Enterprise evaluation infrastructure providing thread-safe file caching, per-example regression detection, persistent run storage, and historical run diffing.
-
----
-
-### 2.11 Candidate Architecture & Evaluation Scripts (`scripts/`)
+#### [`scripts/run_evidence_refinement_benchmark.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/run_evidence_refinement_benchmark.py)
+- **Role**: Benchmark runner executing the Hybrid Phase 32B Champion + Bounded LangGraph Evidence Refinement architecture across all 50 canonical questions.
+- **Outputs**: `data/evidence_refinement_benchmark_results.json`, `data/evidence_refinement_benchmark_report.md`.
 
 #### [`scripts/langgraph_evidence_refinement.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/langgraph_evidence_refinement.py)
-- **Role**: Candidate Hybrid GraphRAG Architecture (Phase 34, ADR 068, ADR 069). Preserves the fast Phase 32B `RetrievalCoordinator` as the primary engine; executes a selective, bounded 1-pass LangGraph StateGraph (`isolate_gap_node` → `targeted_retrieval_node` → `merge_evidence_node`) only when an evidence gap is detected.
+- **Role**: Production LangGraph Evidence Refinement wrapper (ADR 070). Exposes `ChampionWithLangGraphRefinement` delegating to `src.router.refiner.EvidenceRefiner` and `src.router.coordinator.RetrievalCoordinator`.
 - **Key Symbols**: [`ChampionWithLangGraphRefinement`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/langgraph_evidence_refinement.py), [`RefinementState`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/langgraph_evidence_refinement.py).
 - **Inputs**: Natural language query, optional session ID, `use_cache` flag.
 - **Outputs**: Dictionary containing `answer`, `cited_chunk_ids`, `is_valid`, `refinement_activated`, `missing_entities`, `missing_doc_ids`, `retrieval_context`, `assembled_context`, `latencies`.
 
 #### [`scripts/run_hybrid_repeatability_study.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/run_hybrid_repeatability_study.py)
 - **Role**: Automated 3-run repeatability benchmark runner evaluating candidate hybrid GraphRAG across the canonical 50-question benchmark with complete cache isolation (`use_cache=False`).
-- **Outputs**: `data/hybrid_repeatability_results.json`, `data/hybrid_repeatability_report.md`, `data/hybrid_repeatability_run2_audit.jsonl`, `data/hybrid_repeatability_run3_audit.jsonl`.
-
-#### [`scripts/langgraph_graphrag.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/langgraph_graphrag.py)
-- **Role**: Standalone 9-node LangGraph StateGraph orchestrator with agentic citation self-correction loop (Phase 34, ADR 067).
-- **Key Symbols**: [`LangGraphGraphRAG`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/langgraph_graphrag.py).
-
-#### [`scripts/langgraph_adapter.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/langgraph_adapter.py)
-- **Role**: Adapter connecting LangGraph GraphRAG models to `evalkit` evaluation contracts.
-
-#### [`scripts/test_langgraph_smoke.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/test_langgraph_smoke.py)
-- **Role**: Isolated smoke test verifying the compiled LangGraph StateGraph executes all nodes and edges cleanly.
+- **Outputs**: `data/hybrid_repeatability_results.json`, `data/hybrid_repeatability_report.md`.
 
 ---
 
 ## 3. Test Suite Mapping
 
-Every core production module, standalone script, and evaluation harness is paired with a dedicated test suite:
+Every core production module, standalone script, and router workflow is paired with a dedicated offline test suite:
 
-### 3.1 Core Repository Tests (`tests/`)
+### Core Repository Tests (`tests/`)
 
 | Test Module | Target Tested Components | Tests Count | Status |
 |---|---|---|---|
@@ -562,24 +494,16 @@ Every core production module, standalone script, and evaluation harness is paire
 | [`test_vector.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_vector.py) | `DocumentChunkModel`, `VectorStore`, `EmbeddingGenerator` | 4 | PASSED |
 | [`test_query_engine.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_query_engine.py) | `CYPHER_TEMPLATES`, `GraphQueryEngine` statement format | 4 | PASSED |
 | [`test_router.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_router.py) | `SessionMemory`, `RouteClassifier`, `RetrievalCoordinator` | 6 | PASSED |
+| [`test_evidence_refinement.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_evidence_refinement.py) | Bounded LangGraph refinement nodes, fast path, gap detection, coordinator integration (ADR 070) | 9 | PASSED |
 | [`test_synthesis.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_synthesis.py) | `CitationValidator`, `AnswerSynthesizer`, `QueryResponseCache` | 9 | PASSED |
 | [`test_community.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_community.py) | Label Propagation Algorithm (LPA), community summary synthesis & caching | 9 | PASSED |
 | [`test_api.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_api.py) | FastAPI `/query`, `/health`, `/stats`, `/`, `/graph/communities`, `/ingest/paper` | 6 | PASSED |
-| [`test_eval.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_eval.py) | `BenchmarkDataset`, `BenchmarkRunner` (un-hardcoded), `BenchmarkReporter` | 3 | PASSED |
+| [`test_eval.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_eval.py) | `BenchmarkDataset`, `BenchmarkRunner`, `BenchmarkReporter` | 3 | PASSED |
 | [`test_eval_v2.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_eval_v2.py) | 13 integrity regression properties (paraphrase, hyphens, abstention, contradiction rejection, graph citations) | 13 | PASSED |
 | [`test_benchmark_integrity.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_benchmark_integrity.py) | SHA-256 fingerprinting, 50Q balance validation, corpus ID referential integrity | 4 | PASSED |
-| [`test_evalkit_adapter.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_evalkit_adapter.py) | `GraphRAGAdapter`, `export_dataset` JSONL conversion | 2 | PASSED |
-| [`test_full_evaluation.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_full_evaluation.py) | Metric filtering, hop extraction, legitimacy classification, aggregation & reporting | 20 | PASSED |
-| [`test_passage_hydration.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_passage_hydration.py) | Graph-guided passage hydration acceptance & adaptive budgeting suite (11 cases: hydration, deduplication, budget cap, empty fallback, deterministic ranking, evaluator recognition, feature flag toggle, latency & token profiling, adaptive budgeting rules) | 11 | PASSED |
-| **Subtotal** | **Core Enterprise Pipeline + Evaluation V2 Suite** | **147** | **100% PASSED** |
-
-### 3.2 Evaluation Harness Tests (`evalkit/tests/`)
-
-| Test Module | Target Tested Components | Tests Count | Status |
-|---|---|---|---|
-| [`evalkit/tests/`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalkit/tests) | Consolidated runner, cache, regression, run store, judges, gates, distributions, shims | 244 | PASSED |
-| [`evalkit/tests/test_all_basic_metrics.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalkit/tests/test_all_basic_metrics.py) | All 10 basic metrics computation & runner aggregation | 4 | PASSED |
-| [`evalkit/tests/test_graph_metrics.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalkit/tests/test_graph_metrics.py) | GraphRAG dimensions: utilization, coherence, diversity, coverage | 5 | PASSED |
-| [`scripts/verify_basic_metrics.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/verify_basic_metrics.py) | Integration suite across all 10 basic metrics + 4 GraphRAG dimensions | 5 suites | PASSED |
-| **Subtotal** | **Evaluation Harness & GraphRAG Verification Suites** | **253+** | **100% PASSED** |
-| **Repository Total**| **Entire Project Verification Landscape** | **400+** | **100% PASSED** |
+| [`test_passage_hydration.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_passage_hydration.py) | Graph-guided passage hydration acceptance & adaptive budgeting suite | 11 | PASSED |
+| [`test_metadata_resolver.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_metadata_resolver.py) | Dedicated MetadataResolver unit tests & coordinator integration (ADR 051) | 3 | PASSED |
+| [`test_evaluation_three_way_scripts.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_evaluation_three_way_scripts.py) | Headless browser keyframe recorder, evaluation override header security & defaults | 4 | PASSED |
+| [`test_abcd_ablation.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_abcd_ablation.py) | ABCD failure mode taxonomy, token estimation, and ablation classification | 2 | PASSED |
+| [`test_canonical_resolver.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_canonical_resolver.py) | 6-tier canonical document & entity resolver with ambiguity gate (ADR 053) | 5 | PASSED |
+| **Total** | **Core Enterprise GraphRAG Verification Suite** | **133** | **100% PASSED** |

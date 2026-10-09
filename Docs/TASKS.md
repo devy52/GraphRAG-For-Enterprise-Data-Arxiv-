@@ -10,8 +10,8 @@
 | [Scorecard](BENCHMARK_SCORECARD.md)
 ---
 
-- **Current state**: Production application integration of bounded LangGraph evidence refinement into `src/router/refiner.py` and `src/router/coordinator.py` completed (Phase 36, ADR 070). Codebase sanitized and organized for GitHub: unpushed ad-hoc scripts, raw evaluation run dumps, and legacy shims moved into `_local_archive/` (gitignored). Core test suite 156 / 156 tests passing (100% offline). Verified live FastAPI server execution and multi-tier parity. All canonical docs (`README.md`, `ARCHITECTURE.md`, `FLOWS.md`, `DECISIONS.md`, `CODEBASE_MAP.md`, `TASKS.md`, `BENCHMARK_SCORECARD.md`) fully synchronized.
-- **Next step**: Ready for git staging and push to GitHub. Optional local vLLM/Ollama container deployment for low-latency offline inference.
+- **Current state**: Production repository sanitization and GitHub presentation readiness complete (Phase 37). Non-essential files, in-repo evaluation framework (`evalkit/`), `AGENTS.md`, and redundant comparison scripts migrated to `_local_archive/` (gitignored). Architectural flowchart in `README.md` updated to `flowchart TD` with clean subgraph isolation and verified render. Core test suite 133 / 133 tests passing (100% offline, 0 regressions). All canonical documentation (`README.md`, `CODEBASE_MAP.md`, `TASKS.md`) synchronized.
+- **Next step**: Commit and push the clean release to GitHub (`origin/master`).
 
 <details>
 <summary>Completed Historical Phases (Phases 1–30B)</summary>
@@ -467,4 +467,17 @@
   - Recorded ADR 070 in [`Docs/DECISIONS.md`](DECISIONS.md).
   - Updated [`Docs/ARCHITECTURE.md`](ARCHITECTURE.md) and [`Docs/FLOWS.md`](FLOWS.md) to reflect `src/router/refiner.py`.
   - Updated [`Docs/CODEBASE_MAP.md`](CODEBASE_MAP.md) inventory and [`README.md`](../README.md).
+
+## Phase 37 — GitHub Sanitization, Archive Isolation & Architecture Diagram Polish
+- [x] Step 37A: Archive and Remove Non-Essential Artifacts:
+  - Preserved historical code by migrating `evalkit/`, `AGENTS.md`, and unneeded comparison scripts/datasets into `_local_archive/` (gitignored).
+  - Pruned outdated test scripts that referenced removed artifacts.
+- [x] Step 37B: Offline Test Baseline Verification:
+  - Validated that the core application test suite passes with 0 failures: 133 / 133 tests green in 33.10s (`pytest tests/ -q`).
+- [x] Step 37C: Mermaid Architecture Flowchart Modernization:
+  - Converted diagram to `flowchart TD` syntax with clean subgraph boundaries to eliminate layout bugs on GitHub.
+  - Replaced unescaped HTML-like comparison symbols (`<=`) with Unicode equivalents (`≤`) to prevent GitHub DOMPurify tag-stripping errors.
+  - Tested browser rendering of SVG DOM hierarchy with zero syntax warnings.
+- [x] Step 37D: Documentation & Map Synchronization:
+  - Updated `README.md`, `Docs/CODEBASE_MAP.md`, and `Docs/TASKS.md`.
 

@@ -3,13 +3,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_three_way_script_exists_and_has_snapshot_invariant():
-    p = ROOT / "scripts" / "compare_evalkit_ragas_deepeval.py"
-    text = p.read_text(encoding="utf-8")
-    assert "capture_snapshot" in text
-    assert "frozen GraphRAG output snapshot" in text
-    assert "GraphRAG is executed ONCE" in text
-    assert "score gap" in text.lower()
 
 
 def test_browser_script_records_webm_and_webp_keyframes():
