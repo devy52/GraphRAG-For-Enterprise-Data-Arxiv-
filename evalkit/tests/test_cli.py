@@ -73,9 +73,16 @@ def test_cli_assert_fails_when_threshold_not_met(rag_project):
 
 def test_cli_run_with_missing_config_fails_cleanly(tmp_path):
     result = _run_cli("run", "--config", str(tmp_path / "nonexistent.yaml"))
-    assert result.returncode != 0
-    # should not hang, should not print a stack trace as if it were normal output
-    assert result.returncode != 0
+    assert result.returncode == 2
+    assert "Config error:" in result.stderr
+
+
+def test_cli_run_with_missing_dataset_fails_with_execution_error(rag_project):
+    tmp_path, config = rag_project
+    config.write_text(config.read_text().replace("data.jsonl", "missing.jsonl"))
+    result = _run_cli("run", "--config", str(config))
+    assert result.returncode == 3
+    assert "Execution error:" in result.stderr
 
 
 def test_cli_compare(rag_project):

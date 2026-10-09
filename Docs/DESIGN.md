@@ -1,4 +1,4 @@
-[← README](../README.md) | [PRD](PRD.md) | [TRD](TRD.md) | [Design](DESIGN.md) | [Architecture](ARCHITECTURE.md) | [Flows](FLOWS.md) | [Codebase Map](CODEBASE_MAP.md) | [Decisions](DECISIONS.md) | [Tasks](TASKS.md)
+[← README](../README.md) | [PRD](PRD.md) | [TRD](TRD.md) | [Design](DESIGN.md) | [Architecture](ARCHITECTURE.md) | [Flows](FLOWS.md) | [Codebase Map](CODEBASE_MAP.md) | [Decisions](DECISIONS.md) | [Tasks](TASKS.md) | [Scorecard](BENCHMARK_SCORECARD.md)
 ---
 
 # Detailed Design Specifications (DESIGN)
@@ -137,4 +137,3 @@ The `IngestionOrchestrator` manages asynchronous batch ingestion tasks within th
     - Active stage badge with animated pulse.
     - Terminal-style scrollable live log viewer.
   - **Action Controls**: "Start Ingestion", "Close / Dismiss".
-

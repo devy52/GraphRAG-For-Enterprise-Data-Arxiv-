@@ -102,6 +102,7 @@ class EvalConfig(BaseModel):
 
     judge_backend: str = "litellm"
     judge_model: str = "gpt-4o-mini"
+    judge_config: dict[str, Any] = Field(default_factory=dict)
 
     # Judge calls (litellm backend only — ragas manages its own calls and
     # isn't affected) are cached by default: same backend+model+prompt ->

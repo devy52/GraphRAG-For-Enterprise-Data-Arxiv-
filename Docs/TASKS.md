@@ -1,22 +1,17 @@
-[← README](../README.md) 
-| [PRD](PRD.md) 
-| [TRD](TRD.md) 
-| [Design](DESIGN.md) 
-| [Architecture](ARCHITECTURE.md) 
-| [Flows](FLOWS.md) 
-| [Codebase Map](CODEBASE_MAP.md) 
-| [Decisions](DECISIONS.md) 
+[← README](../README.md)
+| [PRD](PRD.md)
+| [TRD](TRD.md)
+| [Design](DESIGN.md)
+| [Architecture](ARCHITECTURE.md)
+| [Flows](FLOWS.md)
+| [Codebase Map](CODEBASE_MAP.md)
+| [Decisions](DECISIONS.md)
 | [Tasks](TASKS.md)
+| [Scorecard](BENCHMARK_SCORECARD.md)
 ---
 
-- **Current state**: Completed Step 33D Frozen Repeatability Study (ADR 064). Final project status:
-  - Phase 31: ✅ Concluded (Canonical Entity Resolution validated; edge cases triaged).
-  - Phase 32: ✅ Concluded (32B frozen as champion, 32C adaptive hydration rejected under causal ablation).
-  - Phase 33 / 33D: ✅ Concluded as release repeatability audit (retrieval pipeline 100% deterministic; downstream variance quantified at 0.8042 ± 0.0150 fact score across 3 runs; per-question stability 88.0%; mean of run-level P50 medians 4311.4 ms).
-  - Final Release: ❌ Withheld (quality gates failed on repeated runs).
-  - Final System Classification: ✅ Research Champion / Release Candidate (Quantified Generator Variance).
-  - Context Efficiency: 🟡 Accepted limitation (~598 tokens).
-- **Next step**: Project complete. No further retrieval experiments. Any future work requires deliberately opening a new research phase dedicated to context efficiency or generation/evaluator reproducibility.
+- **Current state**: Production application integration of bounded LangGraph evidence refinement into `src/router/refiner.py` and `src/router/coordinator.py` completed (Phase 36, ADR 070). Codebase sanitized and organized for GitHub: unpushed ad-hoc scripts, raw evaluation run dumps, and legacy shims moved into `_local_archive/` (gitignored). Core test suite 156 / 156 tests passing (100% offline). Verified live FastAPI server execution and multi-tier parity. All canonical docs (`README.md`, `ARCHITECTURE.md`, `FLOWS.md`, `DECISIONS.md`, `CODEBASE_MAP.md`, `TASKS.md`, `BENCHMARK_SCORECARD.md`) fully synchronized.
+- **Next step**: Ready for git staging and push to GitHub. Optional local vLLM/Ollama container deployment for low-latency offline inference.
 
 <details>
 <summary>Completed Historical Phases (Phases 1–30B)</summary>
@@ -106,7 +101,7 @@
 - [x] Add empty-facts escalation from pure graph to hybrid in `src/router/coordinator.py`
 - [x] Add unit and integration tests in `tests/test_query_engine.py`
 - [x] Document ADR 025 in `Docs/DECISIONS.md`
- 
+
 ## Phase 14 — External Evalkit Harness Integration & Decoupled Adapter
 - [x] Convert canonical 50-question eval set into `data/evalkit_dataset.jsonl` via `scripts/export_evalkit_dataset.py`
 - [x] Implement decoupled `GraphRAGAdapter(BaseAdapter)` in `eval_adapter.py` with dual live HTTP and persistent `AsyncPipelineRunner` execution
@@ -130,7 +125,7 @@
 - [x] Create comprehensive unit test suite in `tests/test_full_evaluation.py` (20/20 passing; 83/83 overall)
 - [x] Update living docs (`DECISIONS.md` ADR 031, `CODEBASE_MAP.md`, `TASKS.md`)
 - [x] Execute full 50-question live LLM-judged benchmark run via NVIDIA NIM and generate authentic scores in `data/full_evaluation/`
- 
+
 ## Phase 16 — Evaluation-Integrity Refactor & Decoupled 5-Layer Benchmark Standard (Evaluation V2)
 - [x] Implement shared Unicode and lexical normalizer in `src/eval/text_norm.py` (NFKC, lowercase, apostrophe & hyphen `‐ ‒ – — ― − -` -> `-`, whitespace)
 - [x] Add unit tests in `tests/test_text_norm.py` verifying hyphen and apostrophe equivalence (4/4 passed)
@@ -157,7 +152,7 @@
 - [x] Verify standalone aggregation script `scripts/verify_basic_metrics.py` passing across all 10 metrics
 - [x] Verify core repository test suite remains 100% green (`pytest tests`: 96/96 passed)
 - [x] Document ADR 035 in `Docs/DECISIONS.md` and update `Docs/CODEBASE_MAP.md`
- 
+
 ## Phase 18 — GraphRAG Evaluation Matrix Implementation
 - [x] Build `GraphEvaluator` in `evalharness/evaluators/graph.py` implementing all 3 GraphRAG layers:
   - Layer 1 (Indexing): `entity_relation_coverage` (set-based & prompt-based recall) and `community_coherence` (LLM-judge evaluation of cluster summaries against member chunks)
@@ -385,10 +380,91 @@
   - Final Classification: Research Champion / Release Candidate (Quantified Generator Variance)
   - Artifacts produced: `data/phase33d_repeatability_results.json`, `data/phase33d_repeatability_report.md`, `data/phase33d_run3_audit.jsonl`
 
+## Phase 34 — LangGraph Exploration & Hybrid Refinement
+- [x] Standalone LangGraph Orchestration & Benchmark (ADR 067):
+  - Implemented 9-node `StateGraph` in `scripts/langgraph_graphrag.py` with cyclical citation self-correction loop and 0 touch to `src/`.
+  - Built `scripts/langgraph_adapter.py` connecting LangGraph to `evalkit`.
+  - Evaluated stratified sample (`data/langgraph_benchmark_results.json`): fact score 0.8750 (+7.5%), strict success 75.0% (+10.0%), invalid citations 0.0%, P50 latency 37.1s.
+- [x] Hybrid 32B Champion with Bounded 1-Pass LangGraph Evidence Refinement (ADR 068):
+  - Preserved Phase 32B `RetrievalCoordinator` as fast primary path (~80% fast path).
+  - Built heuristic zero-LLM evidence gap detector checking missing corpus entities and documents.
+  - Implemented 3-node bounded refinement `StateGraph` (`isolate_gap_node` -> `targeted_retrieval_node` -> `merge_evidence_node`) in `scripts/langgraph_evidence_refinement.py`.
+  - Built isolated benchmark runner `scripts/run_evidence_refinement_benchmark.py`.
+  - Evaluated stratified sample (`data/evidence_refinement_benchmark_results.json`): fact score 1.0000 (+20.0% vs P33 baseline), strict success 100.0% (+35.0%), invalid citations 0.0%, P50 latency 6,148.1 ms (~83% latency reduction vs standalone LangGraph).
+- [x] Full 50-Question Benchmark under Pre-Registered Gates (ADR 068):
+  - Pre-registered all 10 engineering gates and strict isolation protocols prior to running full benchmark.
+  - Executed across all 50 canonical questions with complete isolation (`use_cache=False`, fresh sessions, unshared artifacts).
+  - Fact score: **0.8667** vs $\ge 0.8208$ target (PASSED, +0.0667 vs 0.8000 baseline).
+  - Strict success rate: **72.5%** (29/40) vs $\ge 70.0\%$ target (PASSED, +7.5% vs 65.0% baseline).
+  - Substantive chunk recall: **0.7179** vs $\ge 0.6538$ target (PASSED, +0.0641 vs baseline).
+  - Unified evidence recall: **0.7333** vs $\ge 0.6708$ target (PASSED, +0.0625 vs baseline).
+  - Invalid citation rate: **0.0%** (PASSED, 0 invalid citations across all 50 questions).
+  - Hop-tier parity: 1-hop fact score **0.8000** (0 regression), OOS abstention **100.0%** (10/10, 0 regression).
+  - Refinement telemetry: Fast path rate **54.0%** (27/50 queries), Refinement activation rate **46.0%** (23/50 queries).
+  - P50 latency: **7,283.0 ms** (~80% reduction vs standalone LangGraph's 37.1s).
+- [x] 3-Run Hybrid Repeatability Study (Phase 34 Repeatability Qualification):
+  - Built runner `scripts/run_hybrid_repeatability_study.py` executing Run 2 and Run 3 under frozen parameters with Run 1 ingested from audit.
+  - Quality criteria verified:
+    - Mean Fact Score: **0.8722 ± 0.0064** (range [0.8667, 0.8792]) vs $\ge 0.8208$ target -> **PASSED**.
+    - Mean Strict Success: **75.0% ± 2.5%** (30.0/40) vs $\ge 28/40$ ($70.0\%$) target -> **PASSED**.
+    - Mean Substantive Chunk Recall: **0.7179** vs $\ge 0.6538$ target -> **PASSED**.
+    - Mean Unified Evidence Recall: **0.7333** vs $\ge 0.6708$ target -> **PASSED**.
+    - Invalid Citations: **0.0%** on every run -> **PASSED**.
+    - OOS Abstention: **10/10 (100.0%)** on every run -> **PASSED**.
+    - Retrieval Determinism: **50/50 (100.0%)** identical chunks and facts -> **PASSED**.
+    - Refinement Routing Determinism: **50/50 (100.0%)** identical fast-path vs refinement routing -> **PASSED**.
+  - Separately reported Efficiency & Latency Gates (Trade-offs):
+    - Context tokens: **710.9** vs $\le 450.0$ target -> **FAIL**.
+    - P50 latency: **5,874.8 ms** vs $\le 4,500.0$ ms target -> **FAIL**.
+    - Latency decomposed: initial 32B retrieval median 2,042.7 ms (~34.2%), refinement execution median 398.6 ms (~6.7%), remote NIM synthesis median 3,027.7 ms (~50.7%).
+  - Artifacts produced: `data/hybrid_repeatability_results.json`, `data/hybrid_repeatability_report.md`, `data/hybrid_repeatability_run2_audit.jsonl`, `data/hybrid_repeatability_run3_audit.jsonl`.
+  - Architecture status: **Qualified Research Champion / Candidate Architecture with Quantified Generator Variance and Explicit Efficiency Trade-off**.
 
+## Phase 35 — Engineering Portfolio & Documentation Standardization
+- [x] Step 35A: Freeze winning candidate architecture (`scripts/langgraph_evidence_refinement.py`, ADR 068, ADR 069):
+  - Preserved Phase 32B `RetrievalCoordinator` in `src/router/` as the primary engine with zero modifications to `src/`.
+  - Enriched `scripts/langgraph_evidence_refinement.py` with deep step-by-step explanatory comments on heuristic zero-LLM gap detection, bounded 1-pass execution, budget caps ($\le 3$ facts, $\le 2$ chunks), and citation provenance invariants.
+  - Verified syntax, imports, and live execution.
+- [x] Step 35B: Execute and verify full test baseline:
+  - Core test suite: 147 / 147 passed in 92.91s (`pytest tests/ -q`).
+  - Evaluation harness suite: 244 / 244 passed (`pytest evalkit/tests -q`).
+  - Smoke test: LangGraph 9-node execution verified (`scripts/test_langgraph_smoke.py`).
+  - Containers: Neo4j and PostgreSQL healthy (`docker ps`).
+  - API daemon: Live server running at `http://127.0.0.1:8000`.
+- [x] Step 35C: Standardize `README.md` for portfolio presentation:
+  - Formulated problem statement and target enterprise/research user personas.
+  - Provided plain-English definition of dual-store GraphRAG.
+  - Integrated Mermaid request flow diagram covering both core engine and bounded refinement candidate.
+  - Published honest 3-run repeatability benchmark comparison against Phase 33D champion and plain vector baseline.
+  - Explicitly declared latency and context-token budget trade-offs; decomposed remote cloud latency.
+  - Detailed clean installation, setup without secrets, offline test commands, and exact reproduction commands.
+- [x] Step 35D: Synchronize canonical documentation:
+  - Updated `Docs/ARCHITECTURE.md` with complete dual-store topology and bounded LangGraph refinement.
+  - Updated `Docs/FLOWS.md` with Sequence Diagram 7 illustrating the selective refinement flow.
+  - Recorded ADR 069 in `Docs/DECISIONS.md`.
+  - Updated `Docs/TASKS.md` and `Docs/CODEBASE_MAP.md`.
 
-
-
-
-
+## Phase 36 — Production Application Integration of Bounded LangGraph Evidence Refinement (ADR 070)
+- [x] Step 36A: Pre-implementation Architecture & Boundary Inspection:
+  - Inspected existing application architecture in `src/`, candidate script in `scripts/`, test suite, and benchmark artifacts.
+  - Formulated clean integration boundary under `src/router/refiner.py` composed into `src/router/coordinator.py`.
+  - Verified dependency requirements: added `langgraph>=0.2.0` to `requirements.txt` and `pyproject.toml`.
+  - Added explicit configuration toggles (`enable_evidence_refinement`, `max_refined_facts`, `max_refined_chunks`) to `src/core/config.py`.
+- [x] Step 36B: Implement Application Evidence Refiner:
+  - Created [`src/router/refiner.py`](../src/router/refiner.py) containing `RefinementState` and `EvidenceRefiner`.
+  - Integrated zero-overhead heuristic gap detector (`detect_evidence_gap`), bounded 3-node StateGraph (`isolate_gap_node` -> `targeted_retrieval_node` -> `merge_evidence_node`), strict budget caps ($\le 3$ facts, $\le 2$ chunks), and citation provenance extraction.
+  - Integrated into [`src/router/coordinator.py`](../src/router/coordinator.py) in Step 3f with try/except fallback to unrefined context on external model/DB errors.
+  - Enriched [`src/router/models.py`](../src/router/models.py) with refinement telemetry fields on `RetrievalContext`.
+  - Refactored [`scripts/langgraph_evidence_refinement.py`](../scripts/langgraph_evidence_refinement.py) to re-export and wrap the application refiner, eliminating code duplication while preserving script backward compatibility.
+- [x] Step 36C: Add Unit & Integration Tests:
+  - Created [`tests/test_evidence_refinement.py`](../tests/test_evidence_refinement.py) covering gap detection, fast-path bypass, budget caps, deduplication, coordinator integration, and exception fallback.
+  - Verified all 9 new tests pass in 4.00s.
+  - Verified full test suite passes with 0 regressions: 156 / 156 passed in 70.07s (`pytest tests/ -q`).
+- [x] Step 36D: Live Server & Benchmark Verification:
+  - Tested live FastAPI `/query` endpoint across in-scope and out-of-scope queries (100% grounded, 0 invalid citations, correct abstention).
+  - Executed benchmark parity check across all 5 hop tiers (`scripts/run_evidence_refinement_benchmark.py --per-hop 1`): achieved 1.00 mean fact score, 100% OOS abstention, 0.0% invalid citations, confirming exact parity with the candidate research champion.
+- [x] Step 36E: Canonical Documentation Synchronization:
+  - Recorded ADR 070 in [`Docs/DECISIONS.md`](DECISIONS.md).
+  - Updated [`Docs/ARCHITECTURE.md`](ARCHITECTURE.md) and [`Docs/FLOWS.md`](FLOWS.md) to reflect `src/router/refiner.py`.
+  - Updated [`Docs/CODEBASE_MAP.md`](CODEBASE_MAP.md) inventory and [`README.md`](../README.md).
 

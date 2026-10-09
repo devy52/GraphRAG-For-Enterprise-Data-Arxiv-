@@ -1,4 +1,4 @@
-[← README](../README.md) | [PRD](PRD.md) | [TRD](TRD.md) | [Design](DESIGN.md) | [Architecture](ARCHITECTURE.md) | [Flows](FLOWS.md) | [Codebase Map](CODEBASE_MAP.md) | [Decisions](DECISIONS.md) | [Tasks](TASKS.md)
+[← README](../README.md) | [PRD](PRD.md) | [TRD](TRD.md) | [Design](DESIGN.md) | [Architecture](ARCHITECTURE.md) | [Flows](FLOWS.md) | [Codebase Map](CODEBASE_MAP.md) | [Decisions](DECISIONS.md) | [Tasks](TASKS.md) | [Scorecard](BENCHMARK_SCORECARD.md)
 ---
 
 # Technical Requirements Document (TRD)
@@ -41,9 +41,9 @@ The Enterprise GraphRAG architecture is built entirely in modern Python ($\ge 3.
   - `created_at TIMESTAMP WITH TIME ZONE`: Record insertion timestamp.
 - **Index Specification**:
   ```sql
-  CREATE INDEX IF NOT EXISTS idx_document_chunks_hnsw 
-  ON document_chunks 
-  USING hnsw (embedding vector_cosine_ops) 
+  CREATE INDEX IF NOT EXISTS idx_document_chunks_hnsw
+  ON document_chunks
+  USING hnsw (embedding vector_cosine_ops)
   WITH (m = 16, ef_construction = 64);
   ```
 

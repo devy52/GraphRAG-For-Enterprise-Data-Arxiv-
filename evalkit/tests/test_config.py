@@ -174,3 +174,21 @@ def test_isolated_flag_disables_cache_and_save_run():
     assert config.cache is False
     assert config.save_run is False
 
+
+def test_from_yaml_loads_judge_config(tmp_path):
+    path = tmp_path / "config.yaml"
+    path.write_text(
+        textwrap.dedent(
+            """
+            track: rag
+            dataset: data.jsonl
+            adapter: static
+            judge_config:
+              max_retries: 5
+              retry_base_delay: 2.0
+            """
+        )
+    )
+    config = EvalConfig.from_yaml(str(path))
+    assert config.judge_config == {"max_retries": 5, "retry_base_delay": 2.0}
+

@@ -34,11 +34,14 @@ def detect_regressions(
     Returns a flat list of regressions, each with input/metric/before/
     after/delta, most severe first within each metric.
     """
-    by_input_b = {row["input"]: row for row in rows_b}
+    def _key(row: dict[str, Any]) -> Any:
+        return row.get("id") or row["input"]
+
+    by_key_b = {_key(row): row for row in rows_b}
 
     regressions: list[dict[str, Any]] = []
     for row_a in rows_a:
-        row_b = by_input_b.get(row_a["input"])
+        row_b = by_key_b.get(_key(row_a))
         if row_b is None:
             continue
         for metric, before in row_a["scores"].items():

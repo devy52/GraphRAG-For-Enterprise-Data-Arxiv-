@@ -195,6 +195,18 @@ class Settings(BaseSettings):
         default=False,
         description="Step 32C toggle: use evidence-gap adaptive budgeting (0, 1, or min(|U|, 3)) for graph passage hydration (rejected; keep False for 32B champion)",
     )
+    enable_evidence_refinement: bool = Field(
+        default=False,
+        description="ADR 070: Bounded 1-pass LangGraph evidence refinement activated on detected entity/doc evidence gaps",
+    )
+    max_refined_facts: int = Field(
+        default=3,
+        description="Maximum number of graph statements merged during evidence refinement",
+    )
+    max_refined_chunks: int = Field(
+        default=2,
+        description="Maximum number of dense text passages merged during evidence refinement",
+    )
 
     # Pydantic v2 settings config
     model_config = SettingsConfigDict(

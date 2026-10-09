@@ -322,3 +322,16 @@ def test_html_and_json_reporters_still_accept_no_run_info(tmp_path):
     JSONReporter().render(results, str(tmp_path / "r.json"))
     assert (tmp_path / "r.html").exists()
     assert (tmp_path / "r.json").exists()
+
+
+def test_markdown_reporter_includes_distribution_for_multi_value_metrics(tmp_path):
+    results = [
+        {"input": "q1", "output": "a1", "reference": None, "context": None, "scores": {"quality": 0.2}},
+        {"input": "q2", "output": "a2", "reference": None, "context": None, "scores": {"quality": 0.8}},
+    ]
+    output_path = tmp_path / "r.md"
+    MarkdownReporter().render(results, str(output_path))
+    content = output_path.read_text(encoding="utf-8")
+    assert "## Distribution" in content
+    assert "| Metric | Mean | Median | Min | P5 | P95 | Max |" in content
+    assert "| quality |" in content

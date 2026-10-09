@@ -1,112 +1,128 @@
-[← README](../README.md) | [PRD](PRD.md) | [TRD](TRD.md) | [Design](DESIGN.md) | [Architecture](ARCHITECTURE.md) | [Flows](FLOWS.md) | [Codebase Map](CODEBASE_MAP.md) | [Decisions](DECISIONS.md) | [Tasks](TASKS.md)
+[← README](../README.md) | [PRD](PRD.md) | [TRD](TRD.md) | [Design](DESIGN.md) | [Architecture](ARCHITECTURE.md) | [Flows](FLOWS.md) | [Codebase Map](CODEBASE_MAP.md) | [Decisions](DECISIONS.md) | [Tasks](TASKS.md) | [Scorecard](BENCHMARK_SCORECARD.md)
 ---
 
-# Architecture
+# Architecture & System Design
 
-## Data flow
+## 1. System Overview & Dual-Store Topology
 
+Enterprise technical and scientific literature (such as AI/ML arXiv publications) exhibits two distinct representations of information:
+1. **Unstructured Descriptive Prose**: Algorithmic explanations, qualitative claims, definitions, and mathematical formulations.
+2. **Structured Relational Topology**: Cross-paper citation networks, algorithmic lineages (which method extends what), co-authorship networks, and benchmark evaluation matrices.
+
+Standard RAG architectures force an unnatural compromise: pure vector RAG loses multi-hop relational structure, whereas pure knowledge-graph text-to-Cypher generates invalid queries and omits descriptive context.
+
+This platform implements a **Dual-Store Hybrid GraphRAG** architecture uniting a Neo4j property graph with a PostgreSQL `pgvector` store, joined at the ingestion level via persistent `source_chunk_id` foreign keys.
+
+```mermaid
+graph TD
+    subgraph Ingestion ["Ingestion Pipeline (Offline / Background)"]
+        RawDocs["ArXiv / Semantic Scholar Papers"] --> Chunker["Markdown Document Chunker<br/>(800 chars, 100 overlap)"]
+        Chunker --> Hash["SHA-256 ID Generation<br/>(chunk_id)"]
+        Hash --> Extractor["Structured LLM Fact Extractor<br/>(Ontology-Constrained Pydantic Schema)"]
+        Hash --> Embedder["Dense Embedding Generator<br/>(2048-dim nemotron-3-embed-1b)"]
+        Extractor --> Resolver["Multi-Stage Entity Resolver<br/>(Lexical + Jaccard + Cosine >= 0.88)"]
+        Resolver --> NeoStore[("Neo4j Property Graph<br/>(Idempotent MERGE + source_chunk_id)")]
+        Embedder --> PgStore[("PostgreSQL pgvector<br/>(HNSW Cosine Index)")]
+    end
+
+    subgraph QueryExecution ["Query Execution Pipeline (Online REST API)"]
+        ClientQuery["Client Query"] --> Router{"Tri-State Intent Router<br/>(RouteClassifier)"}
+        Router -->|"Relational"| NeoTraverse["Parameterized Cypher Catalog<br/>(Zero Raw LLM Cypher)"]
+        Router -->|"Definitional"| VecSearch["HNSW Vector Search<br/>(Top-k Cosine Distance)"]
+        Router -->|"Hybrid"| DualExec["Parallel Execution & Deduplication"]
+
+        NeoStore --> NeoTraverse
+        PgStore --> VecSearch
+
+        NeoTraverse --> Hydrate["Graph Passage Hydration<br/>(Lookup raw chunk text by source_chunk_id)"]
+        VecSearch --> ContextMerge["Context Assembler"]
+        DualExec --> Hydrate
+        Hydrate --> ContextMerge
+    end
+
+    subgraph SelectiveRefinement ["Bounded Evidence Refinement Layer (src/router/refiner.py; ADR 070)"]
+        ContextMerge --> GapDetector{"Heuristic Evidence Gap Detector<br/>(Check Question Entities & Paper Catalog)"}
+        GapDetector -->|"No Gap (54%)"| DirectSynth["Fast Path: Direct Synthesis"]
+        GapDetector -->|"Gap (46%)"| LGPass["Bounded 1-Pass LangGraph StateGraph<br/>(3 Nodes: Isolate -> Target -> Merge)"]
+        LGPass --> SynthMerge["Merge Refined Evidence Ledger<br/>(Caps: <=3 facts, <=2 chunks)"]
+    end
+
+    DirectSynth --> Synthesizer["AnswerSynthesizer<br/>(Grounded Prompting)"]
+    SynthMerge --> Synthesizer
+
+    subgraph HardGate ["Integrity Validation Gate"]
+        Synthesizer --> ValAST{"CitationValidator<br/>(AST / Regex Parsing)"}
+        ValAST -->|"100% Valid"| ValidResponse["FastAPI Response<br/>(Answer, Citations, Provenance, Latencies)"]
+        ValAST -->|"Invalid Citation"| Regenerate["Reject & Regenerate Loop<br/>(max_attempts=3)"]
+        Regenerate --> Synthesizer
+    end
+
+    style Ingestion fill:#f8fafc,stroke:#94a3b8,stroke-width:1px
+    style QueryExecution fill:#f0f9ff,stroke:#0284c7,stroke-width:1px
+    style SelectiveRefinement fill:#faf5ff,stroke:#9333ea,stroke-width:1px
+    style HardGate fill:#f0fdf4,stroke:#16a34a,stroke-width:1px
 ```
-Documents
-   │
-   ├─► Chunking ─────────────────────────────┐
-   │                                          │
-   ▼                                          ▼
-Entity/Relationship Extraction (Claude)   Embedding (pgvector)
-   │                                          │
-   ▼                                          │
-Entity Resolution (dedupe/alias)             │
-   │                                          │
-   ▼                                          │
-Neo4j (MERGE, idempotent)                     │
-   │                                          │
-   └──────────────┬───────────────────────────┘
-                   │  shared chunk_id links graph ↔ vectors
-                   ▼
-              Question Router
-             /               \
-      graph path         vector path
-   (parameterized          (HNSW search,
-    Cypher templates)       ef_search tuned)
-             \               /
-              ▼             ▼
-         Merge + label sources
-                   │
-                   ▼
-         Citation validation
-         (every claim → real chunk_id, else reject & regenerate)
-                   │
-                   ▼
-            FastAPI response
-```
 
-## Components
+---
 
-### 1. Extraction pipeline
-- Input: chunked documents
-- Output: `(entity_type, canonical_name, relationship_type, source_chunk_id, confidence)`
-- Schema-validated Claude calls; retry on validation failure
-- Cache by document hash — never re-extract an unchanged document
-- Cost budget checked per-document before full-corpus runs
+## 2. Component Roles & Specifications
 
-### 2. Entity resolution
-- Normalize → embedding-similarity match above tuned threshold → alias list on node
-- This is the step most likely to get skipped. It doesn't get skipped here.
+### 2.1 Extraction & Ingestion Pipeline
+- **Input**: Markdown-converted scientific e-prints.
+- **Chunking**: Natural section and paragraph splitting (800 target characters, 100 character overlap). Each chunk is deterministically tagged with `chunk_id = sha256(f"{doc_id}:{section}:{idx}:{text}")[:16]`.
+- **Fact Extraction**: Constrained JSON schema extraction mapping sentences into typed facts (`subject`, `relation`, `object`, `source_chunk_id`) conforming to [`Docs/ONTOLOGY.md`](ONTOLOGY.md).
+- **Extraction Cache**: Chunk hash cache (`data/cache/extraction_cache.json`) prevents duplicate LLM extraction costs on unchanged documents.
 
-### 3. Neo4j graph store
-- Fixed ontology: 5–10 entity types, 8–15 relationship types (see `ONTOLOGY.md`)
-- All writes use `MERGE`, never `CREATE` — ingestion must be safely re-runnable
-- Every edge carries `source_chunk_id`
+### 2.2 Multi-Stage Entity Resolution
+Eliminates entity fragmentation and duplicate graph nodes across papers:
+1. **Stage 1 (Lexical)**: NFKD unicode normalization, lowercasing, punctuation stripping.
+2. **Stage 2 (Token Jaccard)**: Fast n-gram overlap against registered canonical nodes.
+3. **Stage 3 (Dense Embedding)**: Cosine similarity ($\ge 0.88$) against canonical entity cluster centroids.
+- Resolved nodes store alternative surface mentions in an `aliases` array property.
 
-### 4. pgvector store
-- Same chunks as the graph, embedded with metadata: `document_id`, `section_path`,
-  `date`, `entity_ids` mentioned
-- HNSW index; `ef_search` tuned against a labeled recall@k set before anything
-  is built on top of it
+### 2.3 Neo4j Property Graph Store
+- **Entities**: `Paper`, `Author`, `Method`, `Dataset`, `Institution`, `Task`, `Metric`.
+- **Relationships**: `CITES`, `AUTHORED_BY`, `EXTENDS`, `USES_METHOD`, `EVALUATED_ON`, `AFFILIATED_WITH`, `TARGETS_TASK`, `MEASURED_BY`, `COLLABORATED_WITH`.
+- **Write Policy**: 100% idempotent `MERGE` writes. Node `CREATE` statements are strictly forbidden.
+- **Provenance Foreign Keys**: Every relationship edge stores the `source_chunk_id` from which it was extracted.
 
-### 5. Router
-- Cheap model call, few-shot, returns an enum: `graph | vector | both`
-- Low-confidence → run both paths, merge
-- Routing rule of thumb:
-  - **graph** → connections, multi-hop chains, cross-entity comparisons, aggregations
-  - **vector** → definitions, policy lookups, single-fact questions
-- Every routing decision logged (question + outcome) — needed for Phase 5, can't
-  be reconstructed after the fact
+### 2.4 PostgreSQL + pgvector Semantic Store
+- **Table**: `document_chunks` storing `chunk_id`, `document_id`, `paper_title`, `section_path`, `text`, `entity_ids`, and `embedding vector(2048)`.
+- **Indexing**: HNSW index (`vector_cosine_ops`, $m=16, \text{ef\_construction}=64$) tuned for $\ge 0.95$ recall@5.
 
-### 6. Graph query execution
-- Extract entities from the question → resolve to node IDs → run a
-  **parameterized** Cypher template
-- Model never emits raw Cypher. Template library keyed by query type; model
-  fills parameters only.
+### 2.5 Tri-State Intent Router
+Classifies incoming questions into `GRAPH`, `VECTOR`, or `BOTH`:
+- **`GRAPH`**: Multi-hop relationship traversals, lineage tracking, author networks.
+- **`VECTOR`**: Specific passage lookups, definitions, mathematical loss formulas.
+- **`BOTH` (Escalation)**: Composite queries or cases where confidence $<0.70$.
 
-### 7. Merge + citation
-- Graph paths converted to readable statements before hitting the prompt
-- Dedup across graph + vector results; context assembled with explicit
-  `[graph]` / `[retrieved]` labels
-- One citation required per claim; each citation must resolve to a chunk_id
-  that was actually retrieved, or the answer is rejected and regenerated
+### 2.6 Parameterized Cypher Template Catalog (Zero Text-to-Cypher)
+To eliminate Cypher syntax errors and schema hallucinations, the LLM **never emits raw Cypher**. Queries are mapped to pre-compiled templates in [`src/graph/templates.py`](../src/graph/templates.py):
+- `CITATION_CHAIN`: Traverses 1–3 hop citation directed acyclic graphs.
+- `METHOD_ANCESTRY_EXTENDS`: Traces algorithmic evolutionary lineages.
+- `METHOD_BENCHMARK_COMPARISONS`: Compares methods across benchmark datasets.
+- `CO_AUTHORSHIP_NETWORK`: Expands co-authorship subgraphs.
+- `EGO_NEIGHBORHOOD`: 1-hop multi-relational expansion around a specific entity.
 
-### 8. API
-- FastAPI ASGI server exposing `/query`, `/health`, `/stats`, and `/graph/subgraph`.
-- Returns: answer, citations, route taken, graph facts, and latency breakdown.
+### 2.7 Graph Passage Hydration
+Graph edges provide structured relationships (`(DPR)-[:EVALUATED_ON]->(NQ)`) but omit the original author prose. Graph Passage Hydration fetches the raw 800-character chunk text referenced by `source_chunk_id` and adds it to the context ledger, elevating substantive chunk recall from 0.2821 to 0.6538.
 
-### 9. Material 3 Web Interface
-- Zero-Node, single-page web app built with vanilla HTML5, Google Material Design 3 CSS tokens, and ES6 JavaScript.
-- Direct FastAPI static asset serving at `http://localhost:8000/`.
-- Features: Dual Chat & Graph view, real-time route badge inspection, interactive force-directed canvas for Neo4j topology exploration, raw citation chunk drawer, and customizable Ingestion Dialog with live progress telemetry.
+### 2.8 Bounded LangGraph Evidence Refinement (ADR 070)
+Implemented in [`src/router/refiner.py`](../src/router/refiner.py) and composed into [`src/router/coordinator.py`](../src/router/coordinator.py) (re-exported by [`scripts/langgraph_evidence_refinement.py`](../scripts/langgraph_evidence_refinement.py) for backward compatibility):
+- **Problem Solved**: Fully agentic cyclical graph loops incur prohibitive latency (37.1s P50). Static one-pass retrieval occasionally misses cross-document entities on complex 3-hop questions.
+- **Mechanism**:
+  1. **Zero-LLM Gap Detector**: Heuristically checks if entities or paper catalog titles in the question were missed in initial retrieval (<1ms check).
+  2. **Fast Path (54%)**: Unambiguous queries bypass refinement.
+  3. **Refined Path (46%)**: Executes a bounded 3-node StateGraph:
+     - `isolate_gap_node`: Confirms missing entity and document IDs.
+     - `targeted_retrieval_node`: Executes 1-hop ego-neighborhood graph expansion and document-filtered vector lookup.
+     - `merge_evidence_node`: Enforces strict budgets ($\le 3$ extra graph facts, $\le 2$ extra vector chunks).
+- **Performance**: Median refinement execution is only **398.6 ms**, lifting 3-hop fact score from 0.8333 to **0.9667** while preserving 0% invalid citations and 100% out-of-scope abstention.
+- **Fail-Safe Robustness**: Try/except fallback to unrefined context on external model/DB error; verified across 9 dedicated unit and integration tests.
 
-### 10. Ingestion Orchestrator Service
-- Asynchronous pipeline worker managing background ingestion runs without external message brokers.
-- Orchestrates `arXivCollector`, `TextChunker`, `VectorStore`, `GraphExtractor`, `EntityResolver`, and `GraphWriter`.
-- Exposes real-time status, progress percentages, active stages, and log streams via `GET /ingest/status`.
+### 2.9 Citation AST Hard-Gate
+The `CitationValidator` parses generated inline `[chunk_id]` tags using regular expressions and abstract syntax matching. Any response citing a non-retrieved or fabricated chunk ID is rejected and regenerated (up to `max_attempts=3`). This guarantees a **0.0% citation hallucination rate**.
 
-## Decisions
-
-1. **Corpus** — curated arXiv papers (RAG/LLM retrieval subfield), see README
-2. **Router model** — model call via OpenRouter (or NVIDIA NIM build), few-shot
-   → enum (`graph | vector | both`). Any small/cheap instruction-following model
-   works; swap freely without touching the router's logic or prompt structure.
-3. **Neo4j hosting** — local Docker Compose for build/dev (free, no account
-   setup, matches existing Docker usage). Migrate to Neo4j AuraDB free tier
-   only if/when this needs a public-facing demo.
-4. **Embedding model** — open, still to pick. Check what `evalkit` uses first
-   so the two projects share one embedding choice instead of two.
+### 2.10 REST API & Material 3 Web Interface
+- **FastAPI Backend**: Asynchronous endpoints `/query`, `/health`, `/stats`, `/graph/subgraph`, and `/ingest`.
+- **Zero-Node Material 3 Web App**: Built with vanilla HTML5, Google Material Design 3 CSS tokens, and Vis.js force-directed graph canvas, served directly by FastAPI static mount at `http://localhost:8000/`.

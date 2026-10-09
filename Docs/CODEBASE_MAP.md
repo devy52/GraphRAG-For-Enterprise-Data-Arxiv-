@@ -1,4 +1,4 @@
-[← README](../README.md) | [PRD](PRD.md) | [TRD](TRD.md) | [Design](DESIGN.md) | [Architecture](ARCHITECTURE.md) | [Flows](FLOWS.md) | [Codebase Map](CODEBASE_MAP.md) | [Decisions](DECISIONS.md) | [Tasks](TASKS.md)
+[← README](../README.md) | [PRD](PRD.md) | [TRD](TRD.md) | [Design](DESIGN.md) | [Architecture](ARCHITECTURE.md) | [Flows](FLOWS.md) | [Codebase Map](CODEBASE_MAP.md) | [Decisions](DECISIONS.md) | [Tasks](TASKS.md) | [Scorecard](BENCHMARK_SCORECARD.md)
 ---
 
 # Codebase Map & Module Directory
@@ -13,8 +13,9 @@ A comprehensive directory and file-by-file index detailing the exact location, p
 GraphRAG-For-Enterprise-Data/
 ├── Docs/                           # Canonical project documentation & specifications
 │   ├── ARCHITECTURE.md             # High-level architecture & system design
+│   ├── BENCHMARK_SCORECARD.md      # Comprehensive benchmark scorecard compiling & comparing all versions & techniques
 │   ├── CODEBASE_MAP.md             # Exhaustive file directory & symbol inventory (this file)
-│   ├── DECISIONS.md                # Architecture Decision Records (ADR 001–044)
+│   ├── DECISIONS.md                # Architecture Decision Records (ADR 001–068)
 │   ├── DESIGN.md                   # Detailed design & algorithmic specifications
 │   ├── FLOWS.md                    # Mermaid sequence diagrams for all major workflows
 │   ├── ONTOLOGY.md                 # Entity and relationship ontology definition
@@ -110,32 +111,31 @@ GraphRAG-For-Enterprise-Data/
 │   │   ├── classifier.py           # Tri-state intent classifier with <0.70 escalation
 │   │   ├── coordinator.py          # Central retrieval coordinator with dynamic top-k, cosine filtering, and Step 32A graph passage hydration (ADRs 033, 060)
 │   │   ├── metadata_resolver.py    # Dedicated provenance-aware catalog metadata resolver (ADR 051)
-│   │   └── models.py               # RouteDecision, RoutingResult, and RetrievalContext with Phase 32 telemetry fields
+│   │   ├── models.py               # RouteDecision, RoutingResult, and RetrievalContext with Phase 32 & ADR 070 telemetry fields
+│   │   └── refiner.py              # Bounded LangGraph evidence refinement module on detected gaps (ADR 070)
 │   └── vector/                     # Phase 3: pgvector dense vector store
 │       ├── __init__.py             # Vector package exports
 │       ├── indexer.py              # Dense embeddings generator, pgvector upsert store, and indexed get_chunks_by_ids (Step 32A)
 │       ├── models.py               # VectorChunkRecord and VectorSearchResult models
 │       ├── schema.py               # SQLAlchemy async ORM DocumentChunkModel & schema init
 │       └── tuning.py               # HNSW ef_search tuner against flat scan ground truth
-├── evalharness/                    # Unified enterprise evaluation harness (257+ tests)
-│   ├── evalharness/                # Core evaluation package
-│   │   ├── contracts/              # Adapter & run contracts (AdapterResponse, MetricResult)
-│   │   ├── core/                   # Runner, report generation, dataset loader, config
-│   │   ├── evaluators/             # Retrieval (precision, recall, MRR, nDCG), RAG, NLP, Graph
-│   │   ├── judges/                 # LiteLLM judge with structured JSON parsing & backoff
-│   │   ├── cache.py                # Thread-safe file caching with SHA-256 fingerprinting
-│   │   ├── regression.py           # Statistical regression detector across examples
-│   │   └── run_store.py            # Persistent run storage and historical diffing
-│   └── tests/                      # Full evaluation test suite (248 + 9 metric tests)
 ├── evalkit/                        # Unified authoritative evaluation framework (14 metrics, caching, regression, CLI)
-├── evalharness/                    # Backward-compatibility forwarding shims pointing to evalkit
-├── tests/                          # Automated verification test suite (103 tests, 100% offline)
+│   ├── evalkit/                    # Core evaluation package
+│   │   ├── adapters/               # Target system adapters (e.g. StaticAdapter)
+│   │   ├── contracts/              # Adapter & run contracts (AdapterResponse, MetricResult)
+│   │   ├── core/                   # Runner, report generation, dataset loader, config, cache, regression, run_store
+│   │   ├── evaluators/             # Retrieval (precision, recall, MRR, nDCG), RAG, NLP, Graph
+│   │   └── judges/                 # LiteLLM judge with structured JSON parsing, backoff, and cache fingerprinting
+│   ├── evalharness/                # Internal backward-compatibility forwarding shims pointing to evalkit
+│   └── tests/                      # Full evaluation test suite (244 tests)
+├── tests/                          # Automated verification test suite (156 tests, 100% offline)
 │   ├── test_api.py                 # FastAPI endpoint tests (root, health, stats, /query, /graph/communities)
 │   ├── test_community.py           # LPA clustering, summary record, and caching tests
 │   ├── test_config.py              # Settings validation and logger tests
 │   ├── test_eval.py                # Dataset stratification, runner, and report tests
 │   ├── test_eval_v2.py             # 9 integrity regression properties (paraphrase, hyphens, abstention)
 │   ├── test_evalkit_adapter.py     # Evalkit adapter & dataset exporter verification tests
+│   ├── test_evidence_refinement.py # Bounded LangGraph refinement unit & integration tests (ADR 070)
 │   ├── test_full_evaluation.py     # Multi-track evaluation, stratification, metric filter & aggregation tests
 │   ├── test_graph.py               # Fact extraction, resolution, and cache tests
 │   ├── test_ingestion.py           # Paper model, chunking determinism, collector & incremental tests
@@ -154,6 +154,16 @@ GraphRAG-For-Enterprise-Data/
 │   ├── phase30_path_formatting_report.md # Phase 30 relational path formatting evaluation report
 │   ├── phase30_path_formatting_results.json # Phase 30 raw 50Q results & comparative metrics
 │   ├── phase30_path_formatting_audit.jsonl # Phase 30 per-question provenance & evaluation audit
+│   ├── evidence_refinement_benchmark_results.json # 32B Champion + Bounded Refinement metrics (Run 1)
+│   ├── evidence_refinement_benchmark_audit.jsonl # 32B + Refinement per-question context audit (Run 1)
+│   ├── evidence_refinement_benchmark_report.md # 32B + Refinement comparative evaluation report
+│   ├── hybrid_repeatability_results.json # 3-Run repeatability aggregated metrics & stability analysis
+│   ├── hybrid_repeatability_report.md    # 3-Run repeatability markdown report & gate verdicts
+│   ├── hybrid_repeatability_run2_audit.jsonl # Run 2 fresh 50Q rerun audit log
+│   ├── hybrid_repeatability_run3_audit.jsonl # Run 3 fresh 50Q rerun audit log
+│   ├── langgraph_benchmark_results.json # Standalone LangGraph 9-node benchmark metrics
+│   ├── langgraph_benchmark_audit.jsonl  # Standalone LangGraph per-question audit log
+│   ├── langgraph_benchmark_report.md   # Standalone LangGraph evaluation report
 │   ├── run3b_canonical_report.md   # Run 3B canonical entity resolution evaluation report
 │   ├── run3b_canonical_results.json# Run 3B raw 50Q results & comparative metrics
 │   ├── run3b_resolution_audit.jsonl# Run 3B canonical resolver resolution ledger
@@ -187,14 +197,20 @@ GraphRAG-For-Enterprise-Data/
 │   ├── run_path_formatting_phase30b.py # Phase 30B concise relational formatting benchmark runner
 │   ├── recompute_run3b_corrected_accounting.py # Recalculates Run 3B metrics under channel-strict accounting
 │   ├── run_phase31c_oracle_control.py # Phase 31C Oracle Control evaluation driver on 16 failed questions
+│   ├── run_phase33_release_benchmark.py # Phase 33 final re-benchmark & release champion runner
+│   ├── langgraph_evidence_refinement.py # Hybrid 32B Champion + Bounded 1-Pass LangGraph Evidence Refinement
+│   ├── run_evidence_refinement_benchmark.py # Isolated benchmark driver for 32B Champion + Refinement
+│   ├── run_hybrid_repeatability_study.py # 3-Run repeatability study runner across Runs 1-3
 │   ├── validate_benchmark.py       # Independent score validator with bootstrap CIs & dual-judge cross-check
 │   └── verify_basic_metrics.py     # Standalone validation verifying all 10 basic metrics + GraphRAG
+├── _local_archive/                 # Local directory for unpushed experimental scripts & audit logs (gitignored)
+│   ├── README.md                   # Archive directory inventory & exclusion rationale
+│   ├── scripts/                    # Exploratory prototypes (langgraph_graphrag, package_codebase, etc.)
+│   ├── data/                       # Local raw benchmark dumps (.json), per-query audit ledgers (.jsonl)
+│   └── legacy/                     # Pre-rename evalharness package copy & test result notes
 ├── eval_adapter.py                 # Standalone BaseAdapter wrapping GraphRAG for evalkit
 ├── evalkit_config.yaml             # Multi-track evalkit configuration (rag + text_similarity)
 ├── run_evalkit.py                  # Standalone evalkit evaluation runner generating reports
-├── GPT_REVIEW_GUIDE.md             # Codebase inspection & review guide for GPT/AI reviewers
-├── GraphRAG_Enterprise_Codebase.zip# Clean, sanitized zip archive of entire codebase (0.66 MB)
-├── GraphRAG_Evaluation_Results_Bundle.zip # Compiled ZIP containing all essential evaluation artifacts for GPT
 ├── docker-compose.yml              # Local container definitions for Neo4j Community & PostgreSQL
 ├── pyproject.toml                  # Python package configuration, dependencies, and pytest options
 ├── requirements.txt                # Pinned production & development dependencies
@@ -353,10 +369,17 @@ GraphRAG-For-Enterprise-Data/
 - **Invariants**: If confidence is $< 0.70$, automatically escalates to `both`; includes deterministic regex heuristic fallback for offline testing.
 
 #### [`src/router/coordinator.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/src/router/coordinator.py)
-- **Role**: Central coordinator managing dialogue memory, intent routing, multi-modal database retrieval, and Step 32C adaptive passage hydration.
+- **Role**: Central coordinator managing dialogue memory, intent routing, multi-modal database retrieval, Step 32A graph passage hydration, and Step 3f conditional LangGraph evidence refinement.
 - **Key Symbols**: [`RetrievalCoordinator`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/src/router/coordinator.py#L123), [`compute_adaptive_hydration_budget`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/src/router/coordinator.py#L58), [`MULTIHOP_CYPHER_TEMPLATES`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/src/router/coordinator.py#L50).
-- **Inputs**: Query string, optional session ID, `top_k`.
-- **Outputs**: Unified `RetrievalContext` containing graph facts, vector text chunks, hydrated passages, citation IDs, and adaptive hydration telemetry.
+- **Inputs**: Query string, optional session ID, `top_k`, optional route override.
+- **Outputs**: Unified `RetrievalContext` containing graph facts, vector text chunks, hydrated passages, citation IDs, and refinement telemetry.
+
+#### [`src/router/refiner.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/src/router/refiner.py)
+- **Role**: Bounded single-pass LangGraph evidence refinement module (ADR 070). Activated conditionally when heuristic gap detector identifies missing ontology entities or catalog document IDs.
+- **Key Symbols**: [`EvidenceRefiner`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/src/router/refiner.py#L60), [`RefinementState`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/src/router/refiner.py#L42).
+- **Inputs**: Query string, initial graph facts, initial vector search chunks.
+- **Outputs**: Refined graph facts (<= 3), refined vector chunks (<= 2), gap telemetry, and timing breakdowns.
+- **Invariants**: 100% deterministic heuristic gap detector (<1ms, zero-LLM overhead); linear 3-node StateGraph (isolate_gap -> targeted_retrieval -> merge_evidence); all refined chunk IDs registered in `cited_chunk_ids`; try/except fallback to unrefined context on external model/DB failure.
 
 ---
 
@@ -500,6 +523,30 @@ GraphRAG-For-Enterprise-Data/
 
 ---
 
+### 2.11 Candidate Architecture & Evaluation Scripts (`scripts/`)
+
+#### [`scripts/langgraph_evidence_refinement.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/langgraph_evidence_refinement.py)
+- **Role**: Candidate Hybrid GraphRAG Architecture (Phase 34, ADR 068, ADR 069). Preserves the fast Phase 32B `RetrievalCoordinator` as the primary engine; executes a selective, bounded 1-pass LangGraph StateGraph (`isolate_gap_node` → `targeted_retrieval_node` → `merge_evidence_node`) only when an evidence gap is detected.
+- **Key Symbols**: [`ChampionWithLangGraphRefinement`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/langgraph_evidence_refinement.py), [`RefinementState`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/langgraph_evidence_refinement.py).
+- **Inputs**: Natural language query, optional session ID, `use_cache` flag.
+- **Outputs**: Dictionary containing `answer`, `cited_chunk_ids`, `is_valid`, `refinement_activated`, `missing_entities`, `missing_doc_ids`, `retrieval_context`, `assembled_context`, `latencies`.
+
+#### [`scripts/run_hybrid_repeatability_study.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/run_hybrid_repeatability_study.py)
+- **Role**: Automated 3-run repeatability benchmark runner evaluating candidate hybrid GraphRAG across the canonical 50-question benchmark with complete cache isolation (`use_cache=False`).
+- **Outputs**: `data/hybrid_repeatability_results.json`, `data/hybrid_repeatability_report.md`, `data/hybrid_repeatability_run2_audit.jsonl`, `data/hybrid_repeatability_run3_audit.jsonl`.
+
+#### [`scripts/langgraph_graphrag.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/langgraph_graphrag.py)
+- **Role**: Standalone 9-node LangGraph StateGraph orchestrator with agentic citation self-correction loop (Phase 34, ADR 067).
+- **Key Symbols**: [`LangGraphGraphRAG`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/langgraph_graphrag.py).
+
+#### [`scripts/langgraph_adapter.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/langgraph_adapter.py)
+- **Role**: Adapter connecting LangGraph GraphRAG models to `evalkit` evaluation contracts.
+
+#### [`scripts/test_langgraph_smoke.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/test_langgraph_smoke.py)
+- **Role**: Isolated smoke test verifying the compiled LangGraph StateGraph executes all nodes and edges cleanly.
+
+---
+
 ## 3. Test Suite Mapping
 
 Every core production module, standalone script, and evaluation harness is paired with a dedicated test suite:
@@ -526,17 +573,13 @@ Every core production module, standalone script, and evaluation harness is paire
 | [`test_passage_hydration.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/tests/test_passage_hydration.py) | Graph-guided passage hydration acceptance & adaptive budgeting suite (11 cases: hydration, deduplication, budget cap, empty fallback, deterministic ranking, evaluator recognition, feature flag toggle, latency & token profiling, adaptive budgeting rules) | 11 | PASSED |
 | **Subtotal** | **Core Enterprise Pipeline + Evaluation V2 Suite** | **147** | **100% PASSED** |
 
-### 3.2 Evaluation Harness Tests (`evalkit/tests/` & `evalharness/tests/`)
+### 3.2 Evaluation Harness Tests (`evalkit/tests/`)
 
 | Test Module | Target Tested Components | Tests Count | Status |
 |---|---|---|---|
-| [`evalkit/tests/`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalkit/tests) | Consolidated runner, cache, regression, run store, judges, gates, distributions | 235 | PASSED |
+| [`evalkit/tests/`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalkit/tests) | Consolidated runner, cache, regression, run store, judges, gates, distributions, shims | 244 | PASSED |
 | [`evalkit/tests/test_all_basic_metrics.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalkit/tests/test_all_basic_metrics.py) | All 10 basic metrics computation & runner aggregation | 4 | PASSED |
 | [`evalkit/tests/test_graph_metrics.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalkit/tests/test_graph_metrics.py) | GraphRAG dimensions: utilization, coherence, diversity, coverage | 5 | PASSED |
-| [`evalharness/tests/`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/evalharness/tests) | Backward-compatibility forwarder verification suite | 235 | PASSED |
 | [`scripts/verify_basic_metrics.py`](file:///d:/PROJS/GraphRAG-For-Enterprise-Data/scripts/verify_basic_metrics.py) | Integration suite across all 10 basic metrics + 4 GraphRAG dimensions | 5 suites | PASSED |
-| **Subtotal** | **Evaluation Harness & GraphRAG Verification Suites** | **266+** | **100% PASSED** |
-| **Repository Total**| **Entire Project Verification Landscape** | **378+** | **100% PASSED** |
-
-
-
+| **Subtotal** | **Evaluation Harness & GraphRAG Verification Suites** | **253+** | **100% PASSED** |
+| **Repository Total**| **Entire Project Verification Landscape** | **400+** | **100% PASSED** |

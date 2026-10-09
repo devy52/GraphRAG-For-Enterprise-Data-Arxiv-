@@ -128,3 +128,33 @@ def test_explicit_response_format_is_respected():
     _, kwargs = mock_completion.call_args
     assert kwargs["response_format"] == {"type": "json_schema"}
 
+
+def test_litellm_judge_retries_transient_failures_and_succeeds():
+    class Timeout(Exception):
+        pass
+
+    calls = 0
+
+    def completion(**kwargs):
+        nonlocal calls
+        calls += 1
+        if calls < 3:
+            raise Timeout("Request timed out")
+        return {"choices": [{"message": {"content": '{"score": 0.95, "reasoning": "ok"}'}}]}
+
+    fake_litellm = SimpleNamespace(
+        completion=completion,
+        exceptions=SimpleNamespace(Timeout=Timeout),
+    )
+    with patch.dict("sys.modules", {"litellm": fake_litellm}):
+        judge = LiteLLMJudge(model="gpt-4o-mini", max_retries=3, retry_base_delay=0.001)
+        score = judge.score("prompt")
+
+    assert score == 0.95
+    assert calls == 3
+
+
+def test_litellm_judge_cache_fingerprint():
+    judge = LiteLLMJudge(model="gpt-4o-mini", temperature=0.7)
+    assert judge.cache_fingerprint == {"temperature": 0.7}
+

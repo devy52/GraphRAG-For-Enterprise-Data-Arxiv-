@@ -1,7 +1,7 @@
 # GraphRAG Evaluation Audit — Findings and Required Fixes
 
-**Audit target:** `GraphRAG_Enterprise_Codebase(1).zip`  
-**Audit date:** 2026-10-03  
+**Audit target:** `GraphRAG_Enterprise_Codebase(1).zip`
+**Audit date:** 2026-10-03
 **Scope:** V2 evaluation refactor, 50-question benchmark, stored V2 results, and Evalkit-vs-RAGAS comparison.
 
 ---

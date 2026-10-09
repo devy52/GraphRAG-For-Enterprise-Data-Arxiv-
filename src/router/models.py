@@ -137,6 +137,27 @@ class RetrievalContext(BaseModel):
         default="",
         description="Machine-readable rationale for hydration budget decision",
     )
+    # ADR 070 Bounded LangGraph Evidence Refinement Telemetry
+    refinement_activated: bool = Field(
+        default=False,
+        description="Whether bounded LangGraph evidence refinement was executed for this query",
+    )
+    refined_facts_count: int = Field(
+        default=0,
+        description="Count of extra graph statements successfully merged during refinement",
+    )
+    refined_chunks_count: int = Field(
+        default=0,
+        description="Count of extra vector passages successfully merged during refinement",
+    )
+    missing_entities: List[str] = Field(
+        default_factory=list,
+        description="Ontology entities identified as missing from initial retrieval context",
+    )
+    missing_doc_ids: List[str] = Field(
+        default_factory=list,
+        description="Target document IDs identified as missing from initial retrieval context",
+    )
 
 
 RetrievalContext.model_rebuild()

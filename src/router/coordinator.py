@@ -41,6 +41,7 @@ from src.memory.session import SessionMemory
 from src.router.classifier import RouteClassifier
 from src.router.metadata_resolver import MetadataResolver
 from src.router.models import RetrievalContext, RouteDecision, RoutingResult
+from src.router.refiner import EvidenceRefiner
 from src.vector.indexer import DEFAULT_TOP_K, VectorStore
 from src.vector.models import VectorSearchResult
 
@@ -135,6 +136,10 @@ class RetrievalCoordinator:
         enable_graph_passage_hydration: Optional[bool] = None,
         max_graph_hydrated_passages: Optional[int] = None,
         enable_adaptive_hydration: Optional[bool] = None,
+        enable_evidence_refinement: Optional[bool] = None,
+        max_refined_facts: Optional[int] = None,
+        max_refined_chunks: Optional[int] = None,
+        refiner: Optional[EvidenceRefiner] = None,
     ) -> None:
         self.query_engine = query_engine or GraphQueryEngine()
         self.classifier = classifier or RouteClassifier(query_engine=self.query_engine)
@@ -162,8 +167,40 @@ class RetrievalCoordinator:
             else getattr(self.settings, "enable_adaptive_hydration", False)
         )
 
+        # ADR 070 Bounded LangGraph Evidence Refinement configuration
+        self.enable_evidence_refinement = (
+            enable_evidence_refinement
+            if enable_evidence_refinement is not None
+            else getattr(self.settings, "enable_evidence_refinement", False)
+        )
+        self.max_refined_facts = (
+            max_refined_facts
+            if max_refined_facts is not None
+            else getattr(self.settings, "max_refined_facts", 3)
+        )
+        self.max_refined_chunks = (
+            max_refined_chunks
+            if max_refined_chunks is not None
+            else getattr(self.settings, "max_refined_chunks", 2)
+        )
+        self.refiner = refiner
+
         # Session memory store keyed by session_id
         self._sessions: Dict[str, SessionMemory] = {}
+
+    def _get_refiner(self) -> EvidenceRefiner:
+        """
+        Lazily initializes the EvidenceRefiner instance if not already provided.
+        """
+        if self.refiner is None:
+            self.refiner = EvidenceRefiner(
+                query_engine=self.query_engine,
+                vector_store=self.vector_store,
+                metadata_resolver=self.metadata_resolver,
+                max_refined_facts=self.max_refined_facts,
+                max_refined_chunks=self.max_refined_chunks,
+            )
+        return self.refiner
 
     def get_or_create_session(self, session_id: Optional[str] = None) -> SessionMemory:
         """
@@ -298,6 +335,7 @@ class RetrievalCoordinator:
         session_id: Optional[str] = None,
         top_k: int = DEFAULT_TOP_K,
         forced_route: Optional[RouteDecision] = None,
+        enable_evidence_refinement: Optional[bool] = None,
     ) -> RetrievalContext:
         """
         Executes end-to-end coordinated retrieval:
@@ -611,6 +649,56 @@ class RetrievalCoordinator:
             hydration_budget = 0
             hydration_reason = "no_graph_candidates"
 
+        # Step 3f: Conditional Bounded LangGraph Evidence Refinement (ADR 070)
+        should_refine = (
+            enable_evidence_refinement
+            if enable_evidence_refinement is not None
+            else self.enable_evidence_refinement
+        )
+        refinement_activated = False
+        missing_entities_list: List[str] = []
+        missing_doc_ids_list: List[str] = []
+        refined_facts_count = 0
+        refined_chunks_count = 0
+
+        if should_refine:
+            refine_start = time.time()
+            try:
+                refiner_instance = self._get_refiner()
+                refine_result = await refiner_instance.refine(
+                    query=resolved_query,
+                    initial_graph_facts=graph_facts,
+                    initial_chunks=retrieved_chunks,
+                )
+                if refine_result.get("refinement_activated"):
+                    refinement_activated = True
+                    missing_entities_list = refine_result.get("missing_entities", [])
+                    missing_doc_ids_list = refine_result.get("missing_doc_ids", [])
+                    extra_facts = refine_result.get("refined_graph_facts", [])
+                    extra_chunks = refine_result.get("refined_chunks", [])
+
+                    # Provenance Invariant: Extract source chunk IDs from graph statements
+                    # and append chunk IDs from refined vector chunks. Every claim must
+                    # resolve to an authentic, validated chunk ID.
+                    if extra_facts:
+                        graph_facts.extend(extra_facts)
+                        refined_facts_count = len(extra_facts)
+                        for f in extra_facts:
+                            cids = re.findall(r"\[chunk\s*:\s*([^\]]+)\]", f, flags=re.I)
+                            cited_chunks_set.update(cids)
+
+                    if extra_chunks:
+                        retrieved_chunks.extend(extra_chunks)
+                        refined_chunks_count = len(extra_chunks)
+                        for c in extra_chunks:
+                            cited_chunks_set.add(c.chunk_id)
+
+                latencies["langgraph_refinement_total_ms"] = round((time.time() - refine_start) * 1000.0, 2)
+                latencies.update(refine_result.get("latencies", {}))
+            except Exception as exc:
+                latencies["langgraph_refinement_total_ms"] = round((time.time() - refine_start) * 1000.0, 2)
+                logger.warning("Evidence refinement failed; falling back to unrefined context: %s", exc)
+
         # Step 4: Update session memory with entities extracted in this turn
         session.add_user_turn(
             text=resolved_query,
@@ -644,5 +732,10 @@ class RetrievalCoordinator:
             dropped_due_to_budget=dropped_budget_cids,
             hydration_budget=hydration_budget,
             hydration_reason=hydration_reason,
+            refinement_activated=refinement_activated,
+            refined_facts_count=refined_facts_count,
+            refined_chunks_count=refined_chunks_count,
+            missing_entities=missing_entities_list,
+            missing_doc_ids=missing_doc_ids_list,
         )
 

@@ -53,7 +53,7 @@ python -m compileall src evalharness scripts tests
 - Python is the intended project version.
 - `compileall` exits with code 0.
 
-**PASS:** no syntax/import compilation failures.  
+**PASS:** no syntax/import compilation failures.
 **FAIL:** any compilation error.
 
 ---
@@ -74,7 +74,7 @@ If RAGAS is part of the intended test environment:
 python -c "import ragas; print('ragas ok')"
 ```
 
-**PASS:** all required packages import successfully.  
+**PASS:** all required packages import successfully.
 **FAIL:** missing package prevents evaluation tests from collecting.
 
 ---
@@ -117,7 +117,7 @@ At minimum, the suite must cover:
 9. no hardcoded question-ID scoring
 10. contradiction handling or an explicitly documented limitation
 
-**PASS:** every intended test executes and passes.  
+**PASS:** every intended test executes and passes.
 **FAIL:** any missing test or failing test.
 
 ---
@@ -158,7 +158,7 @@ The result must be clearly marked non-evaluable, e.g.:
 {"precision": 1.0, "recall": 1.0, "mrr": 1.0}
 ```
 
-**PASS:** missing labels are N/A.  
+**PASS:** missing labels are N/A.
 **FAIL:** missing labels produce perfect retrieval.
 
 ---
@@ -266,7 +266,7 @@ No generation/retrieval path may place `reference_answer` into retrieved context
 
 A scoring layer may read the gold answer only **after generation**.
 
-**PASS:** no runtime retrieval/generation code injects gold answers.  
+**PASS:** no runtime retrieval/generation code injects gold answers.
 **FAIL:** any fallback or retrieval object contains the reference answer.
 
 ---

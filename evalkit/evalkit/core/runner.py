@@ -118,7 +118,7 @@ class Runner:
         adapter = adapter_cls(**self.config.adapter_config)
 
         judge_backend_cls = registry.resolve_judge_backend(self.config.judge_backend)
-        judge = judge_backend_cls(model=self.config.judge_model)
+        judge = judge_backend_cls(model=self.config.judge_model, **self.config.judge_config)
         if self.config.cache:
             judge = CachingJudgeBackend(
                 judge, FileCache(self.config.cache_dir), model=self.config.judge_model
@@ -209,6 +209,7 @@ class Runner:
                     combined_scores.update(raw_scores)
 
             return {
+                "id": example.id,
                 "input": example.input,
                 "output": output,
                 "reference": example.reference,

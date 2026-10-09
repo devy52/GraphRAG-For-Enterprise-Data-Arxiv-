@@ -5,6 +5,7 @@ from html import escape
 from typing import Any, Optional
 
 from evalkit.contracts.reporter import BaseReporter
+from evalkit.core.stats import percentile
 
 PASS_THRESHOLD = 0.7  # used for pass/fail color coding and markers in html and markdown reports
 
@@ -181,9 +182,13 @@ class MarkdownReporter(BaseReporter):
             lines.append("")
 
         metric_names = sorted({m for r in results for m in r["scores"]})
+        values_by_metric = {
+            m: [r["scores"][m] for r in results if m in r["scores"]]
+            for m in metric_names
+        }
         summary: dict[str, float] = {}
         for m in metric_names:
-            values = [r["scores"][m] for r in results if m in r["scores"]]
+            values = values_by_metric[m]
             summary[m] = sum(values) / len(values) if values else 0.0
 
         thresholds_by_metric = {
@@ -220,6 +225,31 @@ class MarkdownReporter(BaseReporter):
             for m in metric_names:
                 lines.append(f"| {m} | {_format_metric_value(m, summary[m])} |")
         lines.append("")
+
+        multi_value_metrics = [m for m in metric_names if len(values_by_metric[m]) > 1]
+        if multi_value_metrics:
+            lines.append("## Distribution")
+            lines.append("")
+            lines.append(
+                "The mean alone can hide a bad tail — a handful of terrible "
+                "examples can sit inside an average that still looks fine. "
+                "This table shows the actual shape of each metric's scores."
+            )
+            lines.append("")
+            lines.append("| Metric | Mean | Median | Min | P5 | P95 | Max |")
+            lines.append("|---|---|---|---|---|---|---|")
+            for m in multi_value_metrics:
+                values = values_by_metric[m]
+                lines.append(
+                    f"| {m} "
+                    f"| {_format_metric_value(m, summary[m])} "
+                    f"| {_format_metric_value(m, percentile(values, 50))} "
+                    f"| {_format_metric_value(m, min(values))} "
+                    f"| {_format_metric_value(m, percentile(values, 5))} "
+                    f"| {_format_metric_value(m, percentile(values, 95))} "
+                    f"| {_format_metric_value(m, max(values))} |"
+                )
+            lines.append("")
 
         descriptions = run_info.get("metric_descriptions", {})
         if metric_names:

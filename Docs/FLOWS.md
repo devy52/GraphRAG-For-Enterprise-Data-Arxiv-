@@ -1,4 +1,4 @@
-[← README](../README.md) | [PRD](PRD.md) | [TRD](TRD.md) | [Design](DESIGN.md) | [Architecture](ARCHITECTURE.md) | [Flows](FLOWS.md) | [Codebase Map](CODEBASE_MAP.md) | [Decisions](DECISIONS.md) | [Tasks](TASKS.md)
+[← README](../README.md) | [PRD](PRD.md) | [TRD](TRD.md) | [Design](DESIGN.md) | [Architecture](ARCHITECTURE.md) | [Flows](FLOWS.md) | [Codebase Map](CODEBASE_MAP.md) | [Decisions](DECISIONS.md) | [Tasks](TASKS.md) | [Scorecard](BENCHMARK_SCORECARD.md)
 ---
 
 # System Sequence Flows & Interaction Diagrams (FLOWS)
@@ -23,7 +23,7 @@ sequenceDiagram
     loop For each Paper
         Admin->>Chunker: chunk_paper(paper)
         Chunker-->>Admin: List[DocumentChunk] (SHA-256 IDs)
-        
+
         par Vector Ingestion
             Admin->>VectorStore: insert_chunks(chunks)
             VectorStore->>VectorStore: Generate Embeddings (batch=32)
@@ -60,7 +60,7 @@ sequenceDiagram
     API->>Coord: retrieve(query, session_id)
     Coord->>Memory: resolve_coreference(query)
     Memory-->>Coord: "Explain Dense Passage Retrieval contrastive loss"
-    
+
     Coord->>Router: classify(resolved_query)
     Router->>Router: Score Intent (structural vs semantic)
     alt Confidence < 0.70
@@ -104,7 +104,7 @@ sequenceDiagram
         Synth-->>API: Return Cached Answer (latency < 1ms)
     else Cache Miss
         Synth->>Synth: assemble_context (partition [graph] & [retrieved])
-        
+
         loop Max 2 Attempts
             Synth->>LLM: Generate Answer with [chunk_id] citations
             LLM-->>Synth: Generated Answer Text
@@ -207,7 +207,7 @@ sequenceDiagram
     API->>Orch: start_ingestion(request)
     Orch-->>API: Task initiated (status="running")
     API-->>UI: 202 Accepted {"status": "running", "stage": "harvesting"}
-    
+
     par Async Ingestion Worker
         alt Harvest New Papers
             Orch->>ArXiv: Harvest papers with polite rate limits
@@ -242,4 +242,55 @@ sequenceDiagram
     UI->>UI: Show completion badge & refresh Graph Explorer canvas
 ```
 
+---
+
+## 7. Integrated Bounded LangGraph Evidence Refinement Flow (ADR 070)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Client as Client / FastAPI Route / Benchmark
+    participant Coord as RetrievalCoordinator (src/router/coordinator.py)
+    participant Refiner as EvidenceRefiner (src/router/refiner.py)
+    participant Gap as Heuristic Gap Detector (<1ms)
+    participant StateGraph as LangGraph Refinement StateGraph
+    participant Neo4j as Neo4j Graph (Ego-Neighborhood)
+    participant Vec as pgvector (Doc-Filtered)
+    participant Synth as AnswerSynthesizer (src/synthesis/)
+    participant Val as CitationValidator (src/synthesis/)
+
+    Client->>Coord: retrieve(question, enable_evidence_refinement=True)
+    Coord->>Coord: Steps 1-3e: Intent Routing, Graph Traversal & Passage Hydration
+    
+    Coord->>Refiner: refine(question, initial_graph_facts, initial_chunks)
+    Refiner->>Gap: detect_evidence_gap(question, facts, chunks)
+    Gap->>Gap: Check Canonical Entity Registry & Target Paper Catalog
+
+    alt No Gap Detected (Fast Path: ~54% of queries)
+        Gap-->>Refiner: has_gap=False
+        Refiner-->>Coord: refinement_activated=False (0 extra items)
+        Note over Coord: Bypasses LangGraph StateGraph completely
+    else Gap Detected (Refined Path: ~46% of queries)
+        Gap-->>Refiner: has_gap=True (missing_entities, missing_docs)
+        Refiner->>StateGraph: ainvoke(RefinementState)
+
+        StateGraph->>StateGraph: Node 1: isolate_gap_node
+        StateGraph->>Neo4j: Node 2: execute_query(EGO_NEIGHBORHOOD, missing_entity)
+        Neo4j-->>StateGraph: Refined graph statements
+        StateGraph->>Vec: Node 2: similarity_search(filter_doc_ids=missing_docs)
+        Vec-->>StateGraph: Refined vector chunks
+
+        StateGraph->>StateGraph: Node 3: merge_evidence_node (Deduplicate & Budget Caps)
+        StateGraph-->>Refiner: Refinement Output (<=3 facts, <=2 chunks, latencies)
+        Refiner-->>Coord: Refinement Output
+
+        Coord->>Coord: Merge into RetrievalContext & Register cited_chunk_ids
+    end
+
+    Coord-->>Client: RetrievalContext (facts, chunks, cited_chunk_ids, refinement telemetry)
+    Client->>Synth: synthesize(RetrievalContext)
+    Synth->>Val: validate(answer, cited_chunk_ids)
+    Val-->>Synth: is_valid=True (0% invalid citations)
+    Synth-->>Client: QueryResponse / SynthesizedAnswer
+```
 

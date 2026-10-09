@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from typing import Any, Optional
 
@@ -9,6 +10,7 @@ from pydantic import BaseModel, Field, model_validator
 class EvalExample(BaseModel):
     """One row of an evalkit dataset (JSONL, one JSON object per line).
 
+    - id: optional unique identifier (generated deterministically if omitted).
     - input: required, what's given to the system under test.
     - reference: optional ground-truth answer.
     - context: optional list of retrieved passages (for RAG tracks).
@@ -16,6 +18,7 @@ class EvalExample(BaseModel):
       built-in StaticAdapter, when you already have outputs to score.
     """
 
+    id: Optional[str] = None
     input: str
     reference: Optional[str] = None
     context: Optional[list[str]] = None
@@ -30,7 +33,7 @@ class EvalExample(BaseModel):
                 data["input"] = data.pop("question")
             if "reference" not in data and "reference_answer" in data:
                 data["reference"] = data.pop("reference_answer")
-            known_keys = {"input", "reference", "context", "metadata"}
+            known_keys = {"id", "input", "reference", "context", "metadata"}
             extras = {k: v for k, v in data.items() if k not in known_keys}
             if extras:
                 meta = dict(data.get("metadata", {}))
@@ -39,6 +42,15 @@ class EvalExample(BaseModel):
                 for k in extras:
                     del data[k]
         return data
+
+    @model_validator(mode="after")
+    def _fill_id(self) -> "EvalExample":
+        if self.id is None:
+            canonical = json.dumps(
+                {"input": self.input, "metadata": self.metadata}, sort_keys=True
+            )
+            self.id = hashlib.sha256(canonical.encode()).hexdigest()[:16]
+        return self
 
 
 def load_dataset(path: str) -> list[EvalExample]:

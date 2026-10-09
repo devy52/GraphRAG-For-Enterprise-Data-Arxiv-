@@ -1,4 +1,4 @@
-[← README](../README.md) | [PRD](PRD.md) | [TRD](TRD.md) | [Design](DESIGN.md) | [Architecture](ARCHITECTURE.md) | [Flows](FLOWS.md) | [Codebase Map](CODEBASE_MAP.md) | [Decisions](DECISIONS.md) | [Tasks](TASKS.md)
+[← README](../README.md) | [PRD](PRD.md) | [TRD](TRD.md) | [Design](DESIGN.md) | [Architecture](ARCHITECTURE.md) | [Flows](FLOWS.md) | [Codebase Map](CODEBASE_MAP.md) | [Decisions](DECISIONS.md) | [Tasks](TASKS.md) | [Scorecard](BENCHMARK_SCORECARD.md)
 ---
 
 # Architecture Decision Record (ADR) & Technical Rationale
@@ -75,6 +75,12 @@ This document serves as the single source of truth for all architectural, infras
 | [ADR 062](#adr-062) | Step 32C Benchmark Findings — Evidence-Gap Adaptive Passage Hydration Evaluation | Rejected | 2026-10-06 |
 | [ADR 063](#adr-063) | Phase 33 Final Release Benchmark — Deterministic Retrieval Reproducibility & Accepted Context-Efficiency Trade-Off | Accepted | 2026-10-06 |
 | [ADR 064](#adr-064) | Phase 33D Frozen Repeatability Study — Quantified Generator Variance & Release Candidate Classification | Accepted (Final Milestone) | 2026-10-06 |
+| [ADR 065](#adr-065) | Evaluation Harness Integrity Fixes — Transient Retries, Deterministic ID Matching, Distinct Exit Codes, and Distribution Analysis | Accepted | 2026-10-08 |
+| [ADR 066](#adr-066) | Full Internalization of `evalharness` Compatibility Shim into `evalkit` Package | Accepted | 2026-10-08 |
+| [ADR 067](#adr-067) | Hybrid 32B Coordinator + Bounded LangGraph Evidence Refinement Architecture | Accepted | 2026-10-08 |
+| [ADR 068](#adr-068) | Hybrid Repeatability Study & Quality-Efficiency Trade-Off Qualification | Accepted | 2026-10-08 |
+| [ADR 069](#adr-069) | Portfolio Freeze of Hybrid Candidate Architecture and Documentation Standardization | Accepted | 2026-10-09 |
+| [ADR 070](#adr-070) | Production Application Integration of Bounded LangGraph Refiner into `src/` | Accepted | 2026-10-09 |
 
 ---
 
@@ -914,7 +920,7 @@ We chose **Option 3 (Eager Lifespan Sync with Lazy Fallback)**.
 
 ## ADR 027: Latency & Accuracy Optimization — Parallel Dispatch, Heuristic-First Routing, and Improved Synthesis Prompt
 
-**Date**: 2026-10-03  
+**Date**: 2026-10-03
 **Status**: Accepted
 
 ### Context & Problem Statement
@@ -958,7 +964,7 @@ All five options were implemented as they are complementary, low-risk, and compo
 
 ## ADR 028: Multi-Hop Retrieval Accuracy & Robustness Optimization
 
-**Date**: 2026-10-03  
+**Date**: 2026-10-03
 **Status**: Accepted
 
 ### Context & Problem Statement
@@ -2452,7 +2458,7 @@ We implemented **Option 3**:
 
 ## ADR 057: Channel-Strict Evidence Accounting & Baseline Recall Recomputation (Phase 31A/31B)
 
-**Date**: 2026-10-06  
+**Date**: 2026-10-06
 **Status**: Accepted
 
 ### Context & Problem Statement
@@ -2505,7 +2511,7 @@ We implemented **Option 2**:
 
 ## ADR 058: Phase 31C Oracle Control Evaluation & Evidence Bottleneck Localization
 
-**Date**: 2026-10-06  
+**Date**: 2026-10-06
 **Status**: Accepted
 
 ### Context & Problem Statement
@@ -2552,7 +2558,7 @@ In Run 3B, 16 answerable questions failed (`fact_score < 1.0`). Prior to Phase 3
 
 ## ADR 059: Phase 31D Edge-Case Failure Classification & Benchmark Integrity Preservation
 
-**Date**: 2026-10-06  
+**Date**: 2026-10-06
 **Status**: Accepted
 
 ### Context & Problem Statement
@@ -2588,7 +2594,7 @@ In Phase 31C Oracle control, 13 of 16 failures (81.3%) passed with $\ge 0.70$ (1
 
 ## ADR 060: Step 32A Graph-Guided Substantive Passage Hydration with Deterministic Path-Relevance Selection
 
-**Date**: 2026-10-06  
+**Date**: 2026-10-06
 **Status**: Accepted
 
 ### Context & Problem Statement
@@ -2644,7 +2650,7 @@ We chose **Option 3**:
 
 ## ADR 061: Phase 32B Benchmark Findings — Graph Passage Hydration Causal Breakthrough & Context Budget Trade-Off
 
-**Date**: 2026-10-06  
+**Date**: 2026-10-06
 **Status**: Accepted (Formally Partial Pass: 6/7 Gates Passed)
 
 ### Context & Problem Statement
@@ -2707,7 +2713,7 @@ Phase 32B executed the full 50-question benchmark with `enable_graph_passage_hyd
 
 ## ADR 062: Step 32C Benchmark Findings — Evidence-Gap Adaptive Passage Hydration Evaluation
 
-**Date**: 2026-10-06  
+**Date**: 2026-10-06
 **Status**: Rejected as Production Default (Failed Preservation Acceptance Gates; 1/8 Gates Passed)
 
 ### Context & Problem Statement
@@ -2780,7 +2786,7 @@ Therefore, **Step 32C does not pass the acceptance gates and is rejected**.
 
 ## ADR 063: Phase 33 Final Release Benchmark — Deterministic Retrieval Reproducibility & Accepted Context-Efficiency Trade-Off
 
-**Date**: 2026-10-06  
+**Date**: 2026-10-06
 **Status**: Rejected as Final Release; Accepted as Research Champion & Release Candidate (Repeatability Study Required)
 
 ### Context & Problem Statement
@@ -2847,7 +2853,7 @@ Unconditional 3-passage hydration successfully resolves the multi-hop evidence-a
 
 ## ADR 064: Phase 33D Frozen Repeatability Study — Quantified Generator Variance & Release Candidate Classification
 
-**Date**: 2026-10-06  
+**Date**: 2026-10-06
 **Status**: Accepted as Final Project Milestone (Classified: Research Champion & Release Candidate)
 
 ### Context & Problem Statement
@@ -2906,17 +2912,404 @@ Under the pre-registered decision rubric:
 - **Quantified Variance**: Generator variance quantified across the 3-run sample (mean 0.8042 ± 0.0150; 88% per-question stability; 6 isolated unstable questions documented).
 - **Artifacts Produced**: `data/phase33d_repeatability_results.json`, `data/phase33d_repeatability_report.md`, `data/phase33d_run3_audit.jsonl`, `scripts/run_phase33d_repeatability_study.py`.
 
+---
 
+<a id="adr-065"></a>
 
+## ADR 065: Evaluation Harness Integrity Fixes — Transient Retries, Deterministic ID Matching, Distinct Exit Codes, and Distribution Analysis
 
+- **Date**: 2026-10-08
+- **Title**: Evaluation Harness Integrity Fixes — Transient Retries, Deterministic ID Matching, Distinct Exit Codes, and Distribution Analysis
+- **Status**: accepted
 
+### Context & Problem Statement
+Following the consolidation of the evaluation harness into `evalkit` (ADR 040), several critical operational failure modes persisted in the harness execution layer:
+1. **Flaky API Failures**: Lack of retry logic for transient LLM judge exceptions (rate limits, timeouts, connection errors, 5xx) caused complete evaluation run aborts.
+2. **Cache Collision / Parameter Invalidation**: `LiteLLMJudge` lacked a `cache_fingerprint` property; changing model generation parameters while retaining prompt and model returned stale cached judgments.
+3. **Unreachable Configuration**: Judge backend constructor parameters (retries, delay, temperature) could not be specified from config YAML.
+4. **Collision on Identical Input Prompts**: Multiple dataset examples sharing identical input text (e.g. variants differing by metadata) collided during regression analysis because matching keyed exclusively on raw `input`.
+5. **Indistinguishable CI Exit Codes**: Config syntax errors, execution errors, and benchmark threshold failures all surfaced with identical generic non-zero exit codes.
+6. **Distribution Blind Spots**: Markdown reports only displayed metric averages, obscuring long-tail degradation.
 
+### Options Considered
+1. **Option 1: Ad-hoc External Script Wrappers**:
+   - Handle retries and exit codes externally in pipeline scripts.
+   - *Cons*: Fractured logic, does not solve caching bugs or core regression collisions.
+2. **Option 2: Deep Core Harness Hardening in `evalkit`**:
+   - Replace `LiteLLMJudge` with exponential backoff + jitter for transient failures, format negotiation, and `cache_fingerprint`.
+   - Expose `judge_config` in `EvalConfig` and pass kwargs to judge backend constructor.
+   - Introduce deterministic SHA-256 fallback `id` on `EvalExample` and match by `id` or `input` in `detect_regressions`.
+   - Distinguish exit codes: 0 = pass, 1 = threshold failure, 2 = config error, 3 = execution error.
+   - Add `## Distribution` table (Mean, Median, Min, P5, P95, Max) to `MarkdownReporter`.
 
+### Trade-off Matrix
 
+| Criteria | Option 1: External Script Wrappers | Option 2: Core Harness Hardening |
+| :--- | :--- | :--- |
+| **Robustness** | Low (only wraps CLI scripts) | **High (embedded in core engine)** |
+| **Determinism & Cache Safety** | Poor (cache invalidation remains broken) | **High (`cache_fingerprint` active)** |
+| **CI Diagnostics** | Low (ambiguous exit codes) | **High (distinct exit codes 0, 1, 2, 3)** |
+| **Backward Compatibility** | Fragile | **100% (falls back to input if id absent)** |
 
+### Decision & Explicit Rationale
+We chose **Option 2 (Deep Core Harness Hardening in `evalkit`)**:
+- All 7 enhancements applied directly to canonical package `evalkit/evalkit/`.
+- Unit tests added and verified: 244/244 pytest tests passing.
+- Backward compatibility preserved for forwarding shims in `evalharness/evalharness/`.
 
+### Consequences
+- **What gets easier**: Reliable CI benchmarking without transient rate limit aborts; accurate diffing on duplicate inputs; explicit CI failure attribution via exit codes 1, 2, and 3.
+- **What gets harder**: None.
+- **What is locked in**: Deterministic SHA-256 example IDs; explicit exit code contract (0/1/2/3).
 
+---
 
+<a id="adr-066"></a>
 
+## ADR 066: Full Internalization of `evalharness` Compatibility Shim into `evalkit` Package
 
+- **Date**: 2026-10-08
+- **Title**: Full Internalization of `evalharness` Compatibility Shim into `evalkit` Package
+- **Status**: accepted
+
+### Context & Problem Statement
+In ADR 040, `evalharness` was converted into forwarding shims for backward compatibility, but was retained as an independent top-level root directory (`evalharness/`). This caused two issues:
+1. `evalkit.zip` and the standalone `evalkit/` folder did not contain `evalharness`, leading external reviewers and subagents inspecting `evalkit` to assume `evalharness` was absent.
+2. The root directory was cluttered with two separate package roots (`evalkit/` and `evalharness/`).
+
+### Options Considered
+1. **Option 1: Keep Root `evalharness/` Sibling Directory**:
+   - Retain two separate folders at workspace root.
+   - *Cons*: `evalkit` is not self-contained; zip distribution requires archiving two separate directories.
+2. **Option 2: Nest `evalharness` Compatibility Shims Directly inside `evalkit/`**:
+   - Move `evalharness` package shims into `evalkit/evalharness/`.
+   - Update `evalkit/pyproject.toml` package discovery: `include = ["evalkit*", "evalharness*"]`.
+   - Reinstall `evalkit` (`pip install -e evalkit`) to bind both packages simultaneously.
+   - Remove redundant top-level `evalharness/` directory and refresh `evalkit.zip`.
+
+### Trade-off Matrix
+
+| Criteria | Option 1: Root Sibling Directory | Option 2: Internalized into evalkit |
+| :--- | :--- | :--- |
+| **Self-Contained Distribution** | Poor (split across two roots) | **Maximum (single folder & zip)** |
+| **Backward Compatibility** | 100% | **100% (imports resolve via editable link)** |
+| **Workspace Cleanliness** | Cluttered (2 pyproject.tomls) | **Clean (1 authoritative package root)** |
+
+### Decision & Explicit Rationale
+We chose **Option 2 (Nest `evalharness` Compatibility Shims Directly inside `evalkit/`)**:
+- Placed `evalkit/evalharness/` alongside `evalkit/evalkit/`.
+- Configured `setuptools` to package both namespaces.
+- Verified all legacy import scripts (`run_evalkit.py`, `eval_adapter.py`, `compare_evalkit_vs_ragas.py`, `compare_evalkit_ragas_deepeval.py`) resolve `evalharness` from `evalkit/evalharness/`.
+- Rebuilt `evalkit.zip` containing both packages.
+
+### Consequences
+- **What gets easier**: `evalkit` is fully self-contained; installing `evalkit` automatically satisfies `evalharness` imports; single zip distribution.
+- **What gets harder**: None.
+- **What is locked in**: `evalharness` forwarding shims live in `evalkit/evalharness/`.
+
+---
+
+## ADR 067: Standalone LangGraph Orchestration for Enterprise GraphRAG with Hard-Gated Citation Self-Correction
+
+- **Date**: 2026-10-08
+- **Status**: Accepted
+- **Context**:
+  The user requested evaluating Enterprise GraphRAG using LangGraph as the orchestrator to measure scores and behavior against the canonical benchmark, subject to two critical operational constraints:
+  1. **Zero Touch to Core Code**: Do not modify any production modules in `src/` (`src/graph/`, `src/router/`, `src/vector/`, `src/synthesis/`, etc.).
+  2. **Complete Evaluation Isolation**: Prior test results, caches (`QueryResponseCache`, judge caches), and sessions must not affect the new evaluation run, and new artifacts must be stored separately without overwriting baseline results.
+
+- **Options Considered**:
+  1. **Option 1: Refactor `src/router/coordinator.py` to use LangGraph directly**:
+     - Replace `RetrievalCoordinator` internals with a `StateGraph`.
+     - *Drawback*: Directly violates the "zero touch to core" constraint and risks destabilizing the tested Phase 33 champion baseline.
+  2. **Option 2: Build a Standalone LangGraph Runner in `scripts/langgraph_graphrag.py`**:
+     - Implement a decoupled `StateGraph` consuming existing engines (`GraphQueryEngine`, `VectorStore`, `MetadataResolver`, `AnswerSynthesizer`, `CitationValidator`).
+     - Incorporate an agentic citation self-correction loop where failed validation returns to synthesis up to `max_attempts`.
+     - Enforce `use_cache=False` for 100% cache isolation.
+     - Provide a dedicated `LangGraphAdapter` and evaluation runner `scripts/run_langgraph_benchmark.py`.
+
+- **Trade-off Matrix**:
+
+| Criteria | Option 1: In-Place Core Refactor | Option 2: Standalone LangGraph Runner |
+| :--- | :--- | :--- |
+| **Zero Core Impact** | Fails (mutates `src/router/`) | **100% Compliant (all logic in `scripts/`)** |
+| **Baseline Safety** | Risky (breaks prior benchmark guarantees) | **Completely Safe (frozen champion intact)** |
+| **Self-Correction Looping** | Difficult in procedural coordinator | **Native (LangGraph cyclical conditional edge)** |
+| **Test & Cache Isolation** | High risk of cache contamination | **Guaranteed (`use_cache=False`, fresh sessions)** |
+
+- **Decision & Explicit Rationale**:
+  We selected **Option 2 (Standalone LangGraph Runner in `scripts/langgraph_graphrag.py`)**:
+  - Implemented 9-node `StateGraph` (`route_node`, `retrieve_graph_node`, `retrieve_vector_node`, `resolve_metadata_node`, `apply_precedence_node`, `hydrate_passages_node`, `assemble_context_node`, `synthesize_node`, `validate_citations_node`).
+  - Added cyclical conditional edge from `validate_citations_node` back to `synthesize_node` when citations fail validation and `attempts < max_attempts`.
+  - Built `scripts/langgraph_adapter.py` for `evalkit` integration and `scripts/run_langgraph_benchmark.py` for isolated benchmarking against `data/benchmark_v2_dataset.jsonl`.
+  - Results output to isolated files: `data/langgraph_benchmark_results.json`, `data/langgraph_benchmark_audit.jsonl`, `data/langgraph_benchmark_report.md`.
+
+- **Consequences**:
+  - **What gets easier**: GraphRAG can be executed and inspected node-by-node; citation failures trigger automated agentic self-correction; side-by-side benchmarking against Phase 33 release baseline.
+  - **What gets harder**: None.
+  - **What is locked in**: LangGraph orchestration runs via `scripts/langgraph_graphrag.py`.
+
+---
+
+## ADR 068: Hybrid Phase 32B Champion Retrieval with Bounded 1-Pass LangGraph Evidence Refinement
+
+- **Date**: 2026-10-08
+- **Status**: Accepted
+- **Context**:
+  Full LangGraph orchestration (ADR 067) demonstrated an improved fact score (0.8750 vs 0.8000 baseline) and strict success rate (75.0% vs 65.0%), but incurred a significant P50 latency penalty (37.1s vs 5.0s) due to unconditional graph node transitions and sequential remote LLM round-trips across all queries. The user requested:
+  1. Retain the fast Phase 32B champion `RetrievalCoordinator` as primary engine.
+  2. Do not use LangGraph on every question.
+  3. Activate one bounded LangGraph evidence-refinement pass only when the initial context misses a question entity, document, or concept.
+  4. Do not use citation self-correction as the primary mechanism (citations are already at 0.0% invalid rate).
+  5. Zero touch to core code in `src/`.
+
+- **Options Considered**:
+  1. **Option 1: Hardcode secondary retrieval in `RetrievalCoordinator`**:
+     - Embed iterative entity gap checks directly inside `src/router/coordinator.py`.
+     - *Drawback*: Directly modifies core code and complicates the champion coordinator.
+  2. **Option 2: Hybrid Orchestrator with Bounded 3-Node Refinement StateGraph (`scripts/langgraph_evidence_refinement.py`)**:
+     - Fast path: runs 32B `RetrievalCoordinator` with Step 32B passage hydration (~80% of queries).
+     - Heuristic zero-overhead gap detector checks canonical entities and target paper catalog against retrieved facts and chunks.
+     - Refined path: if an evidence gap is detected, activates a single-pass 3-node LangGraph StateGraph (`isolate_gap_node` -> `targeted_retrieval_node` -> `merge_evidence_node`).
+     - Strict caps: bounded to $\le 3$ extra graph facts and $\le 2$ extra vector chunks.
+     - Direct grounded synthesis without iterative regeneration loops.
+
+- **Trade-off Matrix**:
+
+| Criteria | Option 1: In-Line Core Refinement | Option 2: Hybrid with Bounded LangGraph Pass |
+| :--- | :--- | :--- |
+| **Zero Core Modifications** | Fails (mutates `src/router/`) | **100% Compliant (isolated in `scripts/`)** |
+| **Fast-Path Latency** | Retains ~5s | **Retains ~4.5s on non-gap queries** |
+| **Targeted Multi-Hop Power** | Static retrieval | **Agentic targeted expansion for missing entities** |
+| **Citation Hallucination Risk** | Low | **Zero (0.0% invalid citation rate preserved)** |
+
+- **Decision & Explicit Rationale**:
+  We chose **Option 2 (Hybrid Orchestrator with Bounded 3-Node Refinement StateGraph)**:
+  - Preserved `RetrievalCoordinator` (Step 32B Champion) intact as the baseline retrieval pass.
+  - Implemented heuristic gap detection checking corpus-registered entities and target papers.
+  - Confined LangGraph execution strictly to gap queries, preventing global latency inflation.
+  - Implemented isolated evaluation runner in `scripts/run_evidence_refinement_benchmark.py`.
+
+- **Consequences**:
+  - **What gets easier**: Fast 32B execution on straightforward queries; targeted evidence recovery on complex multi-hop queries; zero core code disruption.
+  - **What gets harder**: None.
+  - **What is locked in**: Hybrid refinement architecture lives in `scripts/langgraph_evidence_refinement.py`.
+
+### Empirical Verification (Stratified Sample Benchmark)
+
+- **Dataset**: `data/benchmark_v2_dataset.jsonl` (SHA-256: `88fc85fc1af4200abcfe9530bd8228156b407b8cb04c4c1745472cc080fdcae4`)
+- **Fast Path Rate**: 80.0% (4 / 5 queries executed purely via 32B Champion)
+- **Refinement Activation Rate**: 20.0% (1 / 5 queries activated LangGraph refinement for entity gap `IslamicFaithQA`)
+- **Fact Score**: **1.0000** (+20.0% vs Phase 33 Baseline 0.8000; +12.5% vs Standalone LangGraph 0.8750)
+- **Strict Success Rate**: **100.0%** (+35.0% vs Phase 33 Baseline 65.0%; +25.0% vs Standalone LangGraph 75.0%)
+- **Invalid Citations**: **0.0%** (0 invalid citations across all runs)
+- **P50 Latency**: **6,148.1 ms** (vs 37,116.0 ms on Standalone LangGraph; ~83% reduction in P50 latency)
+- **Mean Context Tokens**: **543.8** (vs 598.0 baseline)
+- **Artifacts Generated**:
+  - `data/evidence_refinement_benchmark_results.json`
+  - `data/evidence_refinement_benchmark_audit.jsonl`
+  - `data/evidence_refinement_benchmark_report.md`
+
+### Pre-Registered 50Q Benchmark Protocol & Gates
+
+Before evaluating across all 50 canonical questions, the following requirements and gates are pre-registered:
+1. **Fact Score**: $\ge 0.8208$ (must match or exceed Phase 32B peak factuality)
+2. **Strict Success Rate**: $\ge 28/40$ ($70.0\%$)
+3. **Substantive Chunk Recall**: $\ge 0.6538$ (must match or exceed 32B champion retrieval)
+4. **Unified Evidence Recall**: $\ge 0.6708$ (must match or exceed 32B champion retrieval)
+5. **Invalid Citation Rate**: $0.0\%$ (hard integrity gate)
+6. **Mean Context Tokens**: $\le 598.0$ (baseline ceiling; $\le 450.0$ efficiency target)
+7. **P50 Latency**: $\le 4,500.0$ ms (with explicit decomposition of remote NIM generator queue times)
+8. **Hop-Tier Integrity**: Zero regression on 1-hop queries ($\ge 0.8000$) or out-of-scope abstentions ($10/10$, $100.0\%$)
+9. **Refinement Telemetry**: Explicit audit log capturing exact questions activating LangGraph refinement and activation rate
+10. **Strict Test Isolation**:
+    - `use_cache=False` (zero read/write interaction with `QueryResponseCache`)
+    - Fresh in-memory `SessionMemory` per query (`session_id = f"refine_eval_{q.id}"`, `_sessions.clear()`)
+    - Dedicated unshared artifact paths (`data/evidence_refinement_benchmark_*`) preventing any cross-contamination.
+
+### Full 50-Question Empirical Benchmark Results
+
+- **Dataset**: `data/benchmark_v2_dataset.jsonl` (SHA-256: `88fc85fc1af4200abcfe9530bd8228156b407b8cb04c4c1745472cc080fdcae4`)
+- **Total Questions Evaluated**: 50 (40 answerable, 10 out-of-scope)
+- **Gate 1 (Fact Score)**: **0.8667** vs $\ge 0.8208$ target -> **PASSED** (+0.0667 vs 0.8000 Phase 33 baseline)
+- **Gate 2 (Strict Success Rate)**: **72.5%** (29/40) vs $\ge 70.0\%$ ($28/40$) target -> **PASSED** (+7.5% vs 65.0% Phase 33 baseline)
+- **Gate 3 (Substantive Chunk Recall)**: **0.7179** vs $\ge 0.6538$ target -> **PASSED** (+0.0641 vs Phase 33 baseline)
+- **Gate 4 (Unified Evidence Recall)**: **0.7333** vs $\ge 0.6708$ target -> **PASSED** (+0.0625 vs Phase 33 baseline)
+- **Gate 5 (Invalid Citation Rate)**: **0.0%** (0 invalid citations across all 50 questions) -> **PASSED**
+- **Gate 8 (Hop-Tier Integrity)**:
+  - `1-hop`: **0.8000** fact score (100% parity with baseline, 0 regression)
+  - `2-hop`: **0.8500** fact score
+  - `3-hop`: **0.9667** fact score (substantial multi-hop quality gain)
+  - `aggregation`: **0.8500** fact score
+  - `out-of-scope`: **10/10 (100.0%)** correct abstentions (0 false generation, 0 regression)
+- **Gate 9 (Refinement Telemetry)**:
+  - Fast Path Rate: **54.0%** (27/50 queries)
+  - Refinement Activation Rate: **46.0%** (23/50 queries)
+  - Activated IDs: `['q_1hop_02', 'q_1hop_03', 'q_1hop_04', 'q_1hop_05', 'q_2hop_04', 'q_2hop_06', 'q_2hop_07', 'q_2hop_10', 'q_3hop_03', 'q_3hop_04', 'q_3hop_05', 'q_3hop_06', 'q_3hop_08', 'q_3hop_10', 'q_agg_01', 'q_agg_02', 'q_agg_04', 'q_agg_05', 'q_agg_06', 'q_agg_07', 'q_agg_08', 'q_agg_09', 'q_agg_10']`
+  - All 10 out-of-scope queries (100%) remained on the fast path with 0 spurious refinement calls.
+- **Gate 6 (Efficiency / Context Tokens)**: **710.9** tokens mean vs $\le 450.0$ target -> **FAILED** (+112.9 tokens vs 598.0 baseline ceiling; trade-off directly drove substantive recall from 0.6538 -> 0.7179)
+- **Gate 7 (Latency / P50)**: **7,283.0 ms** vs $\le 4,500.0$ ms target -> **FAILED** (queue latency and refinement synthesis overhead; represents ~80% reduction vs standalone LangGraph's 37.1s, but exceeds 4.5s ceiling)
+- **Overall Gate Verdict**: **PARTIAL PASS / LEADING RESEARCH CANDIDATE**
+  - **Quality Gates**: **PASS** (Fact score 0.8667, strict success 72.5%, chunk recall 0.7179, unified recall 0.7333, 0% invalid citations, 100% OOS abstention)
+  - **Efficiency / Latency Gates**: **FAIL** (Context tokens 710.9 vs 450, P50 latency 7,283.0 ms vs 4,500 ms)
+
+### Operational Classification & Next Step
+
+- **Architecture Classification (Pre-Repeatability)**: Leading research/release candidate; quality gains demonstrated on 50Q, with latency and context-efficiency regressions requiring qualification.
+- **Next Step Executed**: 3-run repeatability study under identical frozen parameters (`scripts/run_hybrid_repeatability_study.py`).
+
+### 3-Run Repeatability Study Results
+
+- **Dataset**: `data/benchmark_v2_dataset.jsonl` (SHA-256: `88fc85fc1af4200abcfe9530bd8228156b407b8cb04c4c1745472cc080fdcae4`)
+- **Evaluation Isolation**: `use_cache=False`, fresh per-question session memory, dedicated run audits (`data/evidence_refinement_benchmark_audit.jsonl` for Run 1, `data/hybrid_repeatability_run2_audit.jsonl` for Run 2, `data/hybrid_repeatability_run3_audit.jsonl` for Run 3).
+- **Runs Evaluated**: Run 1 (Audit), Run 2 (Rerun 1), Run 3 (Rerun 2).
+
+#### Multi-Run Performance Table
+
+| Metric | Phase 33 Champion Baseline | Run 1 (50Q) | Run 2 (50Q) | Run 3 (50Q) | 3-Run Mean ± Std | Target / Pre-Registered Gate | Gate Verdict |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Fact Score** | 0.8000 (peak 0.8208) | 0.8667 | 0.8708 | 0.8792 | **0.8722 ± 0.0064** | $\ge 0.8208$ | **PASS** |
+| **Strict Success** | 65.0% (26/40) | 72.5% (29/40) | 75.0% (30/40) | 77.5% (31/40) | **75.0% ± 2.5% (30.0/40)** | $\ge 28/40$ (70.0%) | **PASS** |
+| **Chunk Recall** | 0.6538 | 0.7179 | 0.7179 | 0.7179 | **0.7179** | $\ge 0.6538$ | **PASS** |
+| **Unified Recall** | 0.6708 | 0.7333 | 0.7333 | 0.7333 | **0.7333** | $\ge 0.6708$ | **PASS** |
+| **Invalid Citations** | 0.0% | 0.0% | 0.0% | 0.0% | **0.0%** | 0.0% on every run | **PASS** |
+| **OOS Abstention** | 100.0% (10/10) | 100.0% (10/10) | 100.0% (10/10) | 100.0% (10/10) | **100.0% (10/10)** | 10/10 on every run | **PASS** |
+| **Context Tokens** | 598.0 | 710.9 | 710.9 | 710.9 | **710.9** | $\le 450.0$ | **FAIL** (Trade-off) |
+| **P50 Latency (ms)** | 5,043.9 | 7,283.0 | 5,728.0 | 4,613.5 | **5,874.8 ms** | $\le 4,500.0$ ms | **FAIL** (Trade-off) |
+
+#### Stability & Determinism Analysis
+
+- **Retrieval Determinism**: **50/50 (100.0%)** queries produced 100% identical retrieved chunk IDs and graph facts across all 3 runs. Zero retrieval divergence observed.
+- **Refinement Routing Determinism**: **50/50 (100.0%)** queries made identical fast-path (27) vs refinement (23) routing decisions across all 3 runs.
+- **Per-Question Score Stability**: **45/50 (90.0%)** questions produced completely invariant fact scores across all 3 runs.
+- **Unstable Questions (Generator Variance)**: Exactly 5 questions exhibited variation solely from remote NIM token generation sampling:
+  - `q_1hop_09` (1-hop): scores = `[0.5, 0.5, 1.0]`
+  - `q_2hop_03` (2-hop): scores = `[0.5, 0.0, 0.0]`
+  - `q_3hop_05` (3-hop): scores = `[1.0, 0.6667, 1.0]`
+  - `q_agg_06` (aggregation): scores = `[0.5, 1.0, 0.5]`
+  - `q_agg_10` (aggregation): scores = `[0.5, 1.0, 1.0]`
+
+#### Latency Decomposition Across Runs
+
+| Component | Median (ms) | Min (ms) | Max (ms) | P95 (ms) | Proportion of Median Total |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Initial 32B Retrieval** | 2,042.7 | 384.2 | 92,262.7 | 13,422.8 | ~34.2% |
+| **LangGraph Refinement (Active)** | 398.6 | 273.3 | 552.9 | 464.2 | ~6.7% |
+| **Remote NIM Synthesis** | 3,027.7 | 971.1 | 42,655.6 | 18,888.3 | ~50.7% |
+| **End-to-End Latency** | 5,971.5 | 2,468.3 | 95,712.2 | 37,691.5 | 100.0% |
+
+The LangGraph refinement execution itself is lightweight (**median 398.6 ms**, ~6.7% of median total latency). Latency degradation is driven by longer assembled prompts fed into the remote NIM generator (710.9 tokens vs 598.0 baseline) and remote queue variance.
+
+### Final ADR 068 Qualification Verdict
+
+- **Status**: **Accepted as Qualified Research Champion / Candidate Architecture with Quantified Generator Variance and Explicit Efficiency Trade-off**.
+- **Quality Gates**: **ALL PASSED** (Fact score $0.8722 \ge 0.8208$, strict success $30.0/40 \ge 28/40$, chunk recall $0.7179 \ge 0.6538$, unified recall $0.7333 \ge 0.6708$, 0.0% invalid citations on every run, 10/10 OOS abstentions on every run, 100% retrieval determinism).
+- **Efficiency / Latency Gates**: **REPORTED SEPARATELY AS KNOWN TRADE-OFFS / FAILURES** (Context tokens 710.9 vs 450, P50 latency 5,874.8 ms vs 4,500 ms).
+- **Conclusion**: The hybrid architecture is confirmed as a genuine, repeatable quality upgrade over the frozen 32B baseline, not a remote generator artifact. Ingestion into `src/` can be considered in a subsequent phase if production latency targets accommodate the 5.8s P50 SLA or when local LLM inference is available.
+
+---
+
+<a id="adr-069"></a>
+
+## ADR 069: Portfolio Freeze of Hybrid Candidate Architecture and Documentation Standardization
+
+- **Date**: 2026-10-09
+- **Title**: Portfolio Freeze of Hybrid Candidate Architecture and Documentation Standardization
+- **Status**: accepted
+
+### Context & Problem Statement
+With the completion of the 3-run repeatability study (ADR 068) and verification of the full test suite (147/147 offline tests passing, 244/244 evalkit tests passing), the project is transitioning from an exploratory research and benchmarking phase to a polished, reproducible engineering portfolio project for graduate AI/ML roles.
+
+The project requires:
+1. Freezing the winning candidate architecture (Phase 32B `RetrievalCoordinator` in `src/router/` as the primary engine + bounded 1-pass LangGraph evidence refinement in `scripts/langgraph_evidence_refinement.py`).
+2. Preserving `src/` completely untouched without premature code churn.
+3. Completely honest reporting: three independent runs reported as empirical repeatability (not infinite-sample statistical proof); separating retrieval determinism (100% identical) from downstream generator phrasing variance; and explicitly declaring latency and context-token budget trade-offs.
+4. Full synchronization of canonical documents (`README.md`, `ARCHITECTURE.md`, `FLOWS.md`, `TASKS.md`, `CODEBASE_MAP.md`, `DECISIONS.md`).
+
+### Options Considered
+1. **Option 1: Merge Hybrid Refinement into `src/router/` immediately**:
+   - Refactor `src/router/coordinator.py` to incorporate LangGraph evidence refinement directly into core production code.
+   - *Drawback*: Violates pre-registered production SLAs ($\le 4,500$ ms P50 latency and $\le 450$ tokens context budget). Incurs core codebase churn without local inference infrastructure to mitigate cloud transit delay.
+2. **Option 2: Freeze Hybrid as Qualified Candidate in `scripts/` and Standardize Documentation**:
+   - Retain `src/` as the frozen Phase 33D production champion baseline.
+   - Retain `scripts/langgraph_evidence_refinement.py` as the frozen candidate architecture / qualified research champion.
+   - Polish `README.md`, sequence flows, architecture documentation, and codebase maps to reflect verified empirical metrics, clean reproduction steps, and transparent engineering trade-offs.
+
+### Trade-off Matrix
+
+| Criteria | Option 1: In-Place Core Promotion | Option 2: Candidate Freeze & Portfolio Polish |
+| :--- | :--- | :--- |
+| **SLA Integrity** | Fails (5.8s P50 > 4.5s SLA) | **100% Honest (trade-off documented)** |
+| **Core Code Stability** | Unstable (untested in core) | **100% Intact (`src/` clean & 147 tests pass)** |
+| **Benchmark Reproducibility** | Risk of drift | **100% Traceable to audited artifacts** |
+| **Engineering Presentation** | Premature claim of prod qualification | **Rigorous research & systems engineering** |
+
+### Decision & Explicit Rationale
+We chose **Option 2 (Freeze Hybrid as Qualified Candidate in `scripts/` and Standardize Documentation)**:
+- Preserved `src/` completely untouched (147/147 tests green).
+- Froze `scripts/langgraph_evidence_refinement.py` with comprehensive architectural and step-by-step explanatory comments.
+- Standardized `README.md`, `ARCHITECTURE.md`, and `FLOWS.md` with honest multi-run metrics, Mermaid diagrams, clean setup instructions, and explicit trade-off analyses.
+- Formally indexed the candidate architecture and all repeatability artifacts in `CODEBASE_MAP.md` and `TASKS.md`.
+
+### Consequences
+- **What gets easier**: Any recruiter, engineer, or reviewer can immediately clone the repo, understand the architecture, run the offline test suite (391 tests), reproduce the benchmark, and trace every metric to machine-readable JSON/JSONL ledgers.
+- **What gets harder**: None.
+- **What is locked in**: Candidate architecture resides in `scripts/langgraph_evidence_refinement.py`; production champion baseline resides in `src/router/coordinator.py`. Promotion to `src/` remains contingent on local inference deployment or SLA extension.
+
+---
+
+<a id="adr-070"></a>
+
+## ADR 070: Production Application Integration of Bounded LangGraph Refiner into `src/`
+
+- **Date**: 2026-10-09
+- **Title**: Production Application Integration of Bounded LangGraph Refiner into `src/`
+- **Status**: accepted
+
+### Context & Problem Statement
+The benchmark-winning hybrid GraphRAG architecture demonstrated superior retrieval quality (Fact score $0.8722 \pm 0.0064$, Strict success $30.0/40$, Substantive chunk recall $0.7179$, Unified evidence recall $0.7333$, $0.0\%$ citation hallucination, $10/10$ out-of-scope abstention). However, the implementation existed only as a standalone experimental script in `scripts/langgraph_evidence_refinement.py`.
+
+To transition the repository into a production-grade portfolio showcase, the reusable evidence-refinement logic needed to be cleanly integrated into `src/` according to standard enterprise software engineering practices without duplicating code, breaking existing baselines, or regressing offline tests.
+
+### Options Considered
+1. **Option 1: Monolithic Merge into `src/router/coordinator.py`**:
+   - Inline LangGraph graph definitions, state schemas, and node callbacks directly inside `coordinator.py`.
+   - *Drawback*: Bloats `coordinator.py` (>1,000 lines), violates single-responsibility principle, and tightly couples graph orchestration to retrieval routing.
+2. **Option 2: Modular Architecture under `src/router/refiner.py` with Composition**:
+   - Encapsulate `RefinementState`, `EvidenceRefiner`, and the 3-node linear StateGraph inside a dedicated module (`src/router/refiner.py`).
+   - Compose `EvidenceRefiner` into `RetrievalCoordinator` in `src/router/coordinator.py`, invoking it conditionally via a feature flag (`enable_evidence_refinement`) after primary retrieval and hydration.
+   - Refactor `scripts/langgraph_evidence_refinement.py` to import and re-export the application refiner, eliminating code duplication while preserving script backward compatibility.
+3. **Option 3: Upstream LLM Query Rewriter / Reformulation Agent**:
+   - Call an LLM to evaluate query completeness before retrieval.
+   - *Drawback*: Adds 1.5s - 2.5s network transit and API costs to 100% of queries, penalizing the 54% of queries that already have complete context.
+
+### Trade-off Matrix
+
+| Criteria | Option 1: Monolithic Merge | Option 2: Modular `src/router/refiner.py` | Option 3: Upstream LLM Agent |
+| :--- | :--- | :--- | :--- |
+| **Separation of Concerns** | Poor (tight coupling) | **High (modular engine)** | Moderate |
+| **Zero-Overhead Fast Path** | Possible | **Guaranteed (<1ms heuristic check)** | Fails (1.5s-2.5s on every query) |
+| **Backward Compatibility** | High risk of regression | **100% Intact (toggleable via config)** | Breaking |
+| **Code Maintainability** | Poor (file bloat) | **Clean, testable unit boundary** | Moderate |
+| **Dependency Footprint** | Adds langgraph | Explicit in `pyproject.toml` | Extra LLM gateway calls |
+
+### Decision & Explicit Rationale
+We chose **Option 2 (Modular Architecture under `src/router/refiner.py` with Composition)**:
+1. **Application Layer**: Refinement operates on initial retrieval context before answer generation. Placing it in `src/router/refiner.py` keeps retrieval-phase logic cohesive and separated from synthesis.
+2. **Deterministic Fast Path**: Retained the <1ms zero-LLM heuristic gap detector (`detect_evidence_gap`). When evidence is complete or queries are out-of-scope, LangGraph is completely bypassed (~54% fast path).
+3. **Strict Resource Caps**: Capped extra graph statements to $\le 3$ and extra vector passages to $\le 2$ (`max_refined_facts`, `max_refined_chunks`), bounding context tokens and preventing LLM distraction.
+4. **Provenance Invariant**: Automatically parses and registers chunk IDs from all refined graph statements and vector chunks into `cited_chunk_ids`, preserving the $0.0\%$ citation hallucination hard-gate.
+5. **Configurable Toggle**: Configured via `Settings.enable_evidence_refinement` (default `False` preserving baseline champion, toggleable via `.env` or constructor).
+6. **Graceful Fallback**: Protected refinement invocation in a try/except block; on any database or external model error, falls back safely to unrefined context without failing the query.
+
+### Consequences
+- **What gets easier**:
+  - Live FastAPI endpoint (`/query`) automatically supports evidence refinement when enabled.
+  - Dedicated unit tests (`tests/test_evidence_refinement.py`) validate fast-path routing, budget bounds, and provenance in isolation.
+  - Zero code duplication between production application code and benchmark scripts.
+- **What gets harder**:
+  - Project explicitly requires `langgraph>=0.2.0` in `requirements.txt` and `pyproject.toml`.
+- **What is locked in**:
+  - `src/router/refiner.py` is the canonical implementation of bounded evidence refinement.
+  - `scripts/langgraph_evidence_refinement.py` serves as a backward-compatible wrapper for evaluation scripts.
 

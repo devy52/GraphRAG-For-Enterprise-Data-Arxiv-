@@ -15,8 +15,21 @@ from evalkit.core.runner import EvalResult, Runner
 REGRESSION_DISPLAY_LIMIT = 20
 
 
+class ConfigError(Exception):
+    """Something wrong with the config/arguments themselves, before any
+    evaluation was attempted."""
+
+
+class ExecutionError(Exception):
+    """Something failed while actually running the evaluation."""
+
+
 def _run_from_config(config_path: str, args: argparse.Namespace | None = None) -> tuple[EvalConfig, EvalResult]:
-    config = EvalConfig.from_yaml(config_path)
+    try:
+        config = EvalConfig.from_yaml(config_path)
+    except Exception as exc:
+        raise ConfigError(str(exc)) from exc
+
     if args is not None:
         if getattr(args, "isolated", False):
             config.isolated = True
@@ -28,7 +41,12 @@ def _run_from_config(config_path: str, args: argparse.Namespace | None = None) -
             config.save_run = False
         if getattr(args, "concurrency", None):
             config.max_concurrency = args.concurrency
-    result = Runner(config).run()
+
+    try:
+        result = Runner(config).run()
+    except Exception as exc:
+        raise ExecutionError(str(exc)) from exc
+
     return config, result
 
 
@@ -136,8 +154,11 @@ def cmd_compare(args: argparse.Namespace) -> int:
 
 def cmd_diff(args: argparse.Namespace) -> int:
     store = RunStore(args.runs_dir)
-    run_a = store.load(args.run_a)
-    run_b = store.load(args.run_b)
+    try:
+        run_a = store.load(args.run_a)
+        run_b = store.load(args.run_b)
+    except Exception as exc:
+        raise ConfigError(str(exc)) from exc
 
     agg_a, agg_b = run_a["aggregate"], run_b["aggregate"]
     metrics = sorted(set(agg_a) | set(agg_b))
@@ -156,12 +177,18 @@ def cmd_diff(args: argparse.Namespace) -> int:
 
 def cmd_runs_list(args: argparse.Namespace) -> int:
     store = RunStore(args.runs_dir)
-    runs = store.list_runs()
+    try:
+        runs = store.list_runs()
+    except Exception as exc:
+        raise ConfigError(str(exc)) from exc
     if not runs:
         print(f"No runs stored in {args.runs_dir}")
         return 0
     for run_id in runs:
-        data = store.load(run_id)
+        try:
+            data = store.load(run_id)
+        except Exception as exc:
+            raise ConfigError(str(exc)) from exc
         print(f"{run_id}  ({data['created_at']}, track={data['track']}, dataset={data['dataset']})")
     return 0
 
@@ -222,7 +249,14 @@ def main() -> None:
     p_cache_clear.set_defaults(func=cmd_cache_clear)
 
     args = parser.parse_args()
-    sys.exit(args.func(args))
+    try:
+        sys.exit(args.func(args))
+    except ConfigError as exc:
+        print(f"Config error: {exc}", file=sys.stderr)
+        sys.exit(2)
+    except ExecutionError as exc:
+        print(f"Execution error: {exc}", file=sys.stderr)
+        sys.exit(3)
 
 
 if __name__ == "__main__":

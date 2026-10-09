@@ -38,6 +38,7 @@ scratch/
 temp_*
 data/temp_*
 *.tmp.*
+_local_archive/
 
 # IDE & Editor Settings
 .vscode/

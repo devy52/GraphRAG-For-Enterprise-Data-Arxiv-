@@ -134,3 +134,20 @@ def test_multiple_regressed_metrics_on_same_example():
     regressions = detect_regressions(rows_a, rows_b, threshold=0.1)
     assert len(regressions) == 2
     assert {r["metric"] for r in regressions} == {"faithfulness", "answer_relevancy"}
+
+
+def test_regressions_distinguishes_identical_input_by_id():
+    rows_a = [
+        {"id": "id-1", "input": "identical query", "output": "x", "scores": {"faithfulness": 0.9}},
+        {"id": "id-2", "input": "identical query", "output": "y", "scores": {"faithfulness": 0.9}},
+    ]
+    # id-1 drops, id-2 stays unchanged
+    rows_b = [
+        {"id": "id-1", "input": "identical query", "output": "x", "scores": {"faithfulness": 0.3}},
+        {"id": "id-2", "input": "identical query", "output": "y", "scores": {"faithfulness": 0.9}},
+    ]
+    regressions = detect_regressions(rows_a, rows_b, threshold=0.1)
+    assert len(regressions) == 1
+    assert regressions[0]["input"] == "identical query"
+    assert regressions[0]["before"] == 0.9
+    assert regressions[0]["after"] == 0.3

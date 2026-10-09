@@ -52,3 +52,14 @@ def test_eval_example_defaults():
     assert ex.reference is None
     assert ex.context is None
     assert ex.metadata == {}
+    assert ex.id is not None
+    assert len(ex.id) == 16
+
+
+def test_eval_example_id_preservation_and_uniqueness():
+    ex_custom = EvalExample(id="custom-123", input="hi")
+    assert ex_custom.id == "custom-123"
+
+    ex1 = EvalExample(input="same", metadata={"level": "easy"})
+    ex2 = EvalExample(input="same", metadata={"level": "hard"})
+    assert ex1.id != ex2.id
