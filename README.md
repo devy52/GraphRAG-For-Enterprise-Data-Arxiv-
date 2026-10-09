@@ -15,7 +15,7 @@ Traditional vector-only RAG systems perform well on definitional questions ("Wha
 ### The Solution: Dual-Store Hybrid GraphRAG
 This architecture models the corpus as two complementary representations linked by shared chunk identifiers:
 - **Structural Topology (Neo4j)**: Stores typed entities (`Paper`, `Author`, `Method`, `Dataset`, `Institution`, `Task`, `Metric`) and relationships (`CITES`, `EXTENDS`, `USES_METHOD`, `EVALUATED_ON`, `AUTHORED_BY`) adhering to a strict ontology ([`Docs/ONTOLOGY.md`](Docs/ONTOLOGY.md)). Every edge carries a `source_chunk_id` foreign key.
-- **Dense Semantic Store (pgvector)**: Indexes 800-character passages using HNSW vector indexing (`vector_cosine_ops`, $m=16, \text{ef\_construction}=64$) for rapid cosine similarity search.
+- **Dense Semantic Store (pgvector)**: Indexes 800-character passages using HNSW vector indexing (`vector_cosine_ops`, `m=16, ef_construction=64`) for rapid cosine similarity search.
 - **Deterministic Citation Hard-Gate**: An AST-based validator parses all generated `[chunk_id]` references, strictly rejecting and regenerating any response containing ungrounded or fabricated citations (0.0% citation hallucination rate).
 
 ---
@@ -124,7 +124,7 @@ graph TD
 Queries are classified into `GRAPH`, `VECTOR`, or `BOTH` based on structural vs. semantic intent:
 - **`GRAPH`**: Relational queries, co-authorship networks, citation lineages, method comparisons.
 - **`VECTOR`**: Mathematical formulations, definitions, isolated chunk facts.
-- **`BOTH` (or Confidence $<0.70$)**: Composite queries requiring textual explanation anchored to graph relationships.
+- **`BOTH` (or Confidence < 0.70)**: Composite queries requiring textual explanation anchored to graph relationships.
 
 ### 2. Parameterized Cypher Template Catalog (Zero Text-to-Cypher Hallucination)
 The system **never emits raw LLM-generated Cypher**. Instead, queries bind resolved entity parameters to pre-compiled, injection-proof traversal templates ([`src/graph/templates.py`](src/graph/templates.py)):
@@ -137,7 +137,7 @@ The system **never emits raw LLM-generated Cypher**. Instead, queries bind resol
 Resolves surface forms across papers into canonical graph nodes:
 1. Lexical NFKD normalization, lowercasing, and punctuation stripping.
 2. Token-level Jaccard set similarity against registered canonical entities.
-3. Dense embedding cosine similarity ($\ge 0.88$) against canonical centroids.
+3. Dense embedding cosine similarity (≥ 0.88) against canonical centroids.
 
 ### 4. Graph Passage Hydration
 Graph relationship triples abstract away qualitative prose. Graph Passage Hydration looks up the raw 800-character text chunk corresponding to traversed edges (`source_chunk_id`) and injects it into context, directly recovering lost context and raising chunk recall from 0.2821 to 0.6538.
@@ -147,7 +147,7 @@ Evaluated in [`scripts/langgraph_evidence_refinement.py`](scripts/langgraph_evid
 - **Why not LangGraph on every query?** Unconditional 9-node execution incurred a 37.1s P50 latency penalty ([ADR 067](Docs/DECISIONS.md#adr-067)).
 - **Selective Activation**: A heuristic, zero-LLM gap detector checks whether question entities or referenced paper IDs were missed in initial retrieval (<1ms check).
 - **Fast Path (54%)**: Unambiguous queries bypass LangGraph entirely.
-- **Refined Path (46%)**: Executes a bounded 3-node StateGraph adding $\le 3$ ego-neighborhood facts and $\le 2$ targeted document chunks, improving 3-hop fact score from 0.8333 to **0.9667**.
+- **Refined Path (46%)**: Executes a bounded 3-node StateGraph adding ≤ 3 ego-neighborhood facts and ≤ 2 targeted document chunks, improving 3-hop fact score from 0.8333 to **0.9667**.
 
 ### 6. Out-of-Scope Detection & Calibrated Abstention
 When queries address topics outside the indexed corpus, the system achieves **100.0% abstention (10/10)** by detecting ungrounded context and emitting standardized refusal language without hallucinating facts.
@@ -161,7 +161,7 @@ When queries address topics outside the indexed corpus, the system achieves **10
 | **Runtime** | Python | 3.11+ (CPython, PEP 8, full type hints) |
 | **API** | FastAPI / Uvicorn | Asynchronous ASGI, OpenAPI docs, lifespan connection pools |
 | **Graph Database** | Neo4j Community v5.23 | Cypher 5, APOC Core, uniqueness constraints, idempotent `MERGE` |
-| **Vector Store** | PostgreSQL 16 + pgvector | HNSW cosine index ($m=16, \text{ef\_construction}=64$), asyncpg |
+| **Vector Store** | PostgreSQL 16 + pgvector | HNSW cosine index (`m=16, ef_construction=64`), asyncpg |
 | **Orchestration** | LangGraph & Custom Async | 3-node bounded `StateGraph` for refinement; decoupled pipelines |
 | **LLM Gateway** | OpenAI-Compatible Client | NVIDIA NIM, OpenRouter, local vLLM, or Ollama |
 | **Evaluation Engine**| `evalkit` (in-repo) | Channel-Strict AST evaluator, typed evidence ledgers |
@@ -323,10 +323,10 @@ Reports and audit ledgers will be generated under `data/hybrid_repeatability_*`.
 ## 8. Known Limitations & Future Roadmap
 
 1. **Context Token Budget Overrun**:
-   - *Current*: 710.9 tokens mean context (vs. pre-registered target $\le 450.0$ tokens).
+   - *Current*: 710.9 tokens mean context (vs. pre-registered target ≤ 450.0 tokens).
    - *Trade-off*: Recovering raw contextual paragraphs from omitted papers directly lifted 3-hop fact score from 0.8333 to 0.9667. Context expansion is documented and accepted as an engineering trade-off.
 2. **Provider Queue & Transit Latency**:
-   - *Current*: P50 latency is **5,874.8 ms** (vs. pre-registered SLA $\le 4,500.0$ ms).
+   - *Current*: P50 latency is **5,874.8 ms** (vs. pre-registered SLA ≤ 4,500.0 ms).
    - *Root Cause*: Network latency and remote cloud queue wait times account for ~79% of total execution time.
 3. **Future Engineering Enhancements**:
    - **Local Inference Container**: Serving `Qwen2.5-7B-Instruct` locally via **vLLM** or **Ollama** on `localhost:8000` is projected to eliminate public internet round-trips and drop P50 latency from 5.8s to **~1.6s**.
@@ -339,7 +339,7 @@ Reports and audit ledgers will be generated under `data/hybrid_repeatability_*`.
 > **"Thank you to arXiv for use of its open access interoperability."**
 
 This project adheres strictly to the arXiv API Terms of Use:
-- **Polite Rate Limiting**: All harvesting requests enforce $\ge 3.0$s delays (`ARXIV_DELAY_SECONDS=3.0`) over a single connection with explicit user-agent attribution.
+- **Polite Rate Limiting**: All harvesting requests enforce ≥ 3.0s delays (`ARXIV_DELAY_SECONDS=3.0`) over a single connection with explicit user-agent attribution.
 - **No Redistribution**: PDF binaries are never stored or republished; only extracted structured triples and chunk embeddings are indexed.
 
 ---
