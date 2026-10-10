@@ -4,7 +4,7 @@
 # Product Requirements Document (PRD)
 
 ## 1. Executive Summary
-The Enterprise Hybrid Knowledge Graph & Vector RAG (GraphRAG) platform is a high-assurance retrieval-augmented generation engine designed for complex scientific, technical, and enterprise literature. Traditional vector-only RAG systems fail when responding to multi-hop relational questions, lineage tracking, and cross-document aggregations. This platform unites the deep topological traversal capabilities of a Neo4j property graph with dense semantic embeddings in PostgreSQL (`pgvector`), gated by strict, deterministic citation validation that completely eliminates citation hallucinations.
+The Enterprise Hybrid Knowledge Graph & Vector RAG (GraphRAG) platform is a high-assurance retrieval-augmented generation engine designed for complex scientific, technical, and enterprise literature. Traditional vector-only RAG systems fail when responding to multi-hop relational questions, lineage tracking, and cross-document aggregations. This platform unites the deep topological traversal capabilities of a Neo4j property graph with dense semantic embeddings in PostgreSQL (`pgvector`), gated by deterministic citation validation designed to systematically intercept unsupported citations.
 
 ## 2. Problem Statement
 Enterprise documents (such as technical standards, academic research, and engineering specifications) contain two distinct modalities of information:
@@ -38,10 +38,10 @@ Enterprise documents (such as technical standards, academic research, and engine
 | **FR-03** | Multi-Stage Entity Resolution | Deduplicates entities across papers using lexical normalization, token Jaccard similarity, and dense embedding cosine similarity ($\ge 0.88$). |
 | **FR-04** | Idempotent Graph Storage | Ingests into Neo4j via Cypher `MERGE` statements; attaches `source_chunk_id` to every edge. |
 | **FR-05** | Dense Vector Storage & HNSW Tuning | Indexes chunks into PostgreSQL `pgvector` with HNSW (`m=16`, `ef_construction=64`) tuned for $\ge 0.95$ recall@5. |
-| **FR-06** | Parameterized Cypher Templates | Traverses Neo4j using pre-compiled, injection-proof query templates. Disallows unconstrained text-to-Cypher. |
+| **FR-06** | Parameterized Cypher Templates | Traverses Neo4j using pre-compiled, parameterized query templates. Disallows unconstrained text-to-Cypher. |
 | **FR-07** | Tri-State Question Router | Classifies queries into `graph`, `vector`, or `both` with automatic escalation to `both` when confidence is $<0.70$. |
 | **FR-08** | Multi-Turn Dialogue Memory | Retains sliding-window session context ($k=3$ turns) and deterministically resolves third-person pronoun coreferences. |
-| **FR-09** | Strict Citation Hard-Gate | Deterministically validates that 100% of inline citations (`[chunk_id]`) exist in the retrieved context; rejects and regenerates on hallucination. |
+| **FR-09** | Strict Citation Hard-Gate | Validates that inline citations (`[chunk_id]`) resolve directly to the retrieved context; rejects and regenerates responses on citation mismatch. |
 | **FR-10** | Production REST API | Exposes `/query`, `/health`, and `/stats` endpoints via FastAPI with OpenAPI documentation. |
 | **FR-11** | Stratified Benchmarking Suite | Automates comparative evaluation over 50 stratified questions across 5 complexity tiers (1-hop to out-of-scope). |
 | **FR-12** | Zero-Node Material 3 Web Interface | Interactive single-page UI served via FastAPI static assets with M3 design system, split Chat/Graph view, citation popover, and Neo4j force-directed canvas. |
@@ -54,7 +54,7 @@ Enterprise documents (such as technical standards, academic research, and engine
 | **1-Hop Question Accuracy** | $\ge 90\%$ | **91.5%** |
 | **2-Hop Relational Accuracy** | $\ge 80\%$ | **86.0%** (+34.0% vs vector baseline) |
 | **3-Hop Multi-Hop Accuracy** | $\ge 75\%$ | **79.0%** (+55.0% vs vector baseline) |
-| **Citation Hallucination Rate** | **0.0%** (Hard gate) | **0.0%** (100% verified against raw chunks) |
+| **Citation Hallucination Rate** | **0.0%** (Hard gate) | **0.0%** (verified against retrieved chunks) |
 | **P95 Query Latency** | $< 800$ ms | **620 ms** |
 | **Offline Testability** | 100% passing without internet | **43/43 tests passing offline in 2.86s** |
 

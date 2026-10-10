@@ -39,7 +39,7 @@ Entity duplication is the primary failure mode of automated knowledge graphs. Th
 ```
 
 ## 4. Parameterized Cypher Template Catalog Design
-Eliminates text-to-Cypher hallucinations by restricting Neo4j execution to pre-compiled templates in `src/graph/templates.py`:
+Mitigates text-to-Cypher syntax and schema errors by restricting Neo4j execution to pre-compiled templates in `src/graph/templates.py`:
 
 | Template ID | Traversal Pattern | Query Focus |
 |---|---|---|

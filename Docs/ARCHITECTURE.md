@@ -52,7 +52,7 @@ graph TD
 
     subgraph HardGate ["Integrity Validation Gate"]
         Synthesizer --> ValAST{"CitationValidator<br/>(AST / Regex Parsing)"}
-        ValAST -->|"100% Valid"| ValidResponse["FastAPI Response<br/>(Answer, Citations, Provenance, Latencies)"]
+        ValAST -->|"All Valid"| ValidResponse["FastAPI Response<br/>(Answer, Citations, Provenance, Latencies)"]
         ValAST -->|"Invalid Citation"| Regenerate["Reject & Regenerate Loop<br/>(max_attempts=3)"]
         Regenerate --> Synthesizer
     end
@@ -74,7 +74,7 @@ graph TD
 - **Extraction Cache**: Chunk hash cache (`data/cache/extraction_cache.json`) prevents duplicate LLM extraction costs on unchanged documents.
 
 ### 2.2 Multi-Stage Entity Resolution
-Eliminates entity fragmentation and duplicate graph nodes across papers:
+Mitigates entity fragmentation and duplicate graph nodes across papers:
 1. **Stage 1 (Lexical)**: NFKD unicode normalization, lowercasing, punctuation stripping.
 2. **Stage 2 (Token Jaccard)**: Fast n-gram overlap against registered canonical nodes.
 3. **Stage 3 (Dense Embedding)**: Cosine similarity ($\ge 0.88$) against canonical entity cluster centroids.
@@ -83,7 +83,7 @@ Eliminates entity fragmentation and duplicate graph nodes across papers:
 ### 2.3 Neo4j Property Graph Store
 - **Entities**: `Paper`, `Author`, `Method`, `Dataset`, `Institution`, `Task`, `Metric`.
 - **Relationships**: `CITES`, `AUTHORED_BY`, `EXTENDS`, `USES_METHOD`, `EVALUATED_ON`, `AFFILIATED_WITH`, `TARGETS_TASK`, `MEASURED_BY`, `COLLABORATED_WITH`.
-- **Write Policy**: 100% idempotent `MERGE` writes. Node `CREATE` statements are strictly forbidden.
+- **Write Policy**: Idempotent `MERGE` writes. Node `CREATE` statements are prohibited in production pipelines.
 - **Provenance Foreign Keys**: Every relationship edge stores the `source_chunk_id` from which it was extracted.
 
 ### 2.4 PostgreSQL + pgvector Semantic Store
@@ -117,7 +117,7 @@ Implemented in [`src/router/refiner.py`](../src/router/refiner.py) and composed 
      - `isolate_gap_node`: Confirms missing entity and document IDs.
      - `targeted_retrieval_node`: Executes 1-hop ego-neighborhood graph expansion and document-filtered vector lookup.
      - `merge_evidence_node`: Enforces strict budgets ($\le 3$ extra graph facts, $\le 2$ extra vector chunks).
-- **Performance**: Median refinement execution is only **398.6 ms**, lifting 3-hop fact score from 0.8333 to **0.9667** while preserving 0% invalid citations and 100% out-of-scope abstention.
+- **Performance**: Median refinement execution is only **398.6 ms**, lifting 3-hop fact score from 0.8333 to **0.9667** while maintaining 0.0% invalid citations and 10/10 out-of-scope abstention on benchmark evaluation.
 - **Fail-Safe Robustness**: Try/except fallback to unrefined context on external model/DB error; verified across 9 dedicated unit and integration tests.
 
 ### 2.9 Citation AST Hard-Gate

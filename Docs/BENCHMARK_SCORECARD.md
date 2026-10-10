@@ -54,7 +54,7 @@ All scores are evaluated under identical LLM inference (`Qwen2.5-7B-Instruct`, `
 | **Phase 33D** | **3-Run Repeatability Champion** (Frozen 32B in `src/`) | **0.8042 ± 0.0150** | **26.3 ± 1.5 / 40 (65.8%)** | **0.6538** | **0.6708** | **0.0%** | **10/10 (100%)** | **598.0** | **4,311.4** | **Active Production Champion** |
 | **Phase 34** | **Standalone LangGraph StateGraph** (9-node cyclical) | 0.8750 | 30 / 40 (75.0%) | 0.7179 | 0.7333 | 0.0% | 10/10 (100%) | 503.0 | 37,116.0 | Latency Rejected |
 | **Phase 34** | **Hybrid 32B + LangGraph Refinement** (3-Run Repeatability) | **0.8722 ± 0.0064** | **30.0 ± 1.0 / 40 (75.0%)** | **0.7179** | **0.7333** | **0.0%** | **10/10 (100%)** | **710.9** | **5,874.8** | **Qualified Research Champion** |
-| **Control** | **Phase 31C Oracle Control** (16 failures perfect context) | 0.8646 (failures) | 13 / 16 (81.2%) | 1.0000 | 1.0000 | 0.0% | 10/10 (100%) | 850.0 | 4,920.0 | Theoretical Upper Bound |
+| **Control** | **Phase 31C Oracle Control** (16 failures isolated gold context) | 0.8646 (failures) | 13 / 16 (81.2%) | 1.0000 | 1.0000 | 0.0% | 10/10 (100%) | 850.0 | 4,920.0 | Theoretical Upper Bound |
 
 ---
 
@@ -92,10 +92,10 @@ What specific problem each architectural component solved:
 | Mechanism | Introduced In | Primary Metric Gained | Root Cause Addressed |
 | :--- | :--- | :---: | :--- |
 | **Neo4j Property Graph** | Phase 1–5 | +0.1166 Fact Score | Solved multi-hop relational blindness where isolated vector chunks lacked connecting edges. |
-| **Canonical Entity Resolver** | Phase 31B | +0.0584 Fact Score | Resolved author and paper aliases (`q1hop01`, `q1hop04`) and eliminated lexical mismatches. |
+| **Canonical Entity Resolver** | Phase 31B | +0.0584 Fact Score | Resolved author and paper aliases (`q1hop01`, `q1hop04`) and mitigated lexical mismatches. |
 | **Graph Passage Hydration** | Phase 32A | +0.0583 Fact Score | Recovered raw contextual sentences from provenance chunk IDs that graph triples abstracted away. |
 | **Vector-Similarity Gating ($s_{max}$)** | Phase 32B | -74 Context Tokens | Prevented context bloat by suppressing hydration when pgvector cosine similarity exceeded 0.85. |
-| **3-Run Repeatability Verification** | Phase 33D | Stability Quantified | Proved retrieval was 100% deterministic (50/50) and quantified remote NIM phrasing variance. |
+| **3-Run Repeatability Verification** | Phase 33D | Stability Quantified | Observed retrieval was deterministic (50/50 cases identical in this sample) and quantified remote NIM phrasing variance. |
 | **Bounded LangGraph Refinement** | Phase 34 | +0.0680 Fact Score | Recovered missing corpus entities and document IDs on complex 3-hop questions without looping. |
 
 ---

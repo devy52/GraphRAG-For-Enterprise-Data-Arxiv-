@@ -32,7 +32,7 @@ All results are evaluated on the canonical 50-question benchmark ([`data/benchma
 | **Strict Success Rate** | 14/40 (35.0%) | 26.3 ± 1.5 / 40 (65.8%) | **30.0 ± 1.0 / 40 (75.0%)** | **+114.3%** | **+14.0%** | 🟢 +10.0% Absolute Pass Rate |
 | **Substantive Chunk Recall** | 0.2821 | 0.6538 | **0.7179** | **+154.5%** | **+9.8%** | 🟢 Hydration & Gap Recovery |
 | **Unified Evidence Recall** | 0.3083 | 0.6708 | **0.7333** | **+137.9%** | **+9.3%** | 🟢 Structured Ledger Completeness |
-| **3-Hop Fact Score** | 0.4000 | 0.8333 ± 0.0577 | **0.9667 ± 0.0289** | **+141.7%** | **+16.0%** | 🟢 Near-Perfect Multi-Hop Traversal |
+| **3-Hop Fact Score** | 0.4000 | 0.8333 ± 0.0577 | **0.9667 ± 0.0289** | **+141.7%** | **+16.0%** | 🟢 Multi-Hop Traversal Gain (0.9667) |
 | **2-Hop Fact Score** | 0.6000 | 0.8000 ± 0.0000 | **0.8333 ± 0.0289** | **+38.9%** | **+4.2%** | 🟢 Relational Bridge Recovery |
 | **1-Hop Fact Score** | 0.5500 | 0.7833 ± 0.0289 | **0.8000 ± 0.0000** | **+45.5%** | **+2.1%** | 🟢 Definitional Parity Preserved |
 | **Out-of-Scope Abstention** | **10/10 (100%)** | **10/10 (100%)** | **10/10 (100%)** | **Tied** | **Tied** | 🟢 0/10 Spurious Generation on Benchmark |
@@ -222,7 +222,7 @@ GraphRAG-For-Enterprise-Data/
 │   ├── router/                     # Intent classifier, coordinator, and LangGraph refiner
 │   ├── synthesis/                  # Answer synthesizer & AST citation validator
 │   └── vector/                     # PostgreSQL pgvector indexer & HNSW search
-├── tests/                          # 17 automated test suites (100% offline passing, 0 regressions)
+├── tests/                          # 17 automated test suites (offline passing, 0 regressions)
 ├── docker-compose.yml              # Local container definitions for Neo4j and PostgreSQL
 ├── pyproject.toml                  # Python packaging configuration
 └── requirements.txt                # Pinned production dependencies
@@ -318,7 +318,7 @@ The repository contains automated unit and integration tests that run completely
 # 2. Run focused evidence refinement unit & integration tests (ADR 070)
 .venv\Scripts\pytest tests/test_evidence_refinement.py -v
 ```
-*Expected Result*: 100% green passing across all tests.
+*Expected Result*: All 133 tests pass offline.
 
 ### Running Integrated Hybrid Verification
 ```pwsh

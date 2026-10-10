@@ -26,7 +26,7 @@ The Enterprise GraphRAG architecture is built entirely in modern Python ($\ge 3.
 - **Constraints & Indexes**:
   - Uniqueness constraints on `(n:Label {name: string})` for all 7 entity types (`Paper`, `Author`, `Method`, `Dataset`, `Institution`, `Task`, `Metric`).
   - Indexing on `source_chunk_id` edge property.
-- **Write Policy**: 100% idempotent Cypher writes via `MERGE`. Raw node `CREATE` statements are strictly forbidden.
+- **Write Policy**: Idempotent Cypher writes via `MERGE`. Raw node `CREATE` statements are prohibited in production pipelines.
 
 ### 2.2 PostgreSQL + pgvector
 - **Connection URI**: `postgresql+asyncpg://user:pass@localhost:5432/graphrag_db`
@@ -191,10 +191,10 @@ The Enterprise GraphRAG architecture is built entirely in modern Python ($\ge 3.
 
 ## 5. Security, Invariants & Error Handling
 
-1. **Injection Prevention**: Zero unconstrained text-to-Cypher. All graph queries execute parameterized Cypher templates (`CYPHER_TEMPLATES`) where parameters are passed separately from query strings.
+1. **Injection Prevention**: Avoids unconstrained text-to-Cypher. All graph queries execute parameterized Cypher templates (`CYPHER_TEMPLATES`) where parameters are passed separately from query strings.
 2. **Provenance Invariant**: Every graph relationship and every vector chunk record MUST carry a valid `source_chunk_id`.
 3. **Integrity Hard-Gate**: Answers containing unsupported citations are intercepted at the validator tier and regenerated; non-compliant responses trigger standardized fallback notices.
-4. **Offline Resilience**: When LLM gateway credentials are absent or dummy, deterministic fallback mechanisms activate automatically, allowing 100% offline test execution.
+4. **Offline Resilience**: When LLM gateway credentials are absent or dummy, deterministic fallback mechanisms activate automatically, enabling offline test execution.
 
 ## 6. External API Compliance & Rate Limiting
 1. **Mandatory Attribution**: All public APIs (`GET /`, `GET /stats`) and documentation must render: *"Thank you to arXiv for use of its open access interoperability."*

@@ -211,7 +211,7 @@ LLMs frequently hallucinate plausible-sounding citations or reference documents 
    - *How it works*: Response parser extracts every `[chunk_id]` citation, cross-references it against the set of retrieved chunks (`graph` or `vector`). If any citation is invalid or missing, the response is rejected and regenerated with a penalty prompt.
 
 ### Why Option 3 was Chosen over Others
-- Guarantees 100% verifiable citations in the final API response.
+- Enforces citation verification against active retrieved chunks in API responses.
 - Prevents downstream misinformation in enterprise decision-making.
 
 ---
@@ -421,17 +421,17 @@ When answering multi-hop relational questions over a knowledge graph (e.g., cita
 | **Security & Injection Safety** | Poor (vulnerable to prompt/Cypher injection) | High (structured AST token generation) | **Maximum** (strict parameter binding via Neo4j driver) |
 | **Hallucination Risk** | High (invents non-existent labels/relations) | Low (constrained by code) | **Zero** (queries strictly adhere to ONTOLOGY.md) |
 | **Query Latency** | High (LLM call required to generate Cypher) | Very Low (<2ms assembly) | **Very Low** (<1ms lookup + execution) |
-| **Schema Compliance** | Fragile (model drift across prompt updates) | High | **100% Guaranteed** |
+| **Schema Compliance** | Fragile (model drift across prompt updates) | High | **High (Enforced Schema)** |
 | **Complexity & Maintainability**| Low initial, very high ongoing prompt engineering | Very High (complex AST compiler) | **Moderate & Clean** (explicit catalog in `templates.py`) |
 
 ### Decision & Explicit Rationale
 We chose **Option 3 (Pre-Compiled Parameterized Cypher Template Catalog)**.
 - **Security**: Raw string concatenation and LLM-generated Cypher are eliminated; every query uses native Neo4j parameter maps.
 - **Determinism**: 100% adherence to `Docs/ONTOLOGY.md`. Traversals reliably return ground truth facts without syntactic degradation.
-- **Attribution**: Every parameterized edge in the catalog explicitly projects `source_chunk_id`, guaranteeing that all graph-derived facts can be verified against source text chunks.
+- **Attribution**: Every parameterized edge in the catalog explicitly projects `source_chunk_id`, enabling graph-derived facts to be cross-referenced with source text chunks.
 
 ### Consequences
-- **What gets easier**: Sub-millisecond template routing, deterministic unit testing, zero injection risk, and guaranteed `source_chunk_id` extraction on every edge.
+- **What gets easier**: Sub-millisecond template routing, deterministic unit testing, reduced injection surface, and structured `source_chunk_id` extraction on every edge.
 - **What gets harder**: Supporting novel, unanticipated graph questions requires adding a new template definition to `CYPHER_TEMPLATES`.
 - **What is locked in**: Traversal hop depths are bounded (1..3 hops) to prevent unbounded Neo4j graph traversal blowups.
 
@@ -457,14 +457,14 @@ Executing both graph traversal and dense vector search on every question incurs 
    - Single-path classification with no hybrid option or confidence threshold.
 3. **Tri-State Intent Router with Low-Confidence Fallback Escalation (`graph | vector | both`)**:
    - Classifies query into `graph` (relational/topological), `vector` (semantic/conceptual), or `both` (multifaceted).
-   - Computes a confidence score ($0.0 \dots 1.0$); if confidence is below $0.70$, automatically escalates the decision to `both` (hybrid) to guarantee recall.
+   - Computes a confidence score ($0.0 \dots 1.0$); if confidence is below $0.70$, automatically escalates the decision to `both` (hybrid) to maximize candidate recall.
    - Operates via few-shot LLM when API credentials exist, and falls back to deterministic regex pattern dominance and Cypher template detection when offline.
 
 ### Trade-off Matrix
 
 | Criteria | Option 1: Always Hybrid | Option 2: Binary Hard Router | Option 3: Tri-State with Fallback Escalation |
 | :--- | :--- | :--- | :--- |
-| **Retrieval Recall** | **Maximum** (both paths always retrieved) | Moderate (misclassification leads to missing context) | **Very High** (hybrid route and $<0.70$ fallback guarantee coverage) |
+| **Retrieval Recall** | **Maximum** (both paths always retrieved) | Moderate (misclassification leads to missing context) | **Very High** (hybrid route and $<0.70$ fallback expands candidate coverage) |
 | **P95 Latency & Load** | High (both databases hit on 100% of queries) | **Low** (only one path queried) | **Low to Moderate** (single-store query for clear intents; hybrid only when required) |
 | **Offline Self-Sufficiency** | High | Low (relies strictly on live LLM calls) | **Maximum** (dual engine: few-shot LLM + deterministic regex/template heuristics) |
 | **Context Window Hygiene** | Poor (context polluted with irrelevant facts) | High (isolated store context) | **Balanced & High** (targeted context, combined only when intent demands it) |
@@ -474,7 +474,7 @@ Executing both graph traversal and dense vector search on every question incurs 
 We chose **Option 3 (Tri-State Intent Router with Low-Confidence Fallback Escalation)**.
 - **Selective Dispatch**: Clear structural questions execute in $<15$ms on Neo4j without vector overhead; purely conceptual questions execute in $<10$ms on pgvector without graph overhead.
 - **Recall Guardrail**: The $0.70$ confidence floor eliminates single-path failure modes on ambiguous questions (e.g. short queries or domain edge cases) by executing both paths.
-- **Offline / Test Resiliency**: The dual-mode implementation (`RouteClassifier`) runs 100% offline via deterministic heuristic patterns when API keys are absent, guaranteeing reliable testing and CI/CD operation.
+- **Offline / Test Resiliency**: The dual-mode implementation (`RouteClassifier`) runs 100% offline via deterministic heuristic patterns when API keys are absent, enabling reliable testing and CI/CD operation.
 
 ### Consequences
 - **What gets easier**: Reduced average query latency and token consumption; dialogue coreferences are cleanly resolved by `SessionMemory` ($k=3$) before classification.
@@ -494,7 +494,7 @@ We chose **Option 3 (Tri-State Intent Router with Low-Confidence Fallback Escala
 
 ### Context & Problem Statement
 In enterprise and scientific question-answering systems, hallucinated citations (referencing non-existent papers, fictional sections, or irrelevant chunk IDs) destroy user trust and render answers legally and technically unverifiable.
-Standard RAG systems instruct the LLM via system prompt to "cite your sources", but LLMs frequently confabulate believable citations, mismatch facts with citations, or fabricate chunk tokens out of thin air. We need an architectural guarantee that 100% of cited sources in every returned answer resolve directly to chunks retrieved in the active query context.
+Standard RAG systems instruct the LLM via system prompt to "cite your sources", but LLMs frequently confabulate believable citations, mismatch facts with citations, or fabricate chunk tokens out of thin air. We need a validation gate ensuring that cited sources in returned answers resolve directly to chunks retrieved in the active query context.
 
 ### Options Considered
 1. **Soft Prompting Only ("Please cite accurately")**:
@@ -511,7 +511,7 @@ Standard RAG systems instruct the LLM via system prompt to "cite your sources", 
 
 | Criteria | Option 1: Soft Prompting Only | Option 2: Post-Hoc Warning Banner | Option 3: Deterministic Hard-Gate & Regeneration |
 | :--- | :--- | :--- | :--- |
-| **Citation Hallucination Rate** | High (15%–25% confabulation) | High (confabulated text still served) | **0.0% Guaranteed** (hard rejection gate) |
+| **Citation Hallucination Rate** | High (15%–25% confabulation) | High (confabulated text still served) | **0.0% (Enforced Gate)** (hard rejection gate) |
 | **User Trust & Verifiability** | Low | Low to Moderate | **Maximum** (every claim is linkable to raw text) |
 | **P95 Latency Impact** | **None** | Low (<5ms regex check) | Moderate on retries (adds 1 LLM turn on failure; ~0ms on success) |
 | **System Determinism** | None | Low | **High** (deterministic code-level gate) |
@@ -519,13 +519,13 @@ Standard RAG systems instruct the LLM via system prompt to "cite your sources", 
 
 ### Decision & Explicit Rationale
 We chose **Option 3 (Deterministic AST/Regex Hard-Gate with Rejection and Regeneration Loop)**.
-- **Enterprise Provenance Guarantee**: Hallucinated citation tokens are completely eliminated from the user-facing API surface.
+- **Enterprise Provenance Gate**: Unsupported citation tokens are intercepted and blocked from the user-facing API surface.
 - **Explicit Source Partitioning**: Context assembler tags knowledge graph facts with `[graph]` and document passages with `[retrieved] [chunk_id]`, giving the synthesis model unambiguous tokens to cite.
 - **Targeted Feedback Loop**: Passing the exact hallucinated IDs and allowed ID lists back into the conversation context enables the LLM to self-correct in >95% of first-attempt failure cases.
 - **Response Caching**: Validated answers are cached via `QueryResponseCache` (keyed by SHA-256 canonical query digests), reducing subsequent latency to $<1$ms.
 
 ### Consequences
-- **What gets easier**: Guarantees zero phantom citations in production; audit logs record exact source chunk lineage for every claim.
+- **What gets easier**: Mitigates phantom citations in production; audit logs record exact source chunk lineage for every claim.
 - **What gets harder**: The system prompt must strictly enforce the citation syntax `[chunk_id]`, and tests must verify retry escalation paths.
 - **What is locked in**: Uncited factual claims or hallucinated chunk IDs are rejected as hard errors rather than silently ignored.
 
@@ -651,7 +651,7 @@ We chose **Option 3 (Stratified Multi-Hop Benchmark)**.
 | Criteria | Option 1: Retain LangChain Wrappers | Option 2: Native Gateway + arXiv Compliance |
 | :--- | :--- | :--- |
 | **Dependency Footprint** | Bloated (>50 transitive packages) | **Lean & Minimal** (`openai`, `httpx`, `neo4j`, `sqlalchemy`) |
-| **Deterministic Citation Gate** | Difficult to guarantee through chain abstractions | **100% Guaranteed** (direct regex/AST verification) |
+| **Deterministic Citation Gate** | Difficult to guarantee through chain abstractions | **Deterministic Rule** (direct regex/AST verification) |
 | **API Compatibility** | Locked to LangChain version releases | **Universal OpenAI-compatible standard** (NVIDIA NIM / OpenRouter) |
 | **arXiv Compliance** | Ad-hoc | **Formally Baked In** (Settings, API responses, README) |
 
@@ -782,7 +782,7 @@ When navigating between the "Chat", "Graph Explorer", and "Telemetry" views in t
 ### Decision & Explicit Rationale
 We chose **Option 3 (Session-Bound Storage with `boot_id` Lifecycle Probe and Markdown Export)**.
 - **Seamless UX**: Allows users to inspect Graph Explorer or Telemetry tabs mid-conversation without losing their dialogue stream.
-- **Automated Lifecycle Purge**: Guarantees that stopping the server or rebooting Uvicorn invalidates and purges cached conversation turns.
+- **Automated Lifecycle Purge**: Ensures stopping the server or rebooting Uvicorn invalidates and purges cached conversation turns.
 - **Auditable Export**: Enables 1-click download of grounded answers, graph facts, and cited chunk IDs as standard Markdown.
 
 ### Consequences
@@ -3033,9 +3033,9 @@ We chose **Option 2 (Nest `evalharness` Compatibility Shims Directly inside `eva
 | Criteria | Option 1: In-Place Core Refactor | Option 2: Standalone LangGraph Runner |
 | :--- | :--- | :--- |
 | **Zero Core Impact** | Fails (mutates `src/router/`) | **100% Compliant (all logic in `scripts/`)** |
-| **Baseline Safety** | Risky (breaks prior benchmark guarantees) | **Completely Safe (frozen champion intact)** |
+| **Baseline Safety** | Risky (breaks prior benchmark baseline) | **High Confidence (frozen champion intact)** |
 | **Self-Correction Looping** | Difficult in procedural coordinator | **Native (LangGraph cyclical conditional edge)** |
-| **Test & Cache Isolation** | High risk of cache contamination | **Guaranteed (`use_cache=False`, fresh sessions)** |
+| **Test & Cache Isolation** | High risk of cache contamination | **Verified (`use_cache=False`, fresh sessions)** |
 
 - **Decision & Explicit Rationale**:
   We selected **Option 2 (Standalone LangGraph Runner in `scripts/langgraph_graphrag.py`)**:
@@ -3267,7 +3267,7 @@ We chose **Option 2 (Freeze Hybrid as Qualified Candidate in `scripts/` and Stan
 - **Status**: accepted
 
 ### Context & Problem Statement
-The benchmark-winning hybrid GraphRAG architecture demonstrated superior retrieval quality (Fact score $0.8722 \pm 0.0064$, Strict success $30.0/40$, Substantive chunk recall $0.7179$, Unified evidence recall $0.7333$, $0.0\%$ citation hallucination, $10/10$ out-of-scope abstention). However, the implementation existed only as a standalone experimental script in `scripts/langgraph_evidence_refinement.py`.
+The candidate hybrid GraphRAG architecture demonstrated higher retrieval quality across evaluated metrics (Fact score $0.8722 \pm 0.0064$, Strict success $30.0/40$, Substantive chunk recall $0.7179$, Unified evidence recall $0.7333$, $0.0\%$ citation hallucination, $10/10$ out-of-scope abstention). However, the implementation existed only as a standalone experimental script in `scripts/langgraph_evidence_refinement.py`.
 
 To transition the repository into a production-grade portfolio showcase, the reusable evidence-refinement logic needed to be cleanly integrated into `src/` according to standard enterprise software engineering practices without duplicating code, breaking existing baselines, or regressing offline tests.
 
@@ -3288,7 +3288,7 @@ To transition the repository into a production-grade portfolio showcase, the reu
 | Criteria | Option 1: Monolithic Merge | Option 2: Modular `src/router/refiner.py` | Option 3: Upstream LLM Agent |
 | :--- | :--- | :--- | :--- |
 | **Separation of Concerns** | Poor (tight coupling) | **High (modular engine)** | Moderate |
-| **Zero-Overhead Fast Path** | Possible | **Guaranteed (<1ms heuristic check)** | Fails (1.5s-2.5s on every query) |
+| **Zero-Overhead Fast Path** | Possible | **High Speed (<1ms heuristic check)** | Fails (1.5s-2.5s on every query) |
 | **Backward Compatibility** | High risk of regression | **100% Intact (toggleable via config)** | Breaking |
 | **Code Maintainability** | Poor (file bloat) | **Clean, testable unit boundary** | Moderate |
 | **Dependency Footprint** | Adds langgraph | Explicit in `pyproject.toml` | Extra LLM gateway calls |
