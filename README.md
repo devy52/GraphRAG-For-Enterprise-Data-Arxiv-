@@ -176,7 +176,21 @@ When queries address topics outside the indexed corpus, the system demonstrated 
 
 ---
 
-## 5. Technology Stack & Directory Structure
+## 5. Application Interface & Visualizations
+
+The platform includes a built-in single-page application served directly from the FastAPI static mount (`http://localhost:8000/ui/`), featuring real-time connection telemetry, conversational interaction with verified citations, and an interactive Neo4j force-directed canvas.
+
+### Conversational Query Interface & Citation Provenance
+![Grounded Retrieval & Citation Verification Interface](Docs/assets/ui_grounded_chat.png)
+*Grounded answer synthesis with inline `[chunk_id]` citations, route classification badge (`BOTH`), and latency decomposition.*
+
+### Interactive Knowledge Graph Topology Canvas
+![Interactive Neo4j Knowledge Graph Canvas](Docs/assets/ui_knowledge_graph.png)
+*Force-directed graph canvas (Vis.js) showing entities (`Paper`, `Method`, `Dataset`, `Task`) and traversed relationship edges (`CITES`, `USES_METHOD`, `EVALUATED_ON`).*
+
+---
+
+## 6. Technology Stack & Directory Structure
 
 | Layer | Component | Specification |
 | :--- | :--- | :--- |
@@ -192,6 +206,7 @@ When queries address topics outside the indexed corpus, the system demonstrated 
 ```
 GraphRAG-For-Enterprise-Data/
 ├── Docs/                           # Canonical project documentation (PRD, TRD, ARCHITECTURE, etc.)
+│   ├── assets/                     # Application screenshots & UI visual artifacts
 │   ├── ARCHITECTURE.md             # High-level architecture & dual-store design
 │   ├── BENCHMARK_SCORECARD.md      # Comprehensive scorecard across all 11 experimental phases
 │   ├── CODEBASE_MAP.md             # File-by-file directory index & public symbol directory
@@ -230,7 +245,7 @@ GraphRAG-For-Enterprise-Data/
 
 ---
 
-## 6. Installation & Quickstart
+## 7. Installation & Quickstart
 
 ### Prerequisites
 - **Python 3.11+**
@@ -306,7 +321,7 @@ uvicorn src.api.main:app --port 8000 --reload
 
 ---
 
-## 7. Testing & Benchmark Reproduction
+## 8. Testing & Benchmark Reproduction
 
 ### Running Offline Test Suites (No Credentials Required)
 The repository contains automated unit and integration tests that run completely offline with mock fallbacks:
@@ -338,7 +353,7 @@ Reports and audit ledgers will be generated under `data/hybrid_repeatability_*`.
 
 ---
 
-## 8. Known Limitations & Future Roadmap
+## 9. Known Limitations & Future Roadmap
 
 1. **Context Token Budget Overrun**:
    - *Current*: 710.9 tokens mean context (vs. pre-registered target ≤ 450.0 tokens).
@@ -352,7 +367,7 @@ Reports and audit ledgers will be generated under `data/hybrid_repeatability_*`.
 
 ---
 
-## 9. Acknowledgments & Open Access Compliance
+## 10. Acknowledgments & Open Access Compliance
 
 > **"Thank you to arXiv for use of its open access interoperability."**
 
@@ -362,6 +377,6 @@ This project adheres strictly to the arXiv API Terms of Use:
 
 ---
 
-## 10. License
+## 11. License
 
 MIT License. Free for enterprise, research, and educational use.

@@ -480,4 +480,7 @@
   - Tested browser rendering of SVG DOM hierarchy with zero syntax warnings.
 - [x] Step 37D: Documentation & Map Synchronization:
   - Updated `README.md`, `Docs/CODEBASE_MAP.md`, and `Docs/TASKS.md`.
+- [x] Step 37E: Application Screenshots & Portfolio Visuals:
+  - Captured desktop-resolution screenshots of running application (`http://127.0.0.1:8000/ui/`) showing grounded chat with citation verification and interactive Neo4j force-directed graph canvas.
+  - Stored visual artifacts in `Docs/assets/` and embedded into `README.md`.
 

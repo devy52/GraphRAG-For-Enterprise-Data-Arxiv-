@@ -12,10 +12,13 @@ A comprehensive directory and file-by-file index detailing the exact location, p
 ```
 GraphRAG-For-Enterprise-Data/
 ├── Docs/                           # Canonical project documentation & specifications
+│   ├── assets/                     # Visual portfolio UI screenshots and diagrams
+│   │   ├── ui_grounded_chat.png    # Grounded query interface with citation tags & telemetry
+│   │   └── ui_knowledge_graph.png  # Interactive Neo4j force-directed topology visualizer
 │   ├── ARCHITECTURE.md             # High-level architecture & system design
 │   ├── BENCHMARK_SCORECARD.md      # Comprehensive benchmark scorecard compiling & comparing all versions & techniques
 │   ├── CODEBASE_MAP.md             # Exhaustive file directory & symbol inventory (this file)
-│   ├── DECISIONS.md                # Architecture Decision Records (ADR 001–068)
+│   ├── DECISIONS.md                # Architecture Decision Records (ADR 001–070)
 │   ├── DESIGN.md                   # Detailed design & algorithmic specifications
 │   ├── FLOWS.md                    # Mermaid sequence diagrams for all major workflows
 │   ├── ONTOLOGY.md                 # Entity and relationship ontology definition
